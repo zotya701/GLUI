@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{040A41AC-77BD-466F-A38D-B32449BFCE80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{FAA49C82-66BB-4A8F-9F2E-95CA6387DDA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLUI", "GLUI\GLUI.csproj", "{9289A6BF-658B-4340-8CB5-AAC99525BD4C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{040A41AC-77BD-466F-A38D-B32449BFCE80}.Debug|x64.ActiveCfg = Debug|x64
+		{040A41AC-77BD-466F-A38D-B32449BFCE80}.Debug|x64.Build.0 = Debug|x64
+		{040A41AC-77BD-466F-A38D-B32449BFCE80}.Release|x64.ActiveCfg = Release|x64
+		{040A41AC-77BD-466F-A38D-B32449BFCE80}.Release|x64.Build.0 = Release|x64
+		{FAA49C82-66BB-4A8F-9F2E-95CA6387DDA5}.Debug|x64.ActiveCfg = Debug|x64
+		{FAA49C82-66BB-4A8F-9F2E-95CA6387DDA5}.Debug|x64.Build.0 = Debug|x64
+		{FAA49C82-66BB-4A8F-9F2E-95CA6387DDA5}.Release|x64.ActiveCfg = Release|x64
+		{FAA49C82-66BB-4A8F-9F2E-95CA6387DDA5}.Release|x64.Build.0 = Release|x64
+		{9289A6BF-658B-4340-8CB5-AAC99525BD4C}.Debug|x64.ActiveCfg = Debug|x64
+		{9289A6BF-658B-4340-8CB5-AAC99525BD4C}.Debug|x64.Build.0 = Debug|x64
+		{9289A6BF-658B-4340-8CB5-AAC99525BD4C}.Release|x64.ActiveCfg = Release|x64
+		{9289A6BF-658B-4340-8CB5-AAC99525BD4C}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F625E928-1802-4DDF-A0C3-ACD570D482A2}
+	EndGlobalSection
+EndGlobal
