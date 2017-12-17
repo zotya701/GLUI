@@ -13,9 +13,9 @@ namespace GLUI
 {
     public abstract class Component
     {
-        private int mFrameVerticesId = 0;
-        private int mFrameIndicesId = 0;
-        private int mFrameColorsId = 0;
+        private int mVerticesId = 0;
+        private int mIndicesId = 0;
+        private int mColorsId = 0;
         private int mIndicesCount = 0;
 
         Stack<Scissor> mScissorStack = new Stack<Scissor>();
@@ -31,7 +31,7 @@ namespace GLUI
         public int Height { get { return Size.Height; } set { Size = new Size(Width, value); } }
         public Size Size { get; set; }
 
-        public double BorderWidth { get; set; }
+        public int BorderWidth { get; set; }
 
         public bool Dirty { get; set; }
         public bool Visible { get { return mVisible; } set { mVisible = value; mInvisible = !value; } }
@@ -57,8 +57,6 @@ namespace GLUI
             Location = new Point(0, 0);
             Size = new Size(0, 0);
 
-            BorderWidth = 1;
-
             Dirty = true;
             Visible = true;
             Highlightable = false;
@@ -68,7 +66,7 @@ namespace GLUI
             BackgroundColor = Color.FromArgb(128, 128, 128);
             ForegroundColor = Color.FromArgb(128, 128, 128);
             BorderColor = Color.FromArgb(150, 150, 150);
-            BorderWidth = 1;
+            BorderWidth = 3;
 
             Children.CollectionChanged += Children_CollectionChanged;
         }
@@ -206,13 +204,13 @@ namespace GLUI
         protected virtual void OnRender()
         {
             GL.EnableClientState(ArrayCap.VertexArray);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, mFrameVerticesId);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, mVerticesId);
             GL.VertexPointer(2, VertexPointerType.Int, 0, 0);
 
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, mFrameIndicesId);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, mIndicesId);
 
             GL.EnableClientState(ArrayCap.ColorArray);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, mFrameColorsId);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, mColorsId);
             GL.ColorPointer(3, ColorPointerType.UnsignedByte, 0, 0);
 
             GL.DrawElements(BeginMode.Triangles, mIndicesCount, DrawElementsType.UnsignedInt, 0);
@@ -228,51 +226,80 @@ namespace GLUI
         /// </summary>
         protected virtual void OnUpdate()
         {
-            var wFrameVertices = new List<int>()
+            // The background
+            var wVertices = new List<int>
             {
-                AbsoluteLocation.X, AbsoluteLocation.Y,                     // 0, Upper left
-                AbsoluteLocation.X + Width, AbsoluteLocation.Y,             // 1, Upper right
-                AbsoluteLocation.X + Width, AbsoluteLocation.Y + Height,    // 2, Bottom right
-                AbsoluteLocation.X, AbsoluteLocation.Y + Height             // 3, Bottom left
+                AbsoluteLocation.X + BorderWidth, AbsoluteLocation.Y + BorderWidth,                     // 0, Upper left
+                AbsoluteLocation.X + Width - BorderWidth, AbsoluteLocation.Y + BorderWidth,             // 1, Upper right
+                AbsoluteLocation.X + Width - BorderWidth, AbsoluteLocation.Y + Height - BorderWidth,    // 2, Bottom right
+                AbsoluteLocation.X + BorderWidth, AbsoluteLocation.Y + Height - BorderWidth             // 3, Bottom left
             };
-            var wFrameIndices = new List<uint>()
+            var wIndices = new List<uint>
             {
-                0,1,2,
-                2,3,0
+                0,1,2, 2,3,0
             };
-            var wFrameColors = new List<byte>();
-            for (int i = 0; i < wFrameVertices.Count; ++i)
+            var wColors = new List<byte>();
+            for (int i = 0; i < 4; ++i)
             {
-                wFrameColors.Add(BackgroundColor.R);
-                wFrameColors.Add(BackgroundColor.G);
-                wFrameColors.Add(BackgroundColor.B);
+                wColors.Add(BackgroundColor.R);
+                wColors.Add(BackgroundColor.G);
+                wColors.Add(BackgroundColor.B);
             }
 
-
-            if (mFrameVerticesId != 0)
+            // The border
+            wVertices.AddRange(new List<int>
             {
-                GL.DeleteBuffer(mFrameVerticesId);
-            }
-            if (mFrameIndicesId != 0)
+                AbsoluteLocation.X + BorderWidth, AbsoluteLocation.Y + BorderWidth,                     // 4, same as 0
+                AbsoluteLocation.X + Width - BorderWidth, AbsoluteLocation.Y + BorderWidth,             // 5, same as 1
+                AbsoluteLocation.X + Width - BorderWidth, AbsoluteLocation.Y + Height - BorderWidth,    // 6, same as 2
+                AbsoluteLocation.X + BorderWidth, AbsoluteLocation.Y + Height - BorderWidth,            // 7, same as 3
+                AbsoluteLocation.X, AbsoluteLocation.Y,                                                 // 8
+                AbsoluteLocation.X + Width, AbsoluteLocation.Y,                                         // 9
+                AbsoluteLocation.X + Width, AbsoluteLocation.Y + BorderWidth,                           // 10
+                AbsoluteLocation.X + Width, AbsoluteLocation.Y + Height - BorderWidth,                  // 11
+                AbsoluteLocation.X + Width, AbsoluteLocation.Y + Height,                                // 12
+                AbsoluteLocation.X, AbsoluteLocation.Y + Height,                                        // 13
+                AbsoluteLocation.X, AbsoluteLocation.Y + Height - BorderWidth,                          // 14
+                AbsoluteLocation.X, AbsoluteLocation.Y + BorderWidth,                                   // 15
+            });
+            wIndices.AddRange(new List<uint>
             {
-                GL.DeleteBuffer(mFrameIndicesId);
-            }
-            if(mFrameColorsId != 0)
+                15, 8, 9,  9,10,15,    // Top
+                 5,10,11, 11, 6, 5,    // Right
+                11,12,13, 13,14,11,    // Bottom
+                 7,14,15, 15, 4, 7     // Left
+            });
+            for (int i = 0; i < 12; ++i)
             {
-                GL.DeleteBuffer(mFrameColorsId);
+                wColors.Add(BorderColor.R);
+                wColors.Add(BorderColor.G);
+                wColors.Add(BorderColor.B);
             }
 
-            mFrameVerticesId = GL.GenBuffer();
-            mFrameIndicesId = GL.GenBuffer();
-            mFrameColorsId = GL.GenBuffer();
-            mIndicesCount = wFrameIndices.Count;
+            if (mVerticesId != 0)
+            {
+                GL.DeleteBuffer(mVerticesId);
+            }
+            if (mIndicesId != 0)
+            {
+                GL.DeleteBuffer(mIndicesId);
+            }
+            if (mColorsId != 0)
+            {
+                GL.DeleteBuffer(mColorsId);
+            }
 
-            GL.BindBuffer(BufferTarget.ArrayBuffer, mFrameVerticesId);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(int) * wFrameVertices.Count, wFrameVertices.ToArray(), BufferUsageHint.DynamicDraw);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, mFrameIndicesId);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(uint) * wFrameIndices.Count, wFrameIndices.ToArray(), BufferUsageHint.DynamicDraw);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, mFrameColorsId);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(byte) * wFrameColors.Count, wFrameColors.ToArray(), BufferUsageHint.DynamicDraw);
+            mVerticesId = GL.GenBuffer();
+            mIndicesId = GL.GenBuffer();
+            mColorsId = GL.GenBuffer();
+            mIndicesCount = wIndices.Count;
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, mVerticesId);
+            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(int) * wVertices.Count, wVertices.ToArray(), BufferUsageHint.DynamicDraw);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, mIndicesId);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(uint) * wIndices.Count, wIndices.ToArray(), BufferUsageHint.DynamicDraw);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, mColorsId);
+            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(byte) * wColors.Count, wColors.ToArray(), BufferUsageHint.DynamicDraw);
         }
 
         /// <summary>
