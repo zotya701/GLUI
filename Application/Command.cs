@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace Application
 {
-    public class ControlKey
+    public class Command
     {
-        public string Name { get; }
         public List<Key> Keys { get; } = new List<Key>();
 
-        public event EventHandler<ControlKey> Activated;
+        public event EventHandler<Command> Activated;
 
-        public ControlKey(params Key[] keys)
+        public Command(params Key[] keys)
         {
             foreach (var wKey in keys)
             {
@@ -22,7 +21,7 @@ namespace Application
             }
         }
 
-        public ControlKey(ControlKey left, params Key[] keys)
+        public Command(Command left, params Key[] keys)
         {
             Keys = left.Keys;
             Keys.AddRange(keys);
@@ -46,14 +45,14 @@ namespace Application
             return string.Join(" + ", Keys.Select(key => key.RealKey));
         }
 
-        public static implicit operator ControlKey(Key key)
+        public static implicit operator Command(Key key)
         {
-            return new ControlKey(key);
+            return new Command(key);
         }
 
-        public static ControlKey operator +(ControlKey left, Key right)
+        public static Command operator +(Command left, Key right)
         {
-            return new ControlKey(left, right);
+            return new Command(left, right);
         }
 
         //public static bool operator ==(KeyboardState left, ControlKey right)

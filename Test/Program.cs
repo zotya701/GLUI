@@ -24,19 +24,18 @@ namespace Test
                 Width = 210 * 5,
                 Height = 90 * 5,
                 VSync = false,
-                ControlKeys = new Dictionary<string, ControlKey>
+                Commands = new Dictionary<string, Command>
                 {
                     {"Exit", Key.Escape },
                     {"Fullscreen", Key.AltLeft + Key.Enter },
-                    {"TaskManager", Key.LControl + Key.LAlt + Key.Delete }
                 }
             };
 
-            wApp.ControlKeys["Exit"].Activated += (s, e) =>
+            wApp.Commands["Exit"].Activated += (s, e) =>
             {
                 wApp.Exit();
             };
-            wApp.ControlKeys["Fullscreen"].Activated += (s, e) =>
+            wApp.Commands["Fullscreen"].Activated += (s, e) =>
             {
                 wApp.FullScreen = !wApp.FullScreen;
             };

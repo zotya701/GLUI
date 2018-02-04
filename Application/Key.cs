@@ -164,9 +164,9 @@ namespace Application
             RealKey = key;
         }
 
-        public static ControlKey operator +(Key left, Key right)
+        public static Command operator +(Key left, Key right)
         {
-            return new ControlKey(left, right);
+            return new Command(left, right);
         }
 
         public static bool operator ==(OpenTK.Input.Key left, Key right)

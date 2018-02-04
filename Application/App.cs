@@ -36,7 +36,7 @@ namespace Application
         public string Title { get { return mWindow.Title; } set { mWindow.Title = value; } }
         public System.Drawing.Icon Icon { get { return mWindow.Icon; } set { mWindow.Icon = value; } }
         public bool CursorVisible { get { return mWindow.CursorVisible; } set { mWindow.CursorVisible = value; } }
-        public Dictionary<string, ControlKey> ControlKeys { get; set; }
+        public Dictionary<string, Command> Commands { get; set; }
         #endregion
 
         public App()
@@ -44,7 +44,7 @@ namespace Application
             mKeyboardState = new GLUI.KeyboardState();
             mMouseState = new GLUI.MouseState();
             mWindow = new GameWindow();
-            ControlKeys = new Dictionary<string, ControlKey>();
+            Commands = new Dictionary<string, Command>();
 
             mWindow.Load += OnLoad;
 
@@ -86,7 +86,7 @@ namespace Application
             //    Console.WriteLine($"  {wExtension}");
             //}
             Console.WriteLine("Commands:");
-            foreach (var wControlKey in ControlKeys)
+            foreach (var wControlKey in Commands)
             {
                 Console.WriteLine($"  {wControlKey.Key} -> {wControlKey.Value}");
             }
@@ -163,7 +163,7 @@ namespace Application
             mKeyboardState.Shift = e.Shift;
             mKeyboardState.KeyDown[e.Key] = true;
 
-            foreach(var wControlKey in ControlKeys.Values)
+            foreach(var wControlKey in Commands.Values)
             {
                 wControlKey.Check(mKeyboardState);
             }
