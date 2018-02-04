@@ -103,44 +103,7 @@ namespace Application
         #region EventHandlers
         private void OnLoad(object sender, EventArgs e)
         {
-            //var wCharSet = "";
-            //foreach(var wCharCode in Enumerable.Range(0, Byte.MaxValue + 1))
-            //{
-            //    if((32 <= wCharCode && wCharCode <= 126) || (160 <= wCharCode && wCharCode <= Byte.MaxValue))
-            //    {
-            //        wCharSet = wCharSet + Convert.ToChar(wCharCode);
-            //    }
-            //    else
-            //    {
-            //        wCharSet = wCharSet + " ";
-            //    }
-            //}
-
-            //var Font = new Font("Arial", 32, GraphicsUnit.Pixel);
-            //var wSize = System.Windows.Forms.TextRenderer.MeasureText(wCharSet, Font);
-            //wCharSet.ToList().ForEach(c => Console.WriteLine(c + " " + System.Windows.Forms.TextRenderer.MeasureText("" + c, Font)));
-            //var wImage = new Bitmap(wSize.Width, wSize.Height);
-            //using (var wGraphics = Graphics.FromImage(wImage))
-            //{
-            //    wGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            //    wGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            //    wGraphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-            //    wGraphics.DrawString(wCharSet, Font, new SolidBrush(Color.FromArgb(0, 0, 0)), new PointF(0, 0));
-            //    wGraphics.Flush();
-            //}
-            //wImage.Save("TEST.bmp");
-
-            //int mFontTexture;
-            //GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
-            //GL.GenTextures(1, out mFontTexture);
-            //GL.BindTexture(TextureTarget.Texture2D, mFontTexture);
-            //var wData = wImage.LockBits(new Rectangle(0, 0, wImage.Width, wImage.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            //GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, wImage.Width, wImage.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, wData.Scan0);
-            //wImage.UnlockBits(wData);
-            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-            //GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+            
         }
         private void OnResize(object sender, EventArgs e)
         {

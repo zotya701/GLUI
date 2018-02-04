@@ -12,12 +12,6 @@ namespace GLUI
 {
     public class Font
     {
-        private class CharTextureData
-        {
-            public Point Location { get; set; }
-            public Size Size { get; set; }
-        }
-
         private int mTexId;
         private System.Drawing.Font mFont;
         static private string mCharSet;
@@ -57,48 +51,51 @@ namespace GLUI
             GenerateTextureAtlas();
         }
 
-        public void SaveCharacterSet()
+        ~Font()
         {
-            // Create bitmap from the texture
-            if (mTexId == 0)
-            {
-                return;
-            }
-            int wWidth;
-            int wHeight;
-            GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureWidth, out wWidth);
-            GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureHeight, out wHeight);
-            var wCharacterSetImage = new Bitmap(wWidth, wHeight);
-            var wData = wCharacterSetImage.LockBits(new Rectangle(0, 0, wCharacterSetImage.Width, wCharacterSetImage.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Bgra, PixelType.UnsignedByte, wData.Scan0);
-            wCharacterSetImage.UnlockBits(wData);
-            using (var wGraphics = Graphics.FromImage(wCharacterSetImage))
-            using (var wPen = new Pen(Color.FromArgb(Color.R, Color.G, Color.B)))
-            {
-                wGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                wGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                wGraphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                foreach(var wTuple in mLookUpTable)
-                {
-                    wGraphics.DrawRectangle(wPen, new Rectangle(wTuple.Value.Location, wTuple.Value.Size));
-                }
-                wGraphics.Flush();
-            }
-
-            // Save the image
-            var wFileName = $"{FamilyName}_{Size}_{Color.ToString()}_";
-            var wFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{wFileName}*").ToList();
-            if (wFiles.Any())
-            {
-                var wId = wFiles.Select(wPath => Path.GetFileNameWithoutExtension(wPath)).Select(wPath => int.Parse(wPath.Substring(wPath.LastIndexOf('_') + 1))).Max() + 1;
-                wFileName = $"{wFileName}{wId}.bmp";
-            }
-            else
-            {
-                wFileName = $"{wFileName}0.bmp";
-            }
-            wCharacterSetImage.Save(wFileName);
+            if (mTexId == 0) return;
+            GL.DeleteTexture(mTexId);
         }
+
+        //public void SaveCharacterSet()
+        //{
+        //    // Create bitmap from the texture
+        //    if (mTexId == 0) return;
+        //    int wWidth;
+        //    int wHeight;
+        //    GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureWidth, out wWidth);
+        //    GL.GetTexLevelParameter(TextureTarget.Texture2D, 0, GetTextureParameter.TextureHeight, out wHeight);
+        //    var wCharacterSetImage = new Bitmap(wWidth, wHeight);
+        //    var wData = wCharacterSetImage.LockBits(new Rectangle(0, 0, wCharacterSetImage.Width, wCharacterSetImage.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+        //    GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Bgra, PixelType.UnsignedByte, wData.Scan0);
+        //    wCharacterSetImage.UnlockBits(wData);
+        //    using (var wGraphics = Graphics.FromImage(wCharacterSetImage))
+        //    using (var wPen = new Pen(Color.FromArgb(Color.R, Color.G, Color.B)))
+        //    {
+        //        wGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+        //        wGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        //        wGraphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+        //        foreach(var wTuple in mLookUpTable)
+        //        {
+        //            wGraphics.DrawRectangle(wPen, new Rectangle(wTuple.Value.Location, wTuple.Value.Size));
+        //        }
+        //        wGraphics.Flush();
+        //    }
+
+        //    // Save the image
+        //    var wFileName = $"{FamilyName}_{Size}_{Color.ToString()}_";
+        //    var wFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), $"{wFileName}*").ToList();
+        //    if (wFiles.Any())
+        //    {
+        //        var wId = wFiles.Select(wPath => Path.GetFileNameWithoutExtension(wPath)).Select(wPath => int.Parse(wPath.Substring(wPath.LastIndexOf('_') + 1))).Max() + 1;
+        //        wFileName = $"{wFileName}{wId}.bmp";
+        //    }
+        //    else
+        //    {
+        //        wFileName = $"{wFileName}0.bmp";
+        //    }
+        //    wCharacterSetImage.Save(wFileName);
+        //}
 
         private void GenerateTextureAtlas()
         {
@@ -115,11 +112,11 @@ namespace GLUI
                 var wMinWidth = wTable.Min(wRow => wRow.Sum(wColumn => wColumn.Item2.Width));
                 if (wMinWidth + wSize.Width < wHeight)
                 {
-                    (wTable.FirstOrDefault(wRow => wRow.Sum(wColumn => wColumn.Item2.Width) == wMinWidth) ?? wTable.First()).Add(new Tuple<char, Size>(wChar, wSize));
+                    (wTable.FirstOrDefault(wRow => wRow.Sum(wColumn => wColumn.Item2.Width) == wMinWidth) ?? wTable.First()).Add(Tuple.Create(wChar, wSize));
                 }
                 else
                 {
-                    wTable.Add(new List<Tuple<char, Size>> { new Tuple<char, Size>(wChar, wSize) });
+                    wTable.Add(new List<Tuple<char, Size>> { Tuple.Create(wChar, wSize) });
                 }
             }
 
