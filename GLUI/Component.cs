@@ -214,7 +214,7 @@ namespace GLUI
 
             GL.EnableClientState(ArrayCap.ColorArray);
             GL.BindBuffer(BufferTarget.ArrayBuffer, mColorsId);
-            GL.ColorPointer(3, ColorPointerType.UnsignedByte, 0, 0);
+            GL.ColorPointer(4, ColorPointerType.UnsignedByte, 0, 0);
 
             GL.DrawElements(BeginMode.Triangles, mIndicesCount, DrawElementsType.UnsignedInt, 0);
 
@@ -247,6 +247,7 @@ namespace GLUI
                 wColors.Add(BackgroundColor.R);
                 wColors.Add(BackgroundColor.G);
                 wColors.Add(BackgroundColor.B);
+                wColors.Add(BackgroundColor.A);
             }
 
             // The border
@@ -277,6 +278,7 @@ namespace GLUI
                 wColors.Add(BorderColor.R);
                 wColors.Add(BorderColor.G);
                 wColors.Add(BorderColor.B);
+                wColors.Add(BorderColor.A);
             }
 
             if (mVerticesId != 0)
