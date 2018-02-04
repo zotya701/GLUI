@@ -24,14 +24,17 @@ namespace GLUI
 
         public int X { get { return Location.X; } set { Location = new Point(value, Y); } }
         public int Y { get { return Location.Y; } set { Location = new Point(X, value); } }
-        public Point Location { get; set; }
+        public Point Location { get { return mLocation; } set { mLocation = value; Dirty = true; } }
+        private Point mLocation;
         public Point AbsoluteLocation { get { if (Dirty) { mAbsoluteLocation = (Parent?.AbsoluteLocation ?? new Point(0, 0)) + new Size(X, Y); } return mAbsoluteLocation; } }
         private Point mAbsoluteLocation;
         public int Width { get { return Size.Width; } set { Size = new Size(value, Height); } }
         public int Height { get { return Size.Height; } set { Size = new Size(Width, value); } }
-        public Size Size { get; set; }
+        public Size Size { get { return mSize; } set { mSize = value; Dirty = true; } }
+        private Size mSize;
 
-        public int BorderWidth { get; set; }
+        public int BorderWidth { get { return mBorderWidth; } set { mBorderWidth = value; Dirty = true; } }
+        private int mBorderWidth;
 
         public bool Dirty { get; set; }
         public bool Visible { get { return mVisible; } set { mVisible = value; mInvisible = !value; } }
@@ -264,10 +267,10 @@ namespace GLUI
             });
             wIndices.AddRange(new List<uint>
             {
-                15, 8, 9,  9,10,15,    // Top
-                 5,10,11, 11, 6, 5,    // Right
-                11,12,13, 13,14,11,    // Bottom
-                 7,14,15, 15, 4, 7     // Left
+                15,  8,  9,  9, 10, 15,    // Top
+                 5, 10, 11, 11,  6,  5,    // Right
+                11, 12, 13, 13, 14, 11,    // Bottom
+                 7, 14, 15, 15,  4,  7     // Left
             });
             for (int i = 0; i < 12; ++i)
             {
@@ -309,8 +312,7 @@ namespace GLUI
         /// <param name="keyboardState">The state of the keyboard</param>
         internal void KeyboardHandler(object sender, KeyboardState keyboardState)
         {
-            if (Invisible) return;
-            if (Disabled) return;
+            if (Invisible || Disabled) return;
             OnKeyboard(keyboardState);
             foreach (var wChild in Children)
             {
@@ -325,8 +327,7 @@ namespace GLUI
         /// <param name="mouseState">The state of the mouse</param>
         internal void MouseHandler(object sender, MouseState mouseState)
         {
-            if (Invisible) return;
-            if (Disabled) return;
+            if (Invisible || Disabled) return;
             mouseState.IsOver = IsMouseOver(mouseState);
             OnMouse(mouseState);
             foreach (var wChild in Children)
