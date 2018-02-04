@@ -62,7 +62,7 @@ namespace Test
                     new Label
                     {
                         Text = "Bared on your tomb I'm a prayer for your loneliness And would you ever soon Come above unto me?",
-                        Font = new GLUI.Font("Arial", 64, Color.Black),
+                        Font = new GLUI.Font("Arial", 24, Color.Black),
                         Immediate = true,
                         BorderWidth = 0,
                         Location = new Point(200, 60),
@@ -70,6 +70,16 @@ namespace Test
                     }
                 }
             };
+
+            Task.Run(()=>
+            {
+                var wLabel = wWindow.Children.First(wChild => wChild is Label) as Label;
+                for (int i=0; i<99999; ++i)
+                {
+                    wLabel.Text = $"{i}";
+                    System.Threading.Thread.Sleep(100);
+                }
+            });
 
             //for (int i = 1; i < 12; ++i)
             //{

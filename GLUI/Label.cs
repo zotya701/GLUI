@@ -33,7 +33,7 @@ namespace GLUI
             if (Immediate)
             {
                 Raster.Location = AbsoluteLocation;
-                foreach(var wChar in Text)
+                foreach (var wChar in Text)
                 {
                     Font.DrawChar(wChar);
                 }
@@ -46,12 +46,9 @@ namespace GLUI
 
         protected override void OnUpdate()
         {
-            if (Dirty)
-            {
-                var wSize = Font.MeasueText(Text);
-                Size = new Size(Math.Max(Width, wSize.Width), Math.Max(Height, wSize.Width));
-                base.OnUpdate();
-            }
+            var wSize = Font.MeasueText(Text);
+            Size = new Size(Math.Max(Width, wSize.Width), Math.Max(Height, wSize.Width));
+            base.OnUpdate();
         }
     }
 }

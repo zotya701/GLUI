@@ -366,6 +366,7 @@ namespace GLUI
             {
                 wChild.Update();
             }
+            if (Dirty) Dirty = false;
         }
         #endregion
     }
