@@ -36,6 +36,7 @@ namespace Application
         public string Title { get { return mWindow.Title; } set { mWindow.Title = value; } }
         public System.Drawing.Icon Icon { get { return mWindow.Icon; } set { mWindow.Icon = value; } }
         public bool CursorVisible { get { return mWindow.CursorVisible; } set { mWindow.CursorVisible = value; } }
+        public Dictionary<string, ControlKey> ControlKeys { get; set; }
         #endregion
 
         public App()
@@ -43,6 +44,7 @@ namespace Application
             mKeyboardState = new GLUI.KeyboardState();
             mMouseState = new GLUI.MouseState();
             mWindow = new GameWindow();
+            ControlKeys = new Dictionary<string, ControlKey>();
 
             mWindow.Load += OnLoad;
 
@@ -70,20 +72,25 @@ namespace Application
             };
             mRoot.ListenTo(ref OnKeyboard);
             mRoot.ListenTo(ref OnMouse);
-
+        }
+        public void Run()
+        {
             Console.WriteLine("Vendor: " + GL.GetString(StringName.Vendor));
             Console.WriteLine("Version: " + GL.GetString(StringName.Version));
             Console.WriteLine("Shading language version: " + GL.GetString(StringName.ShadingLanguageVersion));
             Console.WriteLine("Renderer: " + GL.GetString(StringName.Renderer));
-            Console.WriteLine("Extensions:");
-            var wExtensions = GL.GetString(StringName.Extensions).Split(' ');
-            foreach(var wExtension in wExtensions)
+            //Console.WriteLine("Extensions:");
+            //var wExtensions = GL.GetString(StringName.Extensions).Split(' ');
+            //foreach (var wExtension in wExtensions)
+            //{
+            //    Console.WriteLine($"  {wExtension}");
+            //}
+            Console.WriteLine("Commands:");
+            foreach (var wControlKey in ControlKeys)
             {
-                Console.WriteLine($"  {wExtension}");
+                Console.WriteLine($"  {wControlKey.Key} -> {wControlKey.Value}");
             }
-        }
-        public void Run()
-        {
+
             mRoot.Size = Size;
             mWindow.Run();
         }
@@ -156,13 +163,9 @@ namespace Application
             mKeyboardState.Shift = e.Shift;
             mKeyboardState.KeyDown[e.Key] = true;
 
-            if (mKeyboardState == ControlKeys.Exit)
+            foreach(var wControlKey in ControlKeys.Values)
             {
-                Exit();
-            }
-            if (mKeyboardState == ControlKeys.FullScreen)
-            {
-                FullScreen = !FullScreen;
+                wControlKey.Check(mKeyboardState);
             }
 
             OnKeyboard?.Invoke(this, mKeyboardState);
