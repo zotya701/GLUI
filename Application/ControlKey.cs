@@ -13,7 +13,10 @@ namespace Application
 
         public ControlKey(params Key[] keys)
         {
-            keys.ToList().ForEach(arg => mKeys.Add(arg));
+            foreach (var wKey in keys)
+            {
+                mKeys.Add(wKey);
+            }
         }
 
         public ControlKey(ControlKey left, params Key[] keys)
@@ -40,7 +43,10 @@ namespace Application
         public static bool operator ==(KeyboardState left, ControlKey right)
         {
             var wFullFilled = true;
-            right.mKeys.ForEach(key => wFullFilled = wFullFilled && left.KeyDown[key.RealKey]);
+            foreach (var wKey in right.mKeys)
+            {
+                wFullFilled = wFullFilled && left.KeyDown[wKey.RealKey];
+            }
             return wFullFilled;
         }
 
