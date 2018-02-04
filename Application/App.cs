@@ -76,7 +76,11 @@ namespace Application
             Console.WriteLine("Shading language version: " + GL.GetString(StringName.ShadingLanguageVersion));
             Console.WriteLine("Renderer: " + GL.GetString(StringName.Renderer));
             Console.WriteLine("Extensions:");
-            GL.GetString(StringName.Extensions).Split(' ').ToList().ForEach(extension => Console.WriteLine("  " + extension));
+            var wExtensions = GL.GetString(StringName.Extensions).Split(' ');
+            foreach(var wExtension in wExtensions)
+            {
+                Console.WriteLine($"  {wExtension}");
+            }
         }
         public void Run()
         {

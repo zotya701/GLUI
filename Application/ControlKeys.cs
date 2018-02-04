@@ -15,7 +15,11 @@ namespace Application
 
         public static void ListKeys()
         {
-            typeof(ControlKeys).GetProperties().ToList().ForEach(prop => Console.WriteLine($"{prop.Name} -> {prop.GetValue(prop).ToString()}"));
+            var wProperties = typeof(ControlKeys).GetProperties();
+            foreach(var wProperty in wProperties)
+            {
+                Console.WriteLine($"{wProperty.Name} -> {wProperty.GetValue(wProperty).ToString()}");
+            }
         }
     }
 }

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Component.cs" />
+    <Compile Include="Font.cs" />
     <Compile Include="KeyboardState.cs" />
     <Compile Include="Label.cs" />
     <Compile Include="MouseState.cs" />

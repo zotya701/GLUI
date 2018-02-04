@@ -78,7 +78,10 @@ namespace GLUI
                 wGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 wGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                 wGraphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                mLookUpTable.ToList().ForEach(wTuple => wGraphics.DrawRectangle(wPen, new Rectangle(wTuple.Value.Location, wTuple.Value.Size)));
+                foreach(var wTuple in mLookUpTable)
+                {
+                    wGraphics.DrawRectangle(wPen, new Rectangle(wTuple.Value.Location, wTuple.Value.Size));
+                }
                 wGraphics.Flush();
             }
 
@@ -142,7 +145,10 @@ namespace GLUI
                 wGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 wGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                 wGraphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                mLookUpTable.ToList().ForEach(wTuple => TextRenderer.DrawText(wGraphics, $"{wTuple.Key}", mFont, wTuple.Value.Location, Color.FromArgb(Color.R, Color.G, Color.B), TextFormatFlags.NoPrefix));
+                foreach(var wTuple in mLookUpTable)
+                {
+                    TextRenderer.DrawText(wGraphics, $"{wTuple.Key}", mFont, wTuple.Value.Location, Color.FromArgb(Color.R, Color.G, Color.B), TextFormatFlags.NoPrefix);
+                }
                 wGraphics.Flush();
             }
 
