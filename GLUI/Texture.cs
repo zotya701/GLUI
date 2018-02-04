@@ -13,6 +13,8 @@ namespace GLUI
         private static List<int> mDeletedTextures = new List<int>();
 
         public int Id { get; private set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
         public Texture()
         {
             Id = GL.GenTexture();

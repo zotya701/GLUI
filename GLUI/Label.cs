@@ -24,7 +24,7 @@ namespace GLUI
 
         public Label()
         {
-            
+            BackgroundColor = Color.FromArgb(0, 0, 0, 0);
         }
 
         protected override void OnRender()
@@ -32,30 +32,24 @@ namespace GLUI
             base.OnRender();
             if (Immediate)
             {
-
+                Raster.Location = AbsoluteLocation;
+                foreach(var wChar in Text)
+                {
+                    Font.DrawChar(wChar);
+                }
             }
             else
             {
 
             }
-            //GL.Enable(EnableCap.Texture2D);
-            //GL.BindTexture(TextureTarget.Texture2D, mFontTexture);
-            //GL.Begin(BeginMode.Quads);
-            //GL.TexCoord2(0, 0);
-            //GL.Vertex2(0, 0);
-            //GL.TexCoord2(1, 0);
-            //GL.Vertex2(200, 0);
-            //GL.TexCoord2(1, 1);
-            //GL.Vertex2(200, 200);
-            //GL.TexCoord2(0, 1);
-            //GL.Vertex2(0, 200);
-            //GL.End();
         }
 
         protected override void OnUpdate()
         {
             if (Dirty)
             {
+                var wSize = Font.MeasueText(Text);
+                Size = new Size(Math.Max(Width, wSize.Width), Math.Max(Height, wSize.Width));
                 base.OnUpdate();
             }
         }

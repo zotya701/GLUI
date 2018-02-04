@@ -21,8 +21,8 @@ namespace Test
                 Title = "Test program",
                 X = 100,
                 Y = 50,
-                Width = 210 * 5,
-                Height = 90 * 5,
+                Width = 210 * 8,
+                Height = 90 * 8,
                 VSync = false,
                 Commands = new Dictionary<string, Command>
                 {
@@ -58,14 +58,32 @@ namespace Test
                         BackgroundColor = Color.FromArgb(0, 0, 255),
                         Location = new Point(90, 50),
                         Size = new Size(100, 100)
+                    },
+                    new Label
+                    {
+                        Text = "Bared on your tomb I'm a prayer for your loneliness And would you ever soon Come above unto me?",
+                        Font = new GLUI.Font("Arial", 64, Color.Black),
+                        Immediate = true,
+                        BorderWidth = 0,
+                        Location = new Point(200, 60),
+                        Size = new Size(300, 50)
                     }
-                    //new Label
-                    //{
-                    //    Text = "TEST",
-                    //    Font = new Font("Arial", 128, GraphicsUnit.Pixel)
-                    //}
                 }
             };
+
+            //for (int i = 1; i < 12; ++i)
+            //{
+            //    wWindow.Children.Add(
+            //    new Label
+            //    {
+            //        Text = "Bared on your tomb I'm a prayer for your loneliness And would you ever soon Come above unto me?",
+            //        Font = new GLUI.Font("Arial", 12 + i * 2, Color.Black),
+            //        Immediate = true,
+            //        BorderWidth = 0,
+            //        Location = new Point(10, 10 + (12 + i * 2) * i)
+            //    });
+            //}
+
             //for (int i = 0; i < 1000; ++i)
             //{
             //    wWindow.Children.Add(new Window
