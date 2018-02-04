@@ -12,10 +12,13 @@ namespace GLUI
 {
     public class Font
     {
+        public int TextureId { get { return mTexture.Id; } }
         private Texture mTexture;
         private System.Drawing.Font mFont;
         static private string mCharSet;
         private Dictionary<char, CharTextureData> mLookUpTable;
+        private int mFontHeight;
+        private Point mOriginalRasterLocation;
 
         public Color Color { get; }
         public string FamilyName { get { return mFont.FontFamily.Name; } }
@@ -26,17 +29,30 @@ namespace GLUI
             {
                 if (string.IsNullOrEmpty(mCharSet))
                 {
+                    //mCharSet = "";
+                    //foreach (var wCharCode in Enumerable.Range(0, Byte.MaxValue + 1))
+                    //{
+                    //    if ((32 <= wCharCode && wCharCode <= 126) || (160 <= wCharCode && wCharCode <= Byte.MaxValue))
+                    //    {
+                    //        mCharSet = mCharSet + Convert.ToChar(wCharCode);
+                    //    }
+                    //    else
+                    //    {
+                    //        mCharSet = mCharSet + " ";
+                    //    }
+                    //}
                     mCharSet = "";
                     foreach (var wCharCode in Enumerable.Range(0, Byte.MaxValue + 1))
                     {
-                        if ((32 <= wCharCode && wCharCode <= 126) || (160 <= wCharCode && wCharCode <= Byte.MaxValue))
-                        {
-                            mCharSet = mCharSet + Convert.ToChar(wCharCode);
-                        }
-                        else
-                        {
-                            mCharSet = mCharSet + " ";
-                        }
+                        //if ((32 <= wCharCode && wCharCode <= 126) || (160 <= wCharCode && wCharCode <= Byte.MaxValue))
+                        //{
+                        //    mCharSet = mCharSet + Convert.ToChar(wCharCode);
+                        //}
+                        //else
+                        //{
+                        //    mCharSet = mCharSet + " ";
+                        //}
+                        mCharSet = mCharSet + Convert.ToChar(wCharCode);
                     }
                 }
                 return mCharSet;
@@ -50,27 +66,19 @@ namespace GLUI
             GenerateTextureAtlas();
         }
 
+        public void DrawText(string text)
+        {
+            mOriginalRasterLocation = Raster.Location;
+            foreach (var wChar in text)
+            {
+                DrawChar(wChar);
+            }
+        }
+
         public void DrawChar(char c)
         {
-            float wX = mLookUpTable[c].Location.X;
-            float wY = mLookUpTable[c].Location.Y;
-            float wWidth = mLookUpTable[c].Size.Width;
-            float wHeight = mLookUpTable[c].Size.Height;
-
-            var wP1 = new PointF(Raster.Location.X, Raster.Location.Y);
-            var wP2 = new PointF(wP1.X + wWidth, wP1.Y);
-            var wP3 = new PointF(wP2.X, wP1.Y + wHeight);
-            var wP4 = new PointF(wP1.X, wP3.Y);
-
-            wX = wX / mTexture.Width;
-            wY = wY / mTexture.Height;
-            wWidth = wWidth / mTexture.Width;
-            wHeight = wHeight / mTexture.Height;
-
-            var wTP1 = new PointF(wX, wY);
-            var wTP2 = new PointF(wTP1.X + wWidth, wTP1.Y);
-            var wTP3 = new PointF(wTP2.X, wTP1.Y + wHeight);
-            var wTP4 = new PointF(wTP1.X, wTP3.Y);
+            var wVertices = CalculateVertices(c);
+            var wTexCoords = CalculateTexCoords(c);
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
@@ -78,31 +86,84 @@ namespace GLUI
             GL.Enable(EnableCap.Texture2D);
             GL.BindTexture(TextureTarget.Texture2D, mTexture.Id);
             GL.Begin(PrimitiveType.Quads);
-            GL.TexCoord2(wTP1.X, wTP1.Y); GL.Vertex2(wP1.X, wP1.Y);
-            GL.TexCoord2(wTP2.X, wTP2.Y); GL.Vertex2(wP2.X, wP2.Y);
-            GL.TexCoord2(wTP3.X, wTP3.Y); GL.Vertex2(wP3.X, wP3.Y);
-            GL.TexCoord2(wTP4.X, wTP4.Y); GL.Vertex2(wP4.X, wP4.Y);
+            GL.TexCoord2(wTexCoords[0].X, wTexCoords[0].Y); GL.Vertex2(wVertices[0].X, wVertices[0].Y);
+            GL.TexCoord2(wTexCoords[1].X, wTexCoords[1].Y); GL.Vertex2(wVertices[1].X, wVertices[1].Y);
+            GL.TexCoord2(wTexCoords[2].X, wTexCoords[2].Y); GL.Vertex2(wVertices[2].X, wVertices[2].Y);
+            GL.TexCoord2(wTexCoords[3].X, wTexCoords[3].Y); GL.Vertex2(wVertices[3].X, wVertices[3].Y);
             GL.End();
             GL.BindTexture(TextureTarget.Texture2D, 0);
 
-            if(c == ' ')
+            MoveRaster(c);
+        }
+
+        public PointF[] CalculateTexCoords(char c)
+        {
+            var wX = (float)mLookUpTable[c].Location.X / mTexture.Width;
+            var wY = (float)mLookUpTable[c].Location.Y / mTexture.Height;
+            var wWidth = (float)mLookUpTable[c].Size.Width / mTexture.Width;
+            var wHeight = (float)mLookUpTable[c].Size.Height / mTexture.Height;
+
+            var wTP1 = new PointF(wX, wY);
+            var wTP2 = new PointF(wTP1.X + wWidth, wTP1.Y);
+            var wTP3 = new PointF(wTP2.X, wTP1.Y + wHeight);
+            var wTP4 = new PointF(wTP1.X, wTP3.Y);
+
+            return new PointF[] { wTP1, wTP2, wTP3, wTP4 };
+        }
+
+        public Point[] CalculateVertices(char c)
+        {
+            var wX = mLookUpTable[c].Location.X;
+            var wY = mLookUpTable[c].Location.Y;
+            var wWidth = mLookUpTable[c].Size.Width;
+            var wHeight = mLookUpTable[c].Size.Height;
+
+            var wP1 = new Point(Raster.Location.X, Raster.Location.Y);
+            var wP2 = new Point(wP1.X + wWidth, wP1.Y);
+            var wP3 = new Point(wP2.X, wP1.Y + wHeight);
+            var wP4 = new Point(wP1.X, wP3.Y);
+
+            return new Point[] { wP1, wP2, wP3, wP4 };
+        }
+
+        public void MoveRaster(char c)
+        {
+            if (c == ' ')
             {
                 Raster.Move(mLookUpTable[c].Size.Width, 0);
             }
-            Raster.Move(mLookUpTable[c].Size.Width - (mFont.Height / 4), 0);
+
+            if (c == '\r')
+            {
+                Raster.Move(mOriginalRasterLocation.X - Raster.Location.X, 0);
+            }
+            else
+            if (c == '\n')
+            {
+                Raster.Move(0, mFontHeight);
+            }
+            else
+            {
+                Raster.Move(mLookUpTable[c].Size.Width - (mFont.Height / 4), 0);
+            }
         }
 
-        public Size MeasueText(string text)
+        public Size MeasureText(string text)
         {
-            var wSize = new Size(0, 0);
-            foreach(var wChar in text)
+            var wRasterLocation = Raster.Location;
+            var wBottomRight = new Point(0, 0);
+
+            foreach (var wChar in text)
             {
-                if (wChar == ' ')
-                {
-                    wSize = wSize + new Size(mLookUpTable[wChar].Size.Width, 0);
-                }
-                wSize = wSize + new Size(mLookUpTable[wChar].Size.Width - (mFont.Height / 4), 0);
+                MoveRaster(wChar);
+                wBottomRight.X = Math.Max(wBottomRight.X, Raster.Location.X + mFontHeight / 4);
+                wBottomRight.Y = Math.Max(wBottomRight.Y, Raster.Location.Y + mFontHeight);
             }
+
+            var wSize = new Size(wBottomRight.X - wRasterLocation.X, wBottomRight.Y - wRasterLocation.Y);
+
+            Raster.Location = wRasterLocation;
+
             return wSize;
         }
 
@@ -148,7 +209,7 @@ namespace GLUI
             var wOffset = new Size(0, 0);
             mLookUpTable = new Dictionary<char, CharTextureData>();
             var wTable = new List<List<Tuple<char, Size>>> { new List<Tuple<char, Size>>() };
-            var wFontHeight = 0;
+            mFontHeight = 0;
 
             // Order the characters to fit into the possible smallest square like shape
             using (var wGraphics = Graphics.FromImage(new Bitmap(1, 1)))
@@ -162,7 +223,7 @@ namespace GLUI
                     //var wSize = TextRenderer.MeasureText(wGraphics, $"{wChar}", mFont, new Size(int.MaxValue, int.MaxValue), TextFormatFlags.NoPrefix) + wOffset;
                     //var wSize = TextRenderer.MeasureText($"{wChar}", mFont, new Size(), TextFormatFlags.NoPrefix) + wOffset;
                     var wSize = wGraphics.MeasureString($"{wChar}", mFont, int.MaxValue, StringFormat.GenericDefault).ToSize() + wOffset;
-                    wFontHeight = Math.Max(wFontHeight, wSize.Height);
+                    mFontHeight = Math.Max(mFontHeight, wSize.Height);
                     //var wHeight = wTable.Count * mFont.Height;
                     var wHeight = wTable.Count * wSize.Height;
                     var wMaxWidth = wTable.Max(wRow => wRow.Sum(wColumn => wColumn.Item2.Width));
@@ -189,13 +250,13 @@ namespace GLUI
                 }
                 wLocation.X = wOffset.Width;
                 //wLocation.Y = wLocation.Y + mFont.Height + wOffset.Height;
-                wLocation.Y = wLocation.Y + wFontHeight + wOffset.Height;
+                wLocation.Y = wLocation.Y + mFontHeight + wOffset.Height;
             }
 
             // Generate the bitmap containing the texture atlas
             var wMWidth = wTable.Max(wRow => wRow.Sum(wColumn => wColumn.Item2.Width)) + wOffset.Width;
             //var wMHeight = wTable.Count * (mFont.Height + wOffset.Height) + wOffset.Height;
-            var wMHeight = wTable.Count * (wFontHeight + wOffset.Height) + wOffset.Height;
+            var wMHeight = wTable.Count * (mFontHeight + wOffset.Height) + wOffset.Height;
             var wCharacterSetImage = new Bitmap(wMWidth, wMHeight);
             using (var wGraphics = Graphics.FromImage(wCharacterSetImage))
             {
