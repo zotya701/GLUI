@@ -52,6 +52,7 @@
     <Compile Include="Range.cs" />
     <Compile Include="RootComponent.cs" />
     <Compile Include="Scissor.cs" />
+    <Compile Include="Texture.cs" />
     <Compile Include="Window.cs" />
   </ItemGroup>
   <ItemGroup>
