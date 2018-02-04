@@ -25,7 +25,7 @@ namespace GLUI
             mSize = size;
         }
 
-        public Scissor Backup()
+        public static Scissor Backup()
         {
             var wViewport = new int[4];
             GL.GetInteger(GetPName.Viewport, wViewport);
@@ -38,7 +38,28 @@ namespace GLUI
         {
             var wViewport = new int[4];
             GL.GetInteger(GetPName.Viewport, wViewport);
-            GL.Scissor(mLocation.X, wViewport[1] - mLocation.Y, mSize.Width, mSize.Height);
+            GL.Scissor(mLocation.X, wViewport[3] - mLocation.Y - mSize.Height, mSize.Width, mSize.Height);
+        }
+
+        public Scissor Merge(Scissor scissor)
+        {
+            if (scissor == null) return this;
+
+            var wX = Math.Max(mLocation.X, scissor.mLocation.X);
+            var wY = Math.Max(mLocation.Y, scissor.mLocation.Y);
+            var wTopLeft = new Point(wX, wY);
+
+            var wThisBottomRight = mLocation + mSize;
+            var wBottomRight = scissor.mLocation + scissor.mSize;
+            wX = Math.Min(wThisBottomRight.X, wBottomRight.X);
+            wY = Math.Min(wThisBottomRight.Y, wBottomRight.Y);
+            wBottomRight = new Point(wX, wY);
+
+            var wWidth = wBottomRight.X - wTopLeft.X;
+            var wHeigth = wBottomRight.Y - wTopLeft.Y;
+            var wSize = new Size(wWidth, wHeigth);
+
+            return new Scissor(wTopLeft, wSize);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace GLUI
         private int mColorsId = 0;
         private int mIndicesCount = 0;
 
-        Stack<Scissor> mScissorStack = new Stack<Scissor>();
+        private static Stack<Scissor> mScissorStack = new Stack<Scissor>();
         public Component Parent { get; private set; } = null;
         public ObservableCollection<Component> Children { get; } = new ObservableCollection<Component>();
 
@@ -155,7 +155,7 @@ namespace GLUI
 
         protected void PushScissor()
         {
-            var wScissor = new Scissor(Location, Size);
+            var wScissor = new Scissor(AbsoluteLocation, Size).Merge(mScissorStack.FirstOrDefault());
             wScissor.Apply();
             mScissorStack.Push(wScissor);
         }

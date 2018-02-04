@@ -126,7 +126,9 @@ namespace Application
             GL.ClearColor(Color4.Green);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
+            GL.Enable(EnableCap.ScissorTest);
             mRoot.Render();
+            GL.Disable(EnableCap.ScissorTest);
 
 
             //var wViewport = new int[4];
