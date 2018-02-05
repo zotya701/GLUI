@@ -72,7 +72,7 @@ namespace GLUI
         protected override void OnUpdate()
         {
             var wSize = Font.MeasureText(Text);
-            Size = new Size(Math.Max(Width, wSize.Width), Math.Max(Height, wSize.Width));
+            Size = new Size(Math.Max(Width, wSize.Width), Math.Max(Height, wSize.Height));
 
             if (Cached)
             {
