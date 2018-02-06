@@ -12,6 +12,8 @@ namespace GLUI
 {
     public class Label : Component
     {
+        private bool mDisposed = false;
+
         public string Text { get { return mText; } set { mText = value; Dirty = true; } }
         private string mText;
         public Font Font { get { return mFont; } set { mFont = value; Dirty = true; } }
@@ -54,6 +56,20 @@ namespace GLUI
             }
 
             base.OnUpdate();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (mDisposed) return;
+
+            if (disposing)
+            {
+                Font?.Dispose();
+            }
+
+            mDisposed = true;
+
+            base.Dispose(disposing);
         }
     }
 }

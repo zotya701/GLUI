@@ -7,36 +7,35 @@ using OpenTK.Graphics.OpenGL;
 
 namespace GLUI
 {
-    public class Texture
+    public class Texture : IDisposable
     {
-        private static object mObj = new object();
-        private static List<int> mDeletedTextures = new List<int>();
+        private bool mDisposed = false;
 
         public int Id { get; private set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public Texture()
         {
-            Id = GL.GenTexture();
-            lock (mObj)
-            {
-                if (mDeletedTextures.Any())
-                {
-                    foreach(var wId in mDeletedTextures)
-                    {
-                        GL.DeleteTexture(wId);
-                    }
-                    mDeletedTextures.Clear();
-                }
-            }
+            if (Id == 0) Id = GL.GenTexture();
         }
 
-        ~Texture()
+        protected virtual void Dispose(bool disposing)
         {
-            lock (mObj)
+            if (mDisposed) return;
+
+            if (disposing)
             {
-                mDeletedTextures.Add(Id);
+                if (Id != 0) GL.DeleteTexture(Id);
             }
+
+            mDisposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
         }
     }
 }

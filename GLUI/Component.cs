@@ -11,8 +11,10 @@ using System.Collections.Specialized;
 
 namespace GLUI
 {
-    public abstract class Component
+    public abstract class Component : IDisposable
     {
+        private bool mDisposed = false;
+
         private int mVerticesId = 0;
         private int mIndicesId = 0;
         private int mColorsId = 0;
@@ -281,22 +283,9 @@ namespace GLUI
                 wColors.Add(BorderColor.A);
             }
 
-            if (mVerticesId != 0)
-            {
-                GL.DeleteBuffer(mVerticesId);
-            }
-            if (mIndicesId != 0)
-            {
-                GL.DeleteBuffer(mIndicesId);
-            }
-            if (mColorsId != 0)
-            {
-                GL.DeleteBuffer(mColorsId);
-            }
-
-            mVerticesId = GL.GenBuffer();
-            mIndicesId = GL.GenBuffer();
-            mColorsId = GL.GenBuffer();
+            if (mVerticesId == 0) mVerticesId = GL.GenBuffer();
+            if (mIndicesId == 0) mIndicesId = GL.GenBuffer();
+            if (mColorsId == 0) mColorsId = GL.GenBuffer();
             mIndicesCount = wIndices.Count;
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, mVerticesId);
@@ -367,6 +356,26 @@ namespace GLUI
                 wChild.Update();
             }
             if (Dirty) Dirty = false;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (mDisposed) return;
+
+            if (disposing)
+            {
+                if (mVerticesId != 0) GL.DeleteBuffer(mVerticesId);
+                if (mIndicesId != 0) GL.DeleteBuffer(mIndicesId);
+                if (mColorsId != 0) GL.DeleteBuffer(mColorsId);
+            }
+            mDisposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
         }
         #endregion
     }

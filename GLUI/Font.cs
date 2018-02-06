@@ -10,12 +10,15 @@ using OpenTK.Graphics.OpenGL;
 
 namespace GLUI
 {
-    public class Font
+    public class Font : IDisposable
     {
+        private bool mDisposed = false;
+
         private int mVerticesId = 0;
         private int mIndicesId = 0;
         private int mTexCoordsId = 0;
         private int mIndicesCount = 0;
+
         private Texture mTexture;
         private System.Drawing.Font mFont;
         private int mFontHeight;
@@ -121,38 +124,16 @@ namespace GLUI
             {
                 var wChar = text[i];
 
-                if (wChar == 's')
-                {
-                    var asd = 0;
-                }
-
-                //if (wChar != '\r' && wChar != '\n')
-                //{
                 wVertices.AddRange(CalculateVertices(wChar).Select(wVertex => new int[] { wVertex.X, wVertex.Y }).SelectMany(wVertex => wVertex));
                 wTexCoords.AddRange(CalculateTexCoords(wChar).Select(wVertex => new float[] { wVertex.X, wVertex.Y }).SelectMany(wVertex => wVertex));
                 wIndices.AddRange(new List<uint> { 0, 1, 2, 2, 3, 0 }.Select(wIndex => (uint)(wIndex + i * 4)));
-                //}
 
                 MoveRaster(wChar);
             }
 
-
-            if (mVerticesId != 0)
-            {
-                GL.DeleteBuffer(mVerticesId);
-            }
-            if (mIndicesId != 0)
-            {
-                GL.DeleteBuffer(mIndicesId);
-            }
-            if (mTexCoordsId != 0)
-            {
-                GL.DeleteBuffer(mTexCoordsId);
-            }
-
-            mVerticesId = GL.GenBuffer();
-            mIndicesId = GL.GenBuffer();
-            mTexCoordsId = GL.GenBuffer();
+            if (mVerticesId == 0) mVerticesId = GL.GenBuffer();
+            if (mIndicesId == 0) mIndicesId = GL.GenBuffer();
+            if (mTexCoordsId == 0) mTexCoordsId = GL.GenBuffer();
             mIndicesCount = wIndices.Count;
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, mVerticesId);
@@ -326,6 +307,7 @@ namespace GLUI
             }
 
             // Create the texture from the bitmap
+            mTexture?.Dispose();
             mTexture = new Texture
             {
                 Width = wMWidth,
@@ -340,6 +322,28 @@ namespace GLUI
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (mDisposed) return;
+
+            if (disposing)
+            {
+                mTexture?.Dispose();
+                if (mVerticesId != 0) GL.DeleteBuffer(mVerticesId);
+                if (mIndicesId != 0) GL.DeleteBuffer(mIndicesId);
+                if (mTexCoordsId != 0) GL.DeleteBuffer(mTexCoordsId);
+            }
+
+            mDisposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
         }
     }
 }
