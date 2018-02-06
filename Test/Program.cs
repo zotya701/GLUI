@@ -61,51 +61,36 @@ namespace Test
                     },
                     new Label
                     {
-                        Text = "Bared on your tomb I'm a prayer for your loneliness\r\nAnd would you ever soon Come above unto me?",
+                        Text = "Bared on your tomb\r\nI'm a prayer for your loneliness\r\nAnd would you ever soon\r\nCome above unto me?",
                         Font = new GLUI.Font("Arial", 14, Color.Black),
-                        Immediate = true,
-                        BorderWidth = 0,
+                        BorderWidth = 2,
                         Location = new Point(200, 60)
+                        //Size = new Size(350, 0)
+                    },
+                    new Label
+                    {
+                        Text = "For once upon a time\r\nFrom the binds of your lowliness\r\nI could always find the right slot for your sacred key",
+                        Font = new GLUI.Font("Arial", 14, Color.Black),
+                        BorderWidth = 2,
+                        Location = new Point(200, 150)
                         //Size = new Size(300, 50)
                     }
                 }
             };
 
-            //Task.Run(()=>
+            //Task.Run(() =>
             //{
             //    var wLabel = wWindow.Children.First(wChild => wChild is Label) as Label;
-            //    for (int i=0; i<99999; ++i)
+            //    for (int i = 0; i < 99999; ++i)
             //    {
             //        wLabel.Text = $"{i}";
-            //        System.Threading.Thread.Sleep(100);
+            //        wLabel.BackgroundColor = Color.FromArgb(255, 255, (int)((Math.Sin(i / Math.PI / 10.0) + 1.0) / 2.0 * 255.0), 0);
+            //        System.Threading.Thread.Sleep(10);
             //    }
             //});
 
-            //for (int i = 1; i < 12; ++i)
-            //{
-            //    wWindow.Children.Add(
-            //    new Label
-            //    {
-            //        Text = "Bared on your tomb I'm a prayer for your loneliness And would you ever soon Come above unto me?",
-            //        Font = new GLUI.Font("Arial", 12 + i * 2, Color.Black),
-            //        Immediate = true,
-            //        BorderWidth = 0,
-            //        Location = new Point(10, 10 + (12 + i * 2) * i)
-            //    });
-            //}
-
-            //for (int i = 0; i < 1000; ++i)
-            //{
-            //    wWindow.Children.Add(new Window
-            //    {
-            //        BackgroundColor = Color.FromArgb(0, 255, 0),
-            //        Location = new Point(10, 10),
-            //        Size = new Size(100, 100)
-            //    });
-            //}
-
             var asd = new GLUI.Font("Arial", 128, Color.Black);
-            asd.SaveCharacterSet();
+            //asd.SaveCharacterSet();
 
             wApp.AddComponent(wWindow);
             wApp.Run();
