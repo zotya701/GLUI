@@ -191,7 +191,7 @@ namespace GLUI
 
         public Size MeasureText(string text)
         {
-            var wRasterLocation = Raster.Location;
+            mOriginalRasterLocation = Raster.Location;
             var wBottomRight = new Point(0, 0);
 
             foreach (var wChar in text)
@@ -201,9 +201,9 @@ namespace GLUI
                 wBottomRight.Y = Math.Max(wBottomRight.Y, Raster.Location.Y + mFontHeight);
             }
 
-            var wSize = new Size(wBottomRight.X - wRasterLocation.X, wBottomRight.Y - wRasterLocation.Y);
+            var wSize = new Size(wBottomRight.X - mOriginalRasterLocation.X, wBottomRight.Y - mOriginalRasterLocation.Y);
 
-            Raster.Location = wRasterLocation;
+            Raster.Location = mOriginalRasterLocation;
 
             return wSize;
         }
