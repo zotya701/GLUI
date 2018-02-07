@@ -70,8 +70,8 @@ namespace Application
                 BorderColor = Color.FromArgb(0, 0, 0, 0),
                 BorderWidth = 0,
             };
-            mRoot.ListenTo(ref OnKeyboard);
-            mRoot.ListenTo(ref OnMouse);
+            OnKeyboard += mRoot.KeyboardHandler;
+            OnMouse += mRoot.MouseHandler;
         }
         public void Run()
         {
@@ -199,6 +199,8 @@ namespace Application
             mMouseState.ButtonDown[e.Button] = true;
 
             OnMouse?.Invoke(this, mMouseState);
+
+            mMouseState.IsPressed = false;
         }
         private void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -209,6 +211,8 @@ namespace Application
             mMouseState.ButtonDown[e.Button] = false;
 
             OnMouse?.Invoke(this, mMouseState);
+
+            mMouseState.IsPressed = false;
         }
         private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {

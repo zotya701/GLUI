@@ -10,14 +10,6 @@ namespace GLUI
 {
     public class RootComponent : Component
     {
-        public void ListenTo(ref MouseHandler eventHandler)
-        {
-            eventHandler += MouseHandler;
-        }
-        public void ListenTo(ref KeyboardHandler eventHandler)
-        {
-            eventHandler += KeyboardHandler;
-        }
         public new void MouseHandler(object sender, MouseState mouseState)
         {
             if (mouseState.IsPressed)
@@ -25,6 +17,10 @@ namespace GLUI
                 base.BringFront(mouseState);
             }
             base.MouseHandler(sender, mouseState);
+        }
+        public new void KeyboardHandler(object sender, KeyboardState keyboardState)
+        {
+            base.KeyboardHandler(sender, keyboardState);
         }
         public new void Render()
         {
