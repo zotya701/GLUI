@@ -116,6 +116,7 @@ namespace Application
         {
             mRoot.Size = Size;
             GL.Viewport(mWindow.ClientRectangle);
+            OnRenderFrame(null, null);
         }
         private void OnUpdateFrame(object sender, FrameEventArgs e)
         {
