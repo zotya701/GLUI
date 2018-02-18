@@ -14,6 +14,7 @@ namespace GLUI
         public int Id { get; private set; }
         public int Width { get; set; }
         public int Height { get; set; }
+
         public Texture()
         {
             if (Id == 0) Id = GL.GenTexture();

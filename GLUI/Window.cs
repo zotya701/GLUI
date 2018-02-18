@@ -17,10 +17,12 @@ namespace GLUI
         {
             base.OnKeyboard(keyboardState);
         }
+
         protected override void OnMouse(MouseState mouseState)
         {
             base.OnMouse(mouseState);
         }
+
         protected override void OnRender()
         {
             base.OnRender();

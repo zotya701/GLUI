@@ -10,6 +10,7 @@ namespace GLUI
     public static class Raster
     {
         public static Point Location { get; set; } = new Point(0, 0);
+
         public static void Move(int right, int down)
         {
             Location = Location + new Size(right, down);

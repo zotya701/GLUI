@@ -73,6 +73,7 @@ namespace Application
             OnKeyboard += mRoot.KeyboardHandler;
             OnMouse += mRoot.MouseHandler;
         }
+
         public void Run()
         {
             Console.WriteLine("Vendor: " + GL.GetString(StringName.Vendor));
@@ -94,14 +95,17 @@ namespace Application
             mRoot.Size = Size;
             mWindow.Run();
         }
+
         public void Exit()
         {
             mWindow.Exit();
         }
+
         public void AddComponent(Component component)
         {
             mRoot.Children.Add(component);
         }
+
         public void RemoveComponent(Component component)
         {
             mRoot.Children.Remove(component);
@@ -112,16 +116,19 @@ namespace Application
         {
             
         }
+
         private void OnResize(object sender, EventArgs e)
         {
             mRoot.Size = Size;
             GL.Viewport(mWindow.ClientRectangle);
             OnRenderFrame(null, null);
         }
+
         private void OnUpdateFrame(object sender, FrameEventArgs e)
         {
             mRoot.Update();
         }
+
         private void OnRenderFrame(object sender, FrameEventArgs e)
         {
             GL.ClearColor(Color4.Green);
@@ -159,6 +166,7 @@ namespace Application
 
             mWindow.SwapBuffers();
         }
+
         private void OnKeyDown(object sender, KeyboardKeyEventArgs e)
         {
             mKeyboardState.Alt = e.Alt;
@@ -173,6 +181,7 @@ namespace Application
 
             OnKeyboard?.Invoke(this, mKeyboardState);
         }
+
         private void OnKeyUp(object sender, KeyboardKeyEventArgs e)
         {
             mKeyboardState.Alt = e.Alt;
@@ -182,6 +191,7 @@ namespace Application
 
             OnKeyboard?.Invoke(this, mKeyboardState);
         }
+
         private void OnKeyPress(object sender, KeyPressEventArgs e)
         {
             mKeyboardState.KeyChar = e.KeyChar;
@@ -191,6 +201,7 @@ namespace Application
 
             mKeyboardState.IsPressed = false;
         }
+
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             mMouseState.X = e.X;
@@ -203,6 +214,7 @@ namespace Application
 
             mMouseState.IsPressed = false;
         }
+
         private void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
             mMouseState.X = e.X;
@@ -215,6 +227,7 @@ namespace Application
 
             mMouseState.IsPressed = false;
         }
+
         private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
             mMouseState.X = e.X;
@@ -226,6 +239,7 @@ namespace Application
 
             mMouseState.IsScrolled = false;
         }
+
         private void OnMouseMove(object sender, MouseMoveEventArgs e)
         {
             mMouseState.X = e.X;
@@ -238,10 +252,12 @@ namespace Application
 
             mMouseState.IsMoved = false;
         }
+
         private void OnMouseEnter(object sender, EventArgs e)
         {
 
         }
+
         private void OnMouseLeave(object sender, EventArgs e)
         {
 

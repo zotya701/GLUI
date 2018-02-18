@@ -18,10 +18,12 @@ namespace GLUI
             }
             base.MouseHandler(sender, mouseState);
         }
+
         public new void KeyboardHandler(object sender, KeyboardState keyboardState)
         {
             base.KeyboardHandler(sender, keyboardState);
         }
+
         public new void Render()
         {
             var wViewport = new int[4];
@@ -35,10 +37,12 @@ namespace GLUI
 
             base.Render();
         }
+
         public new void Update()
         {
             base.Update();
         }
+
         protected override void OnKeyboard(KeyboardState keyboardState) { }
         protected override void OnMouse(MouseState mouseState) { }
         protected override void OnRender() { }
