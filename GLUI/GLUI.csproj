@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CharTextureData.cs" />
+    <Compile Include="FontTextureData.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Font.cs" />
     <Compile Include="KeyboardState.cs" />

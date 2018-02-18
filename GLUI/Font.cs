@@ -22,7 +22,7 @@ namespace GLUI
         private Texture mTexture;
         private System.Drawing.Font mFont;
         private int mFontHeight;
-        private Dictionary<char, CharTextureData> mLookUpTable;
+        private Dictionary<char, FontTextureData> mLookUpTable;
         private Point mOriginalRasterLocation;
         private static string mCharSet;
 
@@ -247,7 +247,7 @@ namespace GLUI
 
         private void GenerateFontMap()
         {
-            mLookUpTable = new Dictionary<char, CharTextureData>();
+            mLookUpTable = new Dictionary<char, FontTextureData>();
             var wTable = new List<List<Tuple<char, Size>>> { new List<Tuple<char, Size>>() };
             mFontHeight = 0;
 
@@ -282,7 +282,7 @@ namespace GLUI
             {
                 foreach (var wColumn in wRow)
                 {
-                    mLookUpTable[wColumn.Item1] = new CharTextureData { Location = wLocation, Size = wColumn.Item2 };
+                    mLookUpTable[wColumn.Item1] = new FontTextureData { Location = wLocation, Size = wColumn.Item2 };
                     wLocation.X = wLocation.X + wColumn.Item2.Width;
                 }
                 wLocation.X = 0;

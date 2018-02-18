@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GLUI
 {
-    public class CharTextureData
+    public class FontTextureData
     {
         public Point Location { get; set; }
         public Size Size { get; set; }
