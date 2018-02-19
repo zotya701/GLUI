@@ -93,7 +93,7 @@ namespace GLUI
         public Label()
         {
             BackgroundColor = Color.FromArgb(0, 0, 0, 0);
-            
+
             Text = string.Empty;
             Alignment = new Alignment
             {
@@ -118,7 +118,7 @@ namespace GLUI
             {
                 mFontChanged = false;
                 mFont?.Dispose();
-                mFont = new Font(FontFamily, FontSize, FontColor);
+                mFont = Font.Create(FontFamily, FontSize, FontColor);
             }
 
             var wSize = mFont.MeasureText(Text);

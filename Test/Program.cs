@@ -82,20 +82,20 @@ namespace Test
                 }
             };
 
-            //Task.Run(() =>
-            //{
-            //    var wLabel = wWindow.Children.First(wChild => wChild is Label) as Label;
-            //    for (int i = 0; i < 99999; ++i)
-            //    {
-            //        wLabel.Text = $"{i}";
-            //        wLabel.FontColor = Color.FromArgb(255, 255, (int)((Math.Sin(i / Math.PI / 5.0) + 1.0) / 2.0 * 255.0), 0);
-            //        //wLabel.BackgroundColor = Color.FromArgb(255, 255, (int)((Math.Sin(i / Math.PI / 10.0) + 1.0) / 2.0 * 255.0), 0);
-            //        System.Threading.Thread.Sleep(100);
-            //    }
-            //});
+            Task.Run(() =>
+            {
+                var wLabel = wWindow.Children.First(wChild => wChild is Label) as Label;
+                for (int i = 0; i < 99999; ++i)
+                {
+                    wLabel.Text = $"{i}";
+                    wLabel.FontColor = Color.FromArgb(255, 255, (int)((Math.Sin(i / Math.PI / 5.0) + 1.0) / 2.0 * 255.0), 0);
+                    //wLabel.BackgroundColor = Color.FromArgb(255, 255, (int)((Math.Sin(i / Math.PI / 10.0) + 1.0) / 2.0 * 255.0), 0);
+                    System.Threading.Thread.Sleep(10);
+                }
+            });
 
-            var asd = new GLUI.Font("Arial", 128, Color.Black);
-            //asd.SaveCharacterSet();
+            var asd = GLUI.Font.Create("Arial", 256, Color.Black);
+            asd.SaveCharacterSet();
 
             wApp.AddComponent(wWindow);
             wApp.Run();

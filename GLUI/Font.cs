@@ -45,44 +45,17 @@ namespace GLUI
             }
         }
 
-        public Font(string familyName, int size, Color color)
+        private Font(string familyName, int size, Color color)
         {
             mFont = new System.Drawing.Font(familyName, size, GraphicsUnit.Pixel);
             Color = color;
             GenerateFontMap();
         }
 
-        //public void DrawText(string text)
-        //{
-        //    mOriginalRasterLocation = Raster.Location;
-        //    foreach (var wChar in text)
-        //    {
-        //        DrawChar(wChar);
-        //    }
-        //}
-
-        //public void DrawChar(char c)
-        //{
-        //    if (c != '\r' && c != '\n')
-        //    {
-        //        var wVertices = CalculateVertices(c);
-        //        var wTexCoords = CalculateTexCoords(c);
-
-        //        GL.Enable(EnableCap.Blend);
-        //        GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-        //        GL.Disable(EnableCap.Lighting);
-        //        GL.Enable(EnableCap.Texture2D);
-        //        GL.BindTexture(TextureTarget.Texture2D, mTexture.Id);
-        //        GL.Begin(PrimitiveType.Quads);
-        //        GL.TexCoord2(wTexCoords[0].X, wTexCoords[0].Y); GL.Vertex2(wVertices[0].X, wVertices[0].Y);
-        //        GL.TexCoord2(wTexCoords[1].X, wTexCoords[1].Y); GL.Vertex2(wVertices[1].X, wVertices[1].Y);
-        //        GL.TexCoord2(wTexCoords[2].X, wTexCoords[2].Y); GL.Vertex2(wVertices[2].X, wVertices[2].Y);
-        //        GL.TexCoord2(wTexCoords[3].X, wTexCoords[3].Y); GL.Vertex2(wVertices[3].X, wVertices[3].Y);
-        //        GL.End();
-        //        GL.BindTexture(TextureTarget.Texture2D, 0);
-        //    }
-        //    MoveRaster(c);
-        //}
+        public static Font Create(string familyName, int size, Color color)
+        {
+            return new Font(familyName, size, color);
+        }
 
         public void DrawCachedText()
         {
@@ -144,7 +117,7 @@ namespace GLUI
             GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * wTexCoords.Count, wTexCoords.ToArray(), BufferUsageHint.StaticDraw);
         }
 
-        public PointF[] CalculateTexCoords(char c)
+        private PointF[] CalculateTexCoords(char c)
         {
             var wX = (float)mLookUpTable[c].Location.X / mTexture.Width;
             var wY = (float)mLookUpTable[c].Location.Y / mTexture.Height;
@@ -159,7 +132,7 @@ namespace GLUI
             return new PointF[] { wTP1, wTP2, wTP3, wTP4 };
         }
 
-        public Point[] CalculateVertices(char c)
+        private Point[] CalculateVertices(char c)
         {
             var wX = mLookUpTable[c].Location.X;
             var wY = mLookUpTable[c].Location.Y;
@@ -174,7 +147,7 @@ namespace GLUI
             return new Point[] { wP1, wP2, wP3, wP4 };
         }
 
-        public void MoveRaster(char c)
+        private void MoveRaster(char c)
         {
             if (c == ' ')
             {
@@ -258,21 +231,28 @@ namespace GLUI
                 wGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                 wGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                 wGraphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-                foreach (var wChar in CharSet.Distinct())
+
+                var wTotalWidth = 0;
+                for (int i = 0; i < CharSet.Length; ++i)
+                {
+                    wTotalWidth = wTotalWidth + wGraphics.MeasureString($"{CharSet[i]}", mFont, int.MaxValue, StringFormat.GenericDefault).ToSize().Width;
+                }
+                var wLimit = wTotalWidth / Math.Ceiling(Math.Sqrt(CharSet.Length));
+
+                var wWidth = 0;
+                var wIndex = 0;
+                foreach (var wChar in CharSet)
                 {
                     var wSize = wGraphics.MeasureString($"{wChar}", mFont, int.MaxValue, StringFormat.GenericDefault).ToSize();
                     mFontHeight = Math.Max(mFontHeight, wSize.Height);
-                    var wHeight = wTable.Count * wSize.Height;
-                    var wMaxWidth = wTable.Max(wRow => wRow.Sum(wColumn => wColumn.Item2.Width));
-                    var wMinWidth = wTable.Min(wRow => wRow.Sum(wColumn => wColumn.Item2.Width));
-                    if (wMinWidth + wSize.Width < wHeight)
+                    wWidth = wWidth + wSize.Width;
+                    if (wWidth > wLimit)
                     {
-                        (wTable.FirstOrDefault(wRow => wRow.Sum(wColumn => wColumn.Item2.Width) == wMinWidth) ?? wTable.First()).Add(Tuple.Create(wChar, wSize));
+                        wWidth = 0;
+                        wTable.Add(new List<Tuple<char, System.Drawing.Size>> { });
+                        wIndex++;
                     }
-                    else
-                    {
-                        wTable.Add(new List<Tuple<char, Size>> { Tuple.Create(wChar, wSize) });
-                    }
+                    wTable[wIndex].Add(Tuple.Create(wChar, wSize));
                 }
             }
 
