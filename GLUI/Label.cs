@@ -14,20 +14,31 @@ namespace GLUI
     {
         private bool mDisposed = false;
 
-        public string Text { get { return mText; } set { mText = value; Dirty = true; } }
         private string mText;
-        public Font Font { get { return mFont; } set { mFont = value; Dirty = true; } }
         private Font mFont;
+        private bool mImmediate;
+        private bool mCached;
+        private Alignment mAlignment;
+
+        public string Text { get { return mText; } set { mText = value; Dirty = true; } }
+        public Font Font { get { return mFont; } set { mFont = value; Dirty = true; } }
         public Color Color { get; }
         public bool Immediate { get { return mImmediate; } set { mImmediate = value; mCached = !value; } }
-        private bool mImmediate;
         public bool Cached { get { return mCached; } set { mCached = value; mImmediate = !value; } }
-        private bool mCached;
+        public Alignment Alignment { get { return mAlignment; } set { mAlignment = value; Dirty = true; } }
 
         public Label()
         {
             Cached = true;
             BackgroundColor = Color.FromArgb(0, 0, 0, 0);
+
+            Text = string.Empty;
+            Font = new Font("Arial", 12, Color.Black);
+            Alignment = new Alignment
+            {
+                Vertical = Vertical.Top,
+                Horizontal = Horizontal.Left
+            };
         }
 
         protected override void OnRender()
@@ -51,7 +62,27 @@ namespace GLUI
 
             if (Cached)
             {
-                Raster.Location = AbsoluteLocation;
+                var wX = 0;
+                var wY = 0;
+                switch (Alignment.Horizontal)
+                {
+                    case Horizontal.Left: wX = AbsoluteLocation.X;
+                        break;
+                    case Horizontal.Center: wX = (AbsoluteLocation.X + Size.Width / 2) - wSize.Width / 2;
+                        break;
+                    case Horizontal.Right: wX = AbsoluteLocation.X + Size.Width - wSize.Width;
+                        break;
+                }
+                switch (Alignment.Vertical)
+                {
+                    case Vertical.Top: wY = AbsoluteLocation.Y;
+                        break;
+                    case Vertical.Center: wY = (AbsoluteLocation.Y + Size.Height / 2) - wSize.Height / 2;
+                        break;
+                    case Vertical.Bottom: wY = AbsoluteLocation.Y + Size.Height - wSize.Height;
+                        break;
+                }
+                Raster.Location = new Point(wX, wY);
                 Font.RegenerateTextCache(Text);
             }
 

@@ -64,15 +64,15 @@ namespace Test
                         Text = "Bared on your tomb\r\nI'm a prayer for your loneliness\r\nAnd would you ever soon\r\nCome above unto me?",
                         Font = new GLUI.Font("Arial", 14, Color.Black),
                         BorderWidth = 2,
-                        Location = new Point(200, 60)
-                        //Size = new Size(350, 0)
+                        Location = new Point(200, 60),
+                        Size = new Size(350, 100)
                     },
                     new Label
                     {
                         Text = "For once upon a time\r\nFrom the binds of your lowliness\r\nI could always find the right slot for your sacred key",
                         Font = new GLUI.Font("Arial", 14, Color.Black),
                         BorderWidth = 2,
-                        Location = new Point(200, 150)
+                        Location = new Point(200, 200)
                         //Size = new Size(300, 50)
                     }
                 }
