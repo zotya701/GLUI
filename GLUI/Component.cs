@@ -52,8 +52,6 @@ namespace GLUI
 
         public Color BackgroundColor { get; set; }
         private Color mOriginalBackgroundColor;
-        public Color ForegroundColor { get; set; }
-        private Color mOriginalForegroundColor;
         public Color BorderColor { get; set; }
         private Color mOriginalBorderColor;
 
@@ -69,7 +67,6 @@ namespace GLUI
             Enabled = true;
 
             BackgroundColor = Color.FromArgb(128, 128, 128);
-            ForegroundColor = Color.FromArgb(128, 128, 128);
             BorderColor = Color.FromArgb(150, 150, 150);
             BorderWidth = 3;
 
@@ -171,14 +168,10 @@ namespace GLUI
         protected void GreyOut()
         {
             mOriginalBackgroundColor = BackgroundColor;
-            mOriginalForegroundColor = ForegroundColor;
             mOriginalBorderColor = BorderColor;
             BackgroundColor = Color.FromArgb((int)(BackgroundColor.R * 0.8),
                                              (int)(BackgroundColor.G * 0.8),
                                              (int)(BackgroundColor.B * 0.8));
-            ForegroundColor = Color.FromArgb((int)(ForegroundColor.R * 0.8),
-                                             (int)(ForegroundColor.G * 0.8),
-                                             (int)(ForegroundColor.B * 0.8));
             BorderColor = Color.FromArgb((int)(BorderColor.R * 0.8),
                                          (int)(BorderColor.G * 0.8),
                                          (int)(BorderColor.B * 0.8));
@@ -187,7 +180,6 @@ namespace GLUI
         protected void ResetColors()
         {
             BackgroundColor = mOriginalBackgroundColor;
-            ForegroundColor = mOriginalForegroundColor;
             BorderColor = mOriginalBorderColor;
         }
 

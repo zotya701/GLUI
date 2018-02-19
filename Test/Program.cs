@@ -62,7 +62,9 @@ namespace Test
                     new Label
                     {
                         Text = "Bared on your tomb\r\nI'm a prayer for your loneliness\r\nAnd would you ever soon\r\nCome above unto me?",
-                        Font = new GLUI.Font("Arial", 14, Color.Black),
+                        FontFamily = "Arial",
+                        FontSize = 14,
+                        FontColor = Color.Black,
                         BorderWidth = 2,
                         Location = new Point(200, 60),
                         Size = new Size(350, 100)
@@ -70,7 +72,9 @@ namespace Test
                     new Label
                     {
                         Text = "For once upon a time\r\nFrom the binds of your lowliness\r\nI could always find the right slot for your sacred key",
-                        Font = new GLUI.Font("Arial", 14, Color.Black),
+                        FontFamily = "Arial",
+                        FontSize = 14,
+                        FontColor = Color.Black,
                         BorderWidth = 2,
                         Location = new Point(200, 200)
                         //Size = new Size(300, 50)
@@ -84,8 +88,9 @@ namespace Test
             //    for (int i = 0; i < 99999; ++i)
             //    {
             //        wLabel.Text = $"{i}";
-            //        wLabel.BackgroundColor = Color.FromArgb(255, 255, (int)((Math.Sin(i / Math.PI / 10.0) + 1.0) / 2.0 * 255.0), 0);
-            //        System.Threading.Thread.Sleep(10);
+            //        wLabel.FontColor = Color.FromArgb(255, 255, (int)((Math.Sin(i / Math.PI / 5.0) + 1.0) / 2.0 * 255.0), 0);
+            //        //wLabel.BackgroundColor = Color.FromArgb(255, 255, (int)((Math.Sin(i / Math.PI / 10.0) + 1.0) / 2.0 * 255.0), 0);
+            //        System.Threading.Thread.Sleep(100);
             //    }
             //});
 

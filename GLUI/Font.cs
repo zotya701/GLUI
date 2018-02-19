@@ -52,37 +52,37 @@ namespace GLUI
             GenerateFontMap();
         }
 
-        public void DrawText(string text)
-        {
-            mOriginalRasterLocation = Raster.Location;
-            foreach (var wChar in text)
-            {
-                DrawChar(wChar);
-            }
-        }
+        //public void DrawText(string text)
+        //{
+        //    mOriginalRasterLocation = Raster.Location;
+        //    foreach (var wChar in text)
+        //    {
+        //        DrawChar(wChar);
+        //    }
+        //}
 
-        public void DrawChar(char c)
-        {
-            if (c != '\r' && c != '\n')
-            {
-                var wVertices = CalculateVertices(c);
-                var wTexCoords = CalculateTexCoords(c);
+        //public void DrawChar(char c)
+        //{
+        //    if (c != '\r' && c != '\n')
+        //    {
+        //        var wVertices = CalculateVertices(c);
+        //        var wTexCoords = CalculateTexCoords(c);
 
-                GL.Enable(EnableCap.Blend);
-                GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-                GL.Disable(EnableCap.Lighting);
-                GL.Enable(EnableCap.Texture2D);
-                GL.BindTexture(TextureTarget.Texture2D, mTexture.Id);
-                GL.Begin(PrimitiveType.Quads);
-                GL.TexCoord2(wTexCoords[0].X, wTexCoords[0].Y); GL.Vertex2(wVertices[0].X, wVertices[0].Y);
-                GL.TexCoord2(wTexCoords[1].X, wTexCoords[1].Y); GL.Vertex2(wVertices[1].X, wVertices[1].Y);
-                GL.TexCoord2(wTexCoords[2].X, wTexCoords[2].Y); GL.Vertex2(wVertices[2].X, wVertices[2].Y);
-                GL.TexCoord2(wTexCoords[3].X, wTexCoords[3].Y); GL.Vertex2(wVertices[3].X, wVertices[3].Y);
-                GL.End();
-                GL.BindTexture(TextureTarget.Texture2D, 0);
-            }
-            MoveRaster(c);
-        }
+        //        GL.Enable(EnableCap.Blend);
+        //        GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+        //        GL.Disable(EnableCap.Lighting);
+        //        GL.Enable(EnableCap.Texture2D);
+        //        GL.BindTexture(TextureTarget.Texture2D, mTexture.Id);
+        //        GL.Begin(PrimitiveType.Quads);
+        //        GL.TexCoord2(wTexCoords[0].X, wTexCoords[0].Y); GL.Vertex2(wVertices[0].X, wVertices[0].Y);
+        //        GL.TexCoord2(wTexCoords[1].X, wTexCoords[1].Y); GL.Vertex2(wVertices[1].X, wVertices[1].Y);
+        //        GL.TexCoord2(wTexCoords[2].X, wTexCoords[2].Y); GL.Vertex2(wVertices[2].X, wVertices[2].Y);
+        //        GL.TexCoord2(wTexCoords[3].X, wTexCoords[3].Y); GL.Vertex2(wVertices[3].X, wVertices[3].Y);
+        //        GL.End();
+        //        GL.BindTexture(TextureTarget.Texture2D, 0);
+        //    }
+        //    MoveRaster(c);
+        //}
 
         public void DrawCachedText()
         {

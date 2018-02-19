@@ -66,7 +66,6 @@ namespace Application
             mRoot = new RootComponent
             {
                 BackgroundColor = Color.FromArgb(0, 0, 0, 0),
-                ForegroundColor = Color.FromArgb(0, 0, 0, 0),
                 BorderColor = Color.FromArgb(0, 0, 0, 0),
                 BorderWidth = 0,
             };
@@ -114,7 +113,7 @@ namespace Application
         #region EventHandlers
         private void OnLoad(object sender, EventArgs e)
         {
-            
+            mRoot.Update();
         }
 
         private void OnResize(object sender, EventArgs e)
