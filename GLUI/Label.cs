@@ -103,7 +103,6 @@ namespace GLUI
             FontFamily = "Arial";
             FontSize = 12;
             FontColor = Color.Black;
-
         }
 
         protected override void OnRender()

@@ -42,20 +42,20 @@ namespace Test
 
             var wWindow = new Window
             {
-                BackgroundColor = Color.FromArgb(255, 0, 0),
+                //BackgroundColor = Color.FromArgb(100, 255, 0, 0),
                 Location = new Point(300, 100),
-                Size = new Size(600, 300),
+                Size = new Size(1300, 500),
                 Children =
                 {
                     new Window
                     {
-                        BackgroundColor = Color.FromArgb(0, 255, 0),
+                        //BackgroundColor = Color.FromArgb(100, 0, 255, 0),
                         Location = new Point(50, 50),
                         Size = new Size(100, 100)
                     },
                     new Window
                     {
-                        BackgroundColor = Color.FromArgb(0, 0, 255),
+                        //BackgroundColor = Color.FromArgb(100, 0, 0, 255),
                         Location = new Point(90, 50),
                         Size = new Size(100, 100)
                     },
@@ -67,32 +67,39 @@ namespace Test
                         FontColor = Color.Black,
                         BorderWidth = 2,
                         Location = new Point(200, 60),
-                        Size = new Size(350, 100)
+                        Size = new Size(250, 100)
                     },
-                    new Label
+                    new Button("ASD")
                     {
-                        Text = "For once upon a time\r\nFrom the binds of your lowliness\r\nI could always find the right slot for your sacred key",
-                        FontFamily = "Arial",
-                        FontSize = 14,
-                        FontColor = Color.Black,
-                        BorderWidth = 2,
-                        Location = new Point(200, 200)
-                        //Size = new Size(300, 50)
+                        Location = new Point(200, 200),
+                        Size = new Size(70, 30)
                     }
                 }
             };
 
-            Task.Run(() =>
+            //Task.Run(() =>
+            //{
+            //    var wLabel = wWindow.Children.First(wChild => wChild is Label) as Label;
+            //    for (int i = 0; i < 99999; ++i)
+            //    {
+            //        wLabel.Text = $"{i}";
+            //        wLabel.FontColor = Color.FromArgb(255, 255, (int)((Math.Sin(i / Math.PI / 5.0) + 1.0) / 2.0 * 255.0), 0);
+            //        //wLabel.BackgroundColor = Color.FromArgb(255, 255, (int)((Math.Sin(i / Math.PI / 10.0) + 1.0) / 2.0 * 255.0), 0);
+            //        System.Threading.Thread.Sleep(10);
+            //    }
+            //});
+
+            for (int i = 0; i < 10; ++i)
             {
-                var wLabel = wWindow.Children.First(wChild => wChild is Label) as Label;
-                for (int i = 0; i < 99999; ++i)
+                for (int j = 0; j < 10; ++j)
                 {
-                    wLabel.Text = $"{i}";
-                    wLabel.FontColor = Color.FromArgb(255, 255, (int)((Math.Sin(i / Math.PI / 5.0) + 1.0) / 2.0 * 255.0), 0);
-                    //wLabel.BackgroundColor = Color.FromArgb(255, 255, (int)((Math.Sin(i / Math.PI / 10.0) + 1.0) / 2.0 * 255.0), 0);
-                    System.Threading.Thread.Sleep(10);
+                    wWindow.Children.Add(new Button("ASDASDASD")
+                    {
+                        Location = new Point(500 + i * 75, 100 + j * 35),
+                        Size = new Size(70, 30)
+                    });
                 }
-            });
+            }
 
             var asd = GLUI.Font.Create("Arial", 256, Color.Black);
             asd.SaveCharacterSet();

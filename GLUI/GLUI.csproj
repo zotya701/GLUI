@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Button.cs" />
     <Compile Include="FontTextureData.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Font.cs" />

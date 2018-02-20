@@ -130,7 +130,7 @@ namespace Application
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
         {
-            GL.ClearColor(Color4.Green);
+            GL.ClearColor(0.1f, 0.2f, 0.3f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             GL.Enable(EnableCap.ScissorTest);

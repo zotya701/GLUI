@@ -21,39 +21,43 @@ namespace GLUI
         private int mIndicesCount = 0;
 
         private static Stack<Scissor> mScissorStack = new Stack<Scissor>();
+
+        private Point mLocation;
+        private Point mAbsoluteLocation;
+        private Size mSize;
+        private int mBorderWidth;
+        private bool mVisible;
+        private bool mInvisible;
+        private bool mHighlightable;
+        private bool mHighlighted;
+        private bool mEnabled;
+        private bool mDisabled;
+
+        private Color mOriginalBackgroundColor;
+        private Color mOriginalBorderColor;
+
+
         public Component Parent { get; private set; } = null;
         public ObservableCollection<Component> Children { get; } = new ObservableCollection<Component>();
-
         public int X { get { return Location.X; } set { Location = new Point(value, Y); } }
         public int Y { get { return Location.Y; } set { Location = new Point(X, value); } }
-        public Point Location { get { return mLocation; } set { mLocation = value; Dirty = true; } }
-        private Point mLocation;
+        public Point Location { get { return mLocation; } set { if (mLocation == value) return; mLocation = value; Dirty = true; } }
         public Point AbsoluteLocation { get { if (Dirty) { mAbsoluteLocation = (Parent?.AbsoluteLocation ?? new Point(0, 0)) + new Size(X, Y); } return mAbsoluteLocation; } }
-        private Point mAbsoluteLocation;
         public int Width { get { return Size.Width; } set { Size = new Size(value, Height); } }
         public int Height { get { return Size.Height; } set { Size = new Size(Width, value); } }
-        public Size Size { get { return mSize; } set { mSize = value; Dirty = true; } }
-        private Size mSize;
-
-        public int BorderWidth { get { return mBorderWidth; } set { mBorderWidth = value; Dirty = true; } }
-        private int mBorderWidth;
+        public Size Size { get { return mSize; } set { if (mSize == value) return; mSize = value; Dirty = true; } }
+        public int BorderWidth { get { return mBorderWidth; } set { if (mBorderWidth == value) return; mBorderWidth = value; Dirty = true; } }
 
         public bool Dirty { get; set; }
         public bool Visible { get { return mVisible; } set { mVisible = value; mInvisible = !value; } }
-        private bool mVisible;
         public bool Invisible { get { return mInvisible; } set { mInvisible = value; mVisible = !value; } }
-        private bool mInvisible;
-        public bool Highlightable { get; set; }
-        public bool Highlighted { get; set; }
+        public bool Highlightable { get { return mHighlightable; } set { if (mHighlightable == value) return; mHighlightable = value; Dirty = true; } }
+        public bool Highlighted { get { return mHighlighted; } set { if (mHighlighted == value) return; mHighlighted = value; Dirty = true; if (value) Highlight(); else ResetColors();  } }
         public bool Enabled { get { return mEnabled; } set { mEnabled = value; mDisabled = !value; } }
-        private bool mEnabled;
         public bool Disabled { get { return mDisabled; } set { mDisabled = value; mEnabled = !value; } }
-        private bool mDisabled;
 
         public Color BackgroundColor { get; set; }
-        private Color mOriginalBackgroundColor;
         public Color BorderColor { get; set; }
-        private Color mOriginalBorderColor;
 
         public Component()
         {
@@ -66,14 +70,14 @@ namespace GLUI
             Highlighted = false;
             Enabled = true;
 
-            BackgroundColor = Color.FromArgb(128, 128, 128);
+            BackgroundColor = Color.FromArgb(100, 100, 100, 100);
             BorderColor = Color.FromArgb(150, 150, 150);
             BorderWidth = 3;
 
             Children.CollectionChanged += Children_CollectionChanged;
         }
 
-        private void Children_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Children_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             switch (e.Action)
             {
@@ -175,12 +179,48 @@ namespace GLUI
             BorderColor = Color.FromArgb((int)(BorderColor.R * 0.8),
                                          (int)(BorderColor.G * 0.8),
                                          (int)(BorderColor.B * 0.8));
+            Dirty = true;
+        }
+
+        protected void Highlight()
+        {
+            mOriginalBackgroundColor = BackgroundColor;
+            mOriginalBorderColor = BorderColor;
+            BackgroundColor = Color.FromArgb(255, (int)(BackgroundColor.R * 1.2),
+                                             (int)(BackgroundColor.G * 1.2),
+                                             (int)(BackgroundColor.B * 1.2));
+            BorderColor = Color.FromArgb((int)(BorderColor.R * 1.2),
+                                         (int)(BorderColor.G * 1.2),
+                                         (int)(BorderColor.B * 1.2));
+            Dirty = true;
         }
 
         protected void ResetColors()
         {
             BackgroundColor = mOriginalBackgroundColor;
             BorderColor = mOriginalBorderColor;
+            Dirty = true;
+        }
+
+        private Size CalculateSize()
+        {
+            var wBottomRight = new Point(0, 0);
+            var wQueue = new Queue<Component>();
+            wQueue.Enqueue(this);
+            while (wQueue.Any())
+            {
+                var wCurrent = wQueue.Dequeue();
+                if (wCurrent == null)
+                    continue;
+                foreach (var wChild in wCurrent.Children)
+                {
+                    wQueue.Enqueue(wChild);
+                }
+
+                wBottomRight = new Point(Math.Max(wBottomRight.X, wCurrent.AbsoluteLocation.X + wCurrent.Width),
+                                         Math.Max(wBottomRight.Y, wCurrent.AbsoluteLocation.Y + wCurrent.Height));
+            }
+            return new Size(wBottomRight.X - AbsoluteLocation.X, wBottomRight.Y - AbsoluteLocation.Y);
         }
 
         /// <summary>
@@ -193,7 +233,7 @@ namespace GLUI
         /// Handles the mouse events
         /// </summary>
         /// <param name="mouseState"></param>
-        protected virtual void OnMouse(MouseState mouseState) { }
+        protected virtual void OnMouse(MouseState mouseState) { if(Highlightable) Highlighted = mouseState.IsOver; }
 
         /// <summary>
         /// Renders the component
@@ -348,6 +388,7 @@ namespace GLUI
                 wChild.Update();
             }
             if (Dirty) Dirty = false;
+            Size = CalculateSize();
         }
 
         protected virtual void Dispose(bool disposing)

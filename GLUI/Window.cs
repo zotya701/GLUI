@@ -41,7 +41,6 @@ namespace GLUI
         protected override void OnUpdate()
         {
             base.OnUpdate();
-            Dirty = false;
         }
     }
 }
