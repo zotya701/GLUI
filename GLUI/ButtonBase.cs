@@ -12,7 +12,10 @@ namespace GLUI
     {
         private bool mDisposed = false;
 
-        private bool mPressed = false;
+        protected bool mPressed = false;
+
+        public event EventHandler Pressed;
+        public event EventHandler Released;
 
         public ButtonBase()
         {
@@ -30,16 +33,14 @@ namespace GLUI
             if(mouseState.IsOverDirectly && mouseState.Button == OpenTK.Input.MouseButton.Left && mouseState.IsPressed)
             {
                 Console.WriteLine("Pressed");
+                Pressed?.Invoke(this, new EventArgs());
                 mPressed = true;
-                Width = Width * 2;
-                Height = Height * 2;
             }
             if (mPressed && mouseState.ButtonDown[OpenTK.Input.MouseButton.Left] == false)
             {
                 Console.WriteLine("Released");
+                Released?.Invoke(this, new EventArgs());
                 mPressed = false;
-                Width = Width / 2;
-                Height = Height / 2;
             }
         }
 

@@ -23,6 +23,8 @@ namespace GLUI
         private Color mFontColor;
         private Font mFont;
 
+        public float GLScale { get; set; } = 1.0f;
+
         public string Text
         {
             get
@@ -94,6 +96,7 @@ namespace GLUI
         public Label()
         {
             BackgroundColor = Color.FromArgb(0, 0, 0, 0);
+            BorderWidth = 0;
 
             Text = string.Empty;
             Alignment = new Alignment
@@ -109,7 +112,13 @@ namespace GLUI
         protected override void OnRender()
         {
             base.OnRender();
+            var wCenter = AbsoluteLocation + Size * 0.5f;
+            GL.PushMatrix();
+            GL.Translate(-wCenter.X * GLScale, -wCenter.Y * GLScale, 0);
+            GL.Scale(GLScale, GLScale, 1);
+            GL.Translate(wCenter.X / GLScale, wCenter.Y / GLScale, 0);
             mFont.DrawCachedText();
+            GL.PopMatrix();
         }
 
         protected override void OnUpdate()

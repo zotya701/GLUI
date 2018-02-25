@@ -67,7 +67,8 @@ namespace Test
                         FontSize = 14,
                         FontColor = Color.Black,
                         Location = new Vector2(200, 60),
-                        Size = new Vector2(250, 100)
+                        //Size = new Vector2(250, 100),
+                        BorderWidth = 1.5f
                     },
                     new Button("ASD")
                     {
@@ -93,7 +94,7 @@ namespace Test
             {
                 for (int j = 0; j < 10; ++j)
                 {
-                    wWindow.Children.Add(new Button("ASDASDASD")
+                    wWindow.Children.Add(new Button("ASD")
                     {
                         Location = new Vector2(500 + i * 75, 100 + j * 35),
                         Size = new Vector2(70, 30)

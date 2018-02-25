@@ -419,7 +419,7 @@ namespace GLUI
                 wChild.Update();
             }
             if (Dirty) Dirty = false;
-            Size = CalculateSize();
+            //Size = CalculateSize();
         }
 
         protected virtual void Dispose(bool disposing)

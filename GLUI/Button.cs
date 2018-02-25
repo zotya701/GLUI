@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -11,6 +12,10 @@ namespace GLUI
     {
         private bool mDisposed = false;
         private Label mLabel = null;
+
+        private Animator mSizeAnimator = new Animator() { Duration = TimeSpan.FromMilliseconds(30) };
+        private Animator mLocationAnimator = new Animator() { Duration = TimeSpan.FromMilliseconds(30) };
+        private Animator mLabelAnimator = new Animator() { Duration = TimeSpan.FromMilliseconds(30) };
 
         public Label Label
         {
@@ -45,6 +50,25 @@ namespace GLUI
                 FontColor = Color.Black,
                 Text = text
             };
+
+            Pressed += (o, e) =>
+            {
+                if(mSizeAnimator.IsRunning || mLocationAnimator.IsRunning || mLabelAnimator.IsRunning)
+                {
+                    Size = mSizeAnimator.Target;
+                    Location = mLocationAnimator.Target;
+                    Label.GLScale = mLabelAnimator.Target[0];
+                }
+                mSizeAnimator.Start(Size, Size - Size * 0.1f);
+                mLocationAnimator.Start(Location, Location + Size * 0.05f);
+                mLabelAnimator.Start(new Vector2(1.0f, 0), new Vector2(mSizeAnimator.Target[0] / mSizeAnimator.Source[0], 0));
+            };
+            Released += (o, e) =>
+            {
+                mSizeAnimator.Invert();
+                mLocationAnimator.Invert();
+                mLabelAnimator.Invert();
+            };
         }
 
         protected override void OnKeyboard(KeyboardState keyboardState)
@@ -55,10 +79,20 @@ namespace GLUI
         protected override void OnMouse(MouseState mouseState)
         {
             base.OnMouse(mouseState);
+            if (mPressed || mSizeAnimator.IsRunning || mLocationAnimator.IsRunning || mLabelAnimator.IsRunning)
+            {
+                Highlighted = true;
+            }
         }
 
         protected override void OnRender()
         {
+            if (mSizeAnimator.IsRunning || mLocationAnimator.IsRunning || mLabelAnimator.IsRunning)
+            {
+                Size = mSizeAnimator.Current;
+                Location = mLocationAnimator.Current;
+                Label.GLScale = mLabelAnimator.Current[0];
+            }
             base.OnRender();
         }
 

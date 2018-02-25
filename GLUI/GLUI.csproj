@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Animator.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="ButtonBase.cs" />
     <Compile Include="CheckBox.cs" />
