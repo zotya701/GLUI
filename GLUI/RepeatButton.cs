@@ -43,7 +43,7 @@ namespace GLUI
         protected override void OnMouse(MouseState mouseState)
         {
             base.OnMouse(mouseState);
-            if (mPressed && mTimer.IsRunning)
+            if (Pressed && mTimer.IsRunning)
             {
                 if (!mDelayOccured && mTimer.Elapsed >= Delay)
                 {

@@ -13,7 +13,7 @@ namespace GLUI
     {
         private bool mDisposed = false;
 
-        protected bool mPressed = false;
+        public bool Pressed { get; protected set} = false;
 
         protected event EventHandler mButtonPressed;
         protected event EventHandler mButtonReleased;
@@ -51,12 +51,12 @@ namespace GLUI
             if(mouseState.IsOverDirectly && mouseState.Button == OpenTK.Input.MouseButton.Left && mouseState.IsPressed)
             {
                 OnPressed(this, new EventArgs());
-                mPressed = true;
+                Pressed = true;
             }
-            if (mPressed && mouseState.ButtonDown[OpenTK.Input.MouseButton.Left] == false)
+            if (Pressed && mouseState.ButtonDown[OpenTK.Input.MouseButton.Left] == false)
             {
                 OnReleased(this, new EventArgs());
-                mPressed = false;
+                Pressed = false;
             }
         }
 

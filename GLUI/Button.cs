@@ -81,7 +81,7 @@ namespace GLUI
         protected override void OnMouse(MouseState mouseState)
         {
             base.OnMouse(mouseState);
-            if (mPressed || mSizeAnimator.IsRunning || mLocationAnimator.IsRunning || mLabelAnimator.IsRunning)
+            if (Pressed || mSizeAnimator.IsRunning || mLocationAnimator.IsRunning || mLabelAnimator.IsRunning)
             {
                 Highlighted = true;
             }
