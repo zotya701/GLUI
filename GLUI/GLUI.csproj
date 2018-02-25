@@ -43,6 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Button.cs" />
+    <Compile Include="ButtonBase.cs" />
+    <Compile Include="CheckBox.cs" />
     <Compile Include="FontTextureData.cs" />
     <Compile Include="Component.cs" />
     <Compile Include="Font.cs" />
@@ -51,10 +53,13 @@
     <Compile Include="MouseState.cs" />
     <Compile Include="Alignment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RadioButton.cs" />
     <Compile Include="Raster.cs" />
+    <Compile Include="RepeatButton.cs" />
     <Compile Include="RootComponent.cs" />
     <Compile Include="Scissor.cs" />
     <Compile Include="Texture.cs" />
+    <Compile Include="ToggleButton.cs" />
     <Compile Include="Window.cs" />
   </ItemGroup>
   <ItemGroup>

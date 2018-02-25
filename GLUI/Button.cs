@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GLUI
 {
-    public class Button : Component
+    public class Button : ButtonBase
     {
         private bool mDisposed = false;
         private Label mLabel = null;
@@ -74,7 +74,7 @@ namespace GLUI
 
             if (disposing)
             {
-                //mFont?.Dispose();
+                Label?.Dispose();
             }
 
             mDisposed = true;
