@@ -5,23 +5,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
+using Foundation;
 
 namespace GLUI
 {
     public class RootComponent : Component
     {
-        public new void MouseHandler(object sender, MouseState mouseState)
+        public void MouseHandler(object sender, MouseState mouseState)
         {
             if (mouseState.IsPressed)
             {
                 base.BringFront(mouseState);
             }
-            base.MouseHandler(sender, mouseState);
+            base.MouseHandler(mouseState);
         }
 
-        public new void KeyboardHandler(object sender, KeyboardState keyboardState)
+        public void KeyboardHandler(object sender, KeyboardState keyboardState)
         {
-            base.KeyboardHandler(sender, keyboardState);
+            base.KeyboardHandler(keyboardState);
         }
 
         public new void Render()

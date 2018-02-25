@@ -8,6 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Foundation;
 
 namespace GLUI
 {
@@ -359,26 +360,24 @@ namespace GLUI
         }
 
         /// <summary>
-        /// Calls OnKeyboard and calls KeyboardHandler on child components if the component is visible
+        /// Calls OnKeyboard and calls KeyboardHandler on child components if the component is visible and enabled
         /// </summary>
-        /// <param name="sender">The object who raised the event</param>
         /// <param name="keyboardState">The state of the keyboard</param>
-        internal void KeyboardHandler(object sender, KeyboardState keyboardState)
+        internal void KeyboardHandler(KeyboardState keyboardState)
         {
             if (Invisible || Disabled) return;
             OnKeyboard(keyboardState);
             foreach (var wChild in Children)
             {
-                wChild.KeyboardHandler(sender, keyboardState);
+                wChild.KeyboardHandler(keyboardState);
             }
         }
 
         /// <summary>
-        /// Calls OnMouse and calls MouseHandler on the child components if the component is visible
+        /// Calls OnMouse and calls MouseHandler on the child components if the component is visible and enabled
         /// </summary>
-        /// <param name="sender">The object who raised the event</param>
         /// <param name="mouseState">The state of the mouse</param>
-        internal void MouseHandler(object sender, MouseState mouseState)
+        internal void MouseHandler(MouseState mouseState)
         {
             if (Invisible || Disabled) return;
             mouseState.IsOver = IsMouseOver(mouseState);
@@ -386,7 +385,7 @@ namespace GLUI
             OnMouse(mouseState);
             foreach (var wChild in Children)
             {
-                wChild.MouseHandler(sender, mouseState);
+                wChild.MouseHandler(mouseState);
             }
         }
 
@@ -422,6 +421,10 @@ namespace GLUI
             //Size = CalculateSize();
         }
 
+        /// <summary>
+        /// Releases the OpenGL resources
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (mDisposed) return;
@@ -435,6 +438,9 @@ namespace GLUI
             mDisposed = true;
         }
 
+        /// <summary>
+        /// Releases the OpenGL resources
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);

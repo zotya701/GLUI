@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region dependencies
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,8 @@ using OpenTK.Graphics;
 using OpenTK.Input;
 using GLUI;
 using System.Drawing;
+using Foundation;
+#endregion
 
 namespace Application
 {
@@ -16,8 +19,8 @@ namespace Application
     {
         private GameWindow mWindow;
         private RootComponent mRoot;
-        private GLUI.KeyboardState mKeyboardState;
-        private GLUI.MouseState mMouseState;
+        private Foundation.KeyboardState mKeyboardState;
+        private Foundation.MouseState mMouseState;
 
         public event KeyboardHandler OnKeyboard;
         public event MouseHandler OnMouse;
@@ -41,8 +44,8 @@ namespace Application
 
         public App()
         {
-            mKeyboardState = new GLUI.KeyboardState();
-            mMouseState = new GLUI.MouseState();
+            mKeyboardState = new Foundation.KeyboardState();
+            mMouseState = new Foundation.MouseState();
             // Enable antialiasing
             mWindow = new GameWindow(1, 1, new OpenTK.Graphics.GraphicsMode(32, 0, 8, 8));
             Commands = new Dictionary<string, Command>();

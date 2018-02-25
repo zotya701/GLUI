@@ -9,7 +9,7 @@ namespace Application
 {
     public static class Dispatcher
     {
-        public static ConcurrentQueue<Action> Actions { get; } = new ConcurrentQueue<Action>();
+        internal static ConcurrentQueue<Action> Actions { get; } = new ConcurrentQueue<Action>();
 
         public static void Invoke(Action action)
         {

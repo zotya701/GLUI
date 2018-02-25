@@ -54,6 +54,10 @@
       <Project>{040a41ac-77bd-466f-a38d-b32449bfce80}</Project>
       <Name>Application</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Foundation\Foundation.csproj">
+      <Project>{dd262875-66af-448a-b3f8-3d5aa272c3d9}</Project>
+      <Name>Foundation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GLUI\GLUI.csproj">
       <Project>{9289a6bf-658b-4340-8cb5-aac99525bd4c}</Project>
       <Name>GLUI</Name>

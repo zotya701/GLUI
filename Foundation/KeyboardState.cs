@@ -1,13 +1,12 @@
-﻿using OpenTK.Input;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GLUI
+namespace Foundation
 {
-    public delegate void KeyboardHandler(object sender, GLUI.KeyboardState keyboardState);
+    public delegate void KeyboardHandler(object sender, KeyboardState keyboardState);
     public class KeyboardState : EventArgs
     {
         public bool Alt { get; set; }
@@ -15,6 +14,6 @@ namespace GLUI
         public bool Shift { get; set; }
         public char KeyChar { get; set; }
         public bool IsPressed { get; set; }
-        public Dictionary<Key, bool> KeyDown { get; } = Enum.GetValues(typeof(Key)).Cast<Key>().Distinct().ToDictionary(key => (Key)key, key => false);
+        public Dictionary<OpenTK.Input.Key, bool> KeyDown { get; } = Enum.GetValues(typeof(OpenTK.Input.Key)).Cast<OpenTK.Input.Key>().Distinct().ToDictionary(key => (OpenTK.Input.Key)key, key => false);
     }
 }

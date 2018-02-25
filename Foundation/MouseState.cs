@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GLUI
+namespace Foundation
 {
-    public delegate void MouseHandler(object sender, GLUI.MouseState mouseState);
+    public delegate void MouseHandler(object sender, MouseState mouseState);
     public class MouseState : EventArgs
     {
         public int X { get; set; }
