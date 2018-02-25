@@ -51,7 +51,7 @@ namespace GLUI
                 Text = text
             };
 
-            Pressed += (o, e) =>
+            mButtonPressed += (o, e) =>
             {
                 if(mSizeAnimator.IsRunning || mLocationAnimator.IsRunning || mLabelAnimator.IsRunning)
                 {
@@ -62,8 +62,9 @@ namespace GLUI
                 mSizeAnimator.Start(Size, Size - Size * 0.1f);
                 mLocationAnimator.Start(Location, Location + Size * 0.05f);
                 mLabelAnimator.Start(new Vector2(1.0f, 0), new Vector2(mSizeAnimator.Target[0] / mSizeAnimator.Source[0], 0));
+                OnClick(this, new EventArgs());
             };
-            Released += (o, e) =>
+            mButtonReleased += (o, e) =>
             {
                 mSizeAnimator.Invert();
                 mLocationAnimator.Invert();

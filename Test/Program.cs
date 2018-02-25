@@ -70,7 +70,7 @@ namespace Test
                         //Size = new Vector2(250, 100),
                         BorderWidth = 1.5f
                     },
-                    new Button("ASD")
+                    new RepeatButton("ASD")
                     {
                         Location = new Vector2(200, 200),
                         Size = new Vector2(70, 30)

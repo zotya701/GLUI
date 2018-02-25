@@ -14,12 +14,29 @@ namespace GLUI
 
         protected bool mPressed = false;
 
-        public event EventHandler Pressed;
-        public event EventHandler Released;
+        protected event EventHandler mButtonPressed;
+        protected event EventHandler mButtonReleased;
+
+        public event EventHandler ButtonClicked;
 
         public ButtonBase()
         {
 
+        }
+
+        protected virtual void OnPressed(object s, EventArgs e)
+        {
+            mButtonPressed?.Invoke(s, e);
+        }
+
+        protected virtual void OnReleased(object s, EventArgs e)
+        {
+            mButtonReleased?.Invoke(s, e);
+        }
+
+        protected virtual void OnClick(object s, EventArgs e)
+        {
+            ButtonClicked?.Invoke(s, e);
         }
 
         protected override void OnKeyboard(KeyboardState keyboardState)
@@ -32,14 +49,12 @@ namespace GLUI
             base.OnMouse(mouseState);
             if(mouseState.IsOverDirectly && mouseState.Button == OpenTK.Input.MouseButton.Left && mouseState.IsPressed)
             {
-                Console.WriteLine("Pressed");
-                Pressed?.Invoke(this, new EventArgs());
+                OnPressed(this, new EventArgs());
                 mPressed = true;
             }
             if (mPressed && mouseState.ButtonDown[OpenTK.Input.MouseButton.Left] == false)
             {
-                Console.WriteLine("Released");
-                Released?.Invoke(this, new EventArgs());
+                OnReleased(this, new EventArgs());
                 mPressed = false;
             }
         }
