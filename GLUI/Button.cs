@@ -31,8 +31,10 @@ namespace GLUI
                     Location = mLocationAnimator.Target;
                     Label.GLScale = mLabelAnimator.Target[0];
                 }
-                mSizeAnimator.Start(Size, Size - Size * 0.1f);
-                mLocationAnimator.Start(Location, Location + Size * 0.05f);
+                //mSizeAnimator.Start(Size, Size - Size * 0.1f);
+                //mLocationAnimator.Start(Location, Location + Size * 0.05f);
+                mSizeAnimator.Start(Size, Size - new Vector2(4,4));
+                mLocationAnimator.Start(Location, Location + new Vector2(2,2));
                 mLabelAnimator.Start(new Vector2(1.0f, 0), new Vector2(mSizeAnimator.Target[0] / mSizeAnimator.Source[0], 0));
             };
             mButtonReleased += (o, e) =>

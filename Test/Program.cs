@@ -72,10 +72,10 @@ namespace Test
                         //Size = new Vector2(250, 100),
                         BorderWidth = 1.5f
                     },
-                    new RepeatButton("ASD")
+                    new RepeatButton("RepeatButton - 1")
                     {
                         Location = new Vector2(200, 200),
-                        //Size = new Vector2(70, 30)
+                        Size = new Vector2(200, 30)
                     },
                     new CheckBox("Test check box")
                     {
@@ -84,6 +84,20 @@ namespace Test
                     }
                 }
             };
+
+            var wCheckBox = wWindow.Children.First(wChild => wChild is CheckBox) as CheckBox;
+            wCheckBox.CheckBoxChanged += (o, e) => { Console.WriteLine("CheckBox changed"); };
+            wCheckBox.CheckBoxChecked += (o, e) => { Console.WriteLine("CheckBox checked"); };
+            wCheckBox.CheckBoxUnchecked += (o, e) => { Console.WriteLine("CheckBox unchecked"); };
+
+            var wRepeatButton = wWindow.Children.First(wChild => wChild is RepeatButton) as RepeatButton;
+            wRepeatButton.ButtonClicked += (o, e) => { wRepeatButton.Text = wRepeatButton.Text.Substring(0, 15) + $"{Convert.ToInt32(wRepeatButton.Text.Substring(15)) + 1}"; Console.WriteLine(wRepeatButton.Text); };
+
+            var wLabel = wWindow.Children.First(wChild => wChild is Label) as Label;
+            wLabel.LabelClicked += (o, e) => { Console.WriteLine(wLabel.Text); };
+
+            wWindow.MouseEntered += (o, e) => { Console.WriteLine("Mouse entered"); };
+            wWindow.MouseLeaved += (o, e) => { Console.WriteLine("Mouse leaved"); };
 
             //Task.Run(() =>
             //{
