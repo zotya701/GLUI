@@ -126,6 +126,12 @@ namespace Application
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)
         {
+            Action wAction;
+            while (Dispatcher.Actions.TryDequeue(out wAction))
+            {
+                wAction();
+            }
+
             OnMouse?.Invoke(this, mMouseState);
             OnKeyboard?.Invoke(this, mKeyboardState);
             GL.Enable(EnableCap.Texture2D);
