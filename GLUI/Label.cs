@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing.Drawing2D;
 using OpenTK;
+using Foundation;
 
 namespace GLUI
 {
@@ -25,6 +26,13 @@ namespace GLUI
         private Font mFont;
 
         public float GLScale { get; set; } = 1.0f;
+
+        public bool Clicked { get; protected set; } = false;
+
+        internal event EventHandler mLabelPressed;
+        internal event EventHandler mLabelReleased;
+
+        public event EventHandler LabelClicked;
 
         public string Text
         {
@@ -108,6 +116,37 @@ namespace GLUI
             FontFamily = "Arial";
             FontSize = 12;
             FontColor = Color.Black;
+        }
+
+        protected virtual internal void OnPressed(object s, EventArgs e)
+        {
+            mLabelPressed?.Invoke(s, e);
+            LabelClicked?.Invoke(s, e);
+        }
+
+        protected virtual internal void OnReleased(object s, EventArgs e)
+        {
+            mLabelReleased?.Invoke(s, e);
+        }
+
+        protected virtual internal void OnClick(object s, EventArgs e)
+        {
+            LabelClicked?.Invoke(s, e);
+        }
+
+        protected override void OnMouse(MouseState mouseState)
+        {
+            base.OnMouse(mouseState);
+            if (mouseState.IsOverDirectly && mouseState.Button == OpenTK.Input.MouseButton.Left && mouseState.IsPressed)
+            {
+                OnPressed(this, new EventArgs());
+                Clicked = true;
+            }
+            if (Clicked && mouseState.ButtonDown[OpenTK.Input.MouseButton.Left] == false)
+            {
+                OnReleased(this, new EventArgs());
+                Clicked = false;
+            }
         }
 
         protected override void OnRender()

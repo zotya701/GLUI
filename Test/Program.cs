@@ -75,7 +75,12 @@ namespace Test
                     new RepeatButton("ASD")
                     {
                         Location = new Vector2(200, 200),
-                        Size = new Vector2(70, 30)
+                        //Size = new Vector2(70, 30)
+                    },
+                    new CheckBox("Test check box")
+                    {
+                        Location = new Vector2(200, 250),
+                        //Size = new Vector2(100, 100)
                     }
                 }
             };
@@ -102,7 +107,7 @@ namespace Test
                 {
                     wWindow.Children.Add(new Button("ASD")
                     {
-                        Location = new Vector2(500 + i * 75, 100 + j * 35),
+                        Location = new Vector2(500 + i * 80, 100 + j * 35),
                         Size = new Vector2(70, 30)
                     });
                 }

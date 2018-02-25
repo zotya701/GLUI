@@ -16,12 +16,15 @@ namespace GLUI
     {
         private bool mDisposed = false;
 
+        private bool mMouseInside = false;
+
         private int mVerticesId = 0;
         private int mIndicesId = 0;
         private int mColorsId = 0;
         private int mIndicesCount = 0;
 
         private static Stack<Scissor> mScissorStack = new Stack<Scissor>();
+        protected List<Action> mImmediateDrawingActions = new List<Action>();
 
         private Vector2 mLocation;
         private Vector2 mAbsoluteLocation;
@@ -36,6 +39,9 @@ namespace GLUI
 
         private Color mOriginalBackgroundColor;
         private Color mOriginalBorderColor;
+
+        public event MouseHandler MouseEntered;
+        public event MouseHandler MouseLeaved;
 
 
         public Component Parent { get; private set; } = null;
@@ -122,6 +128,16 @@ namespace GLUI
         }
 
         #region Methods
+        public void AddDrawingAction(Action action)
+        {
+            mImmediateDrawingActions.Add(action);
+        }
+
+        public void RemoveDrawingAction(Action action)
+        {
+            mImmediateDrawingActions.Remove(action);
+        }
+
         protected bool IsMouseOver(MouseState mouseState)
         {
             return new Box2(AbsoluteLocation, AbsoluteLocation + Size).Contains(new Vector2(mouseState.X, mouseState.Y));
@@ -138,7 +154,7 @@ namespace GLUI
             while (wComponent != null && wIsNotOver)
             {
                 var wSiblingsToTheRight = wComponent.GetSiblingsToTheRight();
-                if(wSiblingsToTheRight != null)
+                if (wSiblingsToTheRight != null)
                 {
                     for (int i = wSiblingsToTheRight.Count - 1; i >= 0 && wIsNotOver; --i)
                     {
@@ -236,7 +252,7 @@ namespace GLUI
             Dirty = true;
         }
 
-        private Vector2 CalculateSize()
+        protected Vector2 CalculateSize()
         {
             var wBottomRight = new Vector2(0, 0);
             var wQueue = new Queue<Component>();
@@ -249,6 +265,7 @@ namespace GLUI
                 {
                     wQueue.Enqueue(wChild);
                 }
+                if (wCurrent != this) wCurrent.OnUpdate();
                 wBottomRight.X = Math.Max(wBottomRight.X, wCurrent.AbsoluteLocation.X + wCurrent.Width);
                 wBottomRight.Y = Math.Max(wBottomRight.Y, wCurrent.AbsoluteLocation.Y + wCurrent.Height);
             }
@@ -265,7 +282,31 @@ namespace GLUI
         /// Handles the mouse events
         /// </summary>
         /// <param name="mouseState"></param>
-        protected virtual void OnMouse(MouseState mouseState) { if (Highlightable) Highlighted = mouseState.IsOverDirectly; }
+        protected virtual void OnMouse(MouseState mouseState)
+        {
+            if (mMouseInside == false && mouseState.IsOverDirectly == true)
+            {
+                mMouseInside = true;
+                if (Highlightable) Highlighted = true;
+                OnMouseEntered(mouseState);
+            }
+            else if (mMouseInside == true && mouseState.IsOverDirectly == false)
+            {
+                mMouseInside = false;
+                if (Highlightable) Highlighted = false;
+                OnMouseLeaved(mouseState);
+            }
+        }
+
+        protected virtual void OnMouseEntered(MouseState mouseState)
+        {
+            MouseEntered?.Invoke(this, mouseState);
+        }
+
+        protected virtual void OnMouseLeaved(MouseState mouseState)
+        {
+            MouseLeaved?.Invoke(this, mouseState);
+        }
 
         /// <summary>
         /// Renders the component
@@ -317,34 +358,37 @@ namespace GLUI
             }
 
             // The border
-            wVertices.AddRange(new List<float>
+            if (BorderWidth > 0)
             {
-                AbsoluteLocation.X + BorderWidth, AbsoluteLocation.Y + BorderWidth,                     // 4, same as 0
-                AbsoluteLocation.X + Width - BorderWidth, AbsoluteLocation.Y + BorderWidth,             // 5, same as 1
-                AbsoluteLocation.X + Width - BorderWidth, AbsoluteLocation.Y + Height - BorderWidth,    // 6, same as 2
-                AbsoluteLocation.X + BorderWidth, AbsoluteLocation.Y + Height - BorderWidth,            // 7, same as 3
-                AbsoluteLocation.X, AbsoluteLocation.Y,                                                 // 8
-                AbsoluteLocation.X + Width, AbsoluteLocation.Y,                                         // 9
-                AbsoluteLocation.X + Width, AbsoluteLocation.Y + BorderWidth,                           // 10
-                AbsoluteLocation.X + Width, AbsoluteLocation.Y + Height - BorderWidth,                  // 11
-                AbsoluteLocation.X + Width, AbsoluteLocation.Y + Height,                                // 12
-                AbsoluteLocation.X, AbsoluteLocation.Y + Height,                                        // 13
-                AbsoluteLocation.X, AbsoluteLocation.Y + Height - BorderWidth,                          // 14
-                AbsoluteLocation.X, AbsoluteLocation.Y + BorderWidth,                                   // 15
-            });
-            wIndices.AddRange(new List<uint>
-            {
-                15,  8,  9,  9, 10, 15,    // Top
-                 5, 10, 11, 11,  6,  5,    // Right
-                11, 12, 13, 13, 14, 11,    // Bottom
-                 7, 14, 15, 15,  4,  7     // Left
-            });
-            for (int i = 0; i < 12; ++i)
-            {
-                wColors.Add(BorderColor.R);
-                wColors.Add(BorderColor.G);
-                wColors.Add(BorderColor.B);
-                wColors.Add(BorderColor.A);
+                wVertices.AddRange(new List<float>
+                {
+                    AbsoluteLocation.X + BorderWidth, AbsoluteLocation.Y + BorderWidth,                     // 4, same as 0
+                    AbsoluteLocation.X + Width - BorderWidth, AbsoluteLocation.Y + BorderWidth,             // 5, same as 1
+                    AbsoluteLocation.X + Width - BorderWidth, AbsoluteLocation.Y + Height - BorderWidth,    // 6, same as 2
+                    AbsoluteLocation.X + BorderWidth, AbsoluteLocation.Y + Height - BorderWidth,            // 7, same as 3
+                    AbsoluteLocation.X, AbsoluteLocation.Y,                                                 // 8
+                    AbsoluteLocation.X + Width, AbsoluteLocation.Y,                                         // 9
+                    AbsoluteLocation.X + Width, AbsoluteLocation.Y + BorderWidth,                           // 10
+                    AbsoluteLocation.X + Width, AbsoluteLocation.Y + Height - BorderWidth,                  // 11
+                    AbsoluteLocation.X + Width, AbsoluteLocation.Y + Height,                                // 12
+                    AbsoluteLocation.X, AbsoluteLocation.Y + Height,                                        // 13
+                    AbsoluteLocation.X, AbsoluteLocation.Y + Height - BorderWidth,                          // 14
+                    AbsoluteLocation.X, AbsoluteLocation.Y + BorderWidth,                                   // 15
+                });
+                wIndices.AddRange(new List<uint>
+                {
+                    15,  8,  9,  9, 10, 15,    // Top
+                     5, 10, 11, 11,  6,  5,    // Right
+                    11, 12, 13, 13, 14, 11,    // Bottom
+                     7, 14, 15, 15,  4,  7     // Left
+                });
+                for (int i = 0; i < 12; ++i)
+                {
+                    wColors.Add(BorderColor.R);
+                    wColors.Add(BorderColor.G);
+                    wColors.Add(BorderColor.B);
+                    wColors.Add(BorderColor.A);
+                }
             }
 
             if (mVerticesId == 0) mVerticesId = GL.GenBuffer();
@@ -399,6 +443,7 @@ namespace GLUI
             PushScissor();
             if (Disabled) GreyOut();
             OnRender();
+            mImmediateDrawingActions.ForEach(wAction => wAction());
             if (Disabled) ResetColors();
             foreach (var wChild in Children)
             {
@@ -419,7 +464,6 @@ namespace GLUI
                 wChild.Update();
             }
             if (Dirty) Dirty = false;
-            //Size = CalculateSize();
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Foundation;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace GLUI
@@ -14,11 +15,31 @@ namespace GLUI
         private bool mDisposed = false;
 
         private Label mLabel = null;
+        private bool mPressed = false;
 
-        public bool Pressed { get; protected set; } = false;
+        public bool Pressed
+        {
+            get
+            {
+                return mPressed;
+            }
+            set
+            {
+                if (mPressed == value) return;
+                mPressed = value;
+                if (mPressed)
+                {
+                    OnPressed(this, new EventArgs());
+                }
+                else
+                {
+                    OnReleased(this, new EventArgs());
+                }
+            }
+        }
 
-        protected event EventHandler mButtonPressed;
-        protected event EventHandler mButtonReleased;
+        internal event EventHandler mButtonPressed;
+        internal event EventHandler mButtonReleased;
 
         public event EventHandler ButtonClicked;
 
@@ -57,17 +78,18 @@ namespace GLUI
             };
         }
 
-        protected virtual void OnPressed(object s, EventArgs e)
+        protected virtual internal void OnPressed(object s, EventArgs e)
         {
             mButtonPressed?.Invoke(s, e);
+            OnClick(this, new EventArgs());
         }
 
-        protected virtual void OnReleased(object s, EventArgs e)
+        protected virtual internal void OnReleased(object s, EventArgs e)
         {
             mButtonReleased?.Invoke(s, e);
         }
 
-        protected virtual void OnClick(object s, EventArgs e)
+        protected virtual internal void OnClick(object s, EventArgs e)
         {
             ButtonClicked?.Invoke(s, e);
         }
@@ -82,12 +104,10 @@ namespace GLUI
             base.OnMouse(mouseState);
             if(mouseState.IsOverDirectly && mouseState.Button == OpenTK.Input.MouseButton.Left && mouseState.IsPressed)
             {
-                OnPressed(this, new EventArgs());
                 Pressed = true;
             }
             if (Pressed && mouseState.ButtonDown[OpenTK.Input.MouseButton.Left] == false)
             {
-                OnReleased(this, new EventArgs());
                 Pressed = false;
             }
         }
@@ -99,7 +119,6 @@ namespace GLUI
 
         protected override void OnUpdate()
         {
-            Label.Size = Size;
             base.OnUpdate();
         }
 

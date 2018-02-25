@@ -34,13 +34,17 @@ namespace GLUI
                 mSizeAnimator.Start(Size, Size - Size * 0.1f);
                 mLocationAnimator.Start(Location, Location + Size * 0.05f);
                 mLabelAnimator.Start(new Vector2(1.0f, 0), new Vector2(mSizeAnimator.Target[0] / mSizeAnimator.Source[0], 0));
-                OnClick(this, new EventArgs());
             };
             mButtonReleased += (o, e) =>
             {
                 mSizeAnimator.Invert();
                 mLocationAnimator.Invert();
                 mLabelAnimator.Invert();
+                Highlighted = false;
+            };
+            MouseLeaved += (o, e) =>
+            {
+                if (!Pressed) Highlighted = false;
             };
         }
 
@@ -52,7 +56,8 @@ namespace GLUI
         protected override void OnMouse(MouseState mouseState)
         {
             base.OnMouse(mouseState);
-            if (Pressed || mSizeAnimator.IsRunning || mLocationAnimator.IsRunning || mLabelAnimator.IsRunning)
+            //if (Pressed || mSizeAnimator.IsRunning || mLocationAnimator.IsRunning || mLabelAnimator.IsRunning)
+            if (Pressed || mouseState.IsOverDirectly)
             {
                 Highlighted = true;
             }
@@ -71,6 +76,13 @@ namespace GLUI
 
         protected override void OnUpdate()
         {
+            if (Label.Size.X == 0 && Label.Size.Y == 0)
+            {
+                Size = CalculateSize() + new Vector2(10, 5);
+            }
+            //Size = new Vector2(Math.Max(Width, Label.Size.X),
+            //                   Math.Max(Height, Label.Size.Y));
+            Label.Size = Size;
             base.OnUpdate();
         }
 
