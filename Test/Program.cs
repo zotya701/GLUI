@@ -44,7 +44,7 @@ namespace Test
             var wWindow = new Window
             {
                 //BackgroundColor = Color.FromArgb(100, 255, 0, 0),
-                Location = new Vector2(300, 100),
+                Location = new Vector2(300.0f, 100.0f),
                 Size = new Vector2(1300, 500),
                 Children =
                 {
@@ -66,7 +66,6 @@ namespace Test
                         FontFamily = "Arial",
                         FontSize = 14,
                         FontColor = Color.Black,
-                        BorderWidth = 1.5f,
                         Location = new Vector2(200, 60),
                         Size = new Vector2(250, 100)
                     },

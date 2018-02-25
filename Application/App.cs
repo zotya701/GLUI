@@ -43,7 +43,8 @@ namespace Application
         {
             mKeyboardState = new GLUI.KeyboardState();
             mMouseState = new GLUI.MouseState();
-            mWindow = new GameWindow();
+            // Enable antialiasing
+            mWindow = new GameWindow(1, 1, new OpenTK.Graphics.GraphicsMode(32, 0, 8, 8));
             Commands = new Dictionary<string, Command>();
 
             mWindow.Load += OnLoad;
@@ -127,6 +128,10 @@ namespace Application
         {
             OnMouse?.Invoke(this, mMouseState);
             OnKeyboard?.Invoke(this, mKeyboardState);
+            GL.Enable(EnableCap.Texture2D);
+            GL.Enable(EnableCap.ScissorTest);
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
             mRoot.Update();
         }
 
@@ -135,9 +140,7 @@ namespace Application
             GL.ClearColor(0.1f, 0.2f, 0.3f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            GL.Enable(EnableCap.ScissorTest);
             mRoot.Render();
-            GL.Disable(EnableCap.ScissorTest);
 
             mWindow.SwapBuffers();
         }

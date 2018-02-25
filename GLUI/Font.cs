@@ -56,10 +56,6 @@ namespace GLUI
 
         public void DrawCachedText()
         {
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            GL.Disable(EnableCap.Lighting);
-            GL.Enable(EnableCap.Texture2D);
             GL.BindTexture(TextureTarget.Texture2D, mTexture.Id);
 
             GL.EnableClientState(ArrayCap.VertexArray);
@@ -290,7 +286,6 @@ namespace GLUI
                 Width = wMWidth,
                 Height = wMHeight
             };
-            GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
             GL.BindTexture(TextureTarget.Texture2D, mTexture.Id);
             var wData = wCharacterSetImage.LockBits(new Rectangle(0, 0, wCharacterSetImage.Width, wCharacterSetImage.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, wCharacterSetImage.Width, wCharacterSetImage.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, wData.Scan0);

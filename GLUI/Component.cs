@@ -72,7 +72,7 @@ namespace GLUI
 
             BackgroundColor = Color.FromArgb(100, 100, 100, 100);
             BorderColor = Color.FromArgb(150, 150, 150);
-            BorderWidth = 3;
+            BorderWidth = 1.5f;
 
             Children.CollectionChanged += Children_CollectionChanged;
         }
