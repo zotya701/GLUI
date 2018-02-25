@@ -13,16 +13,48 @@ namespace GLUI
     {
         private bool mDisposed = false;
 
-        public bool Pressed { get; protected set} = false;
+        private Label mLabel = null;
+
+        public bool Pressed { get; protected set; } = false;
 
         protected event EventHandler mButtonPressed;
         protected event EventHandler mButtonReleased;
 
         public event EventHandler ButtonClicked;
 
+        public Label Label
+        {
+            get
+            {
+                return mLabel;
+            }
+            set
+            {
+                if (mLabel == value) return;
+
+                Children.Remove(mLabel);
+                mLabel?.Dispose();
+                mLabel = value;
+                Children.Add(mLabel);
+            }
+        }
+
+        public string Text { get { return Label.Text; } set { if (Text == value) return; Label.Text = value; } }
+
         public ButtonBase()
         {
-
+            Label = new Label()
+            {
+                Alignment = new Alignment
+                {
+                    Vertical = Vertical.Center,
+                    Horizontal = Horizontal.Center
+                },
+                FontFamily = "Arial",
+                FontSize = 14,
+                FontColor = Color.Black,
+                Text = string.Empty
+            };
         }
 
         protected virtual void OnPressed(object s, EventArgs e)
@@ -67,6 +99,7 @@ namespace GLUI
 
         protected override void OnUpdate()
         {
+            Label.Size = Size;
             base.OnUpdate();
         }
 
@@ -76,7 +109,7 @@ namespace GLUI
 
             if (disposing)
             {
-                
+                Label?.Dispose();
             }
 
             mDisposed = true;

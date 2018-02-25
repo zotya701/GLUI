@@ -12,45 +12,16 @@ namespace GLUI
     public class Button : ButtonBase
     {
         private bool mDisposed = false;
-        private Label mLabel = null;
 
         private Animator mSizeAnimator = new Animator() { Duration = TimeSpan.FromMilliseconds(30) };
         private Animator mLocationAnimator = new Animator() { Duration = TimeSpan.FromMilliseconds(30) };
         private Animator mLabelAnimator = new Animator() { Duration = TimeSpan.FromMilliseconds(30) };
 
-        public Label Label
-        {
-            get
-            {
-                return mLabel;
-            }
-            set
-            {
-                if (mLabel == value) return;
-
-                Children.Remove(mLabel);
-                mLabel = value;
-                Children.Add(mLabel);
-            }
-        }
-
-        public string Text { get { return Label.Text; } set { if (Text == value) return; Label.Text = value; } }
-
         public Button(string text)
         {
             Highlightable = true;
-            Label = new Label()
-            {
-                Alignment = new Alignment
-                {
-                    Vertical = Vertical.Center,
-                    Horizontal = Horizontal.Center
-                },
-                FontFamily = "Arial",
-                FontSize = 14,
-                FontColor = Color.Black,
-                Text = text
-            };
+
+            Label.Text = text;
 
             mButtonPressed += (o, e) =>
             {
@@ -100,7 +71,6 @@ namespace GLUI
 
         protected override void OnUpdate()
         {
-            Label.Size = Size;
             base.OnUpdate();
         }
 
@@ -110,7 +80,7 @@ namespace GLUI
 
             if (disposing)
             {
-                Label?.Dispose();
+
             }
 
             mDisposed = true;
