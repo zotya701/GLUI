@@ -52,7 +52,7 @@ namespace GLUI
         public bool Visible { get { return mVisible; } set { mVisible = value; mInvisible = !value; } }
         public bool Invisible { get { return mInvisible; } set { mInvisible = value; mVisible = !value; } }
         public bool Highlightable { get { return mHighlightable; } set { if (mHighlightable == value) return; mHighlightable = value; Dirty = true; } }
-        public bool Highlighted { get { return mHighlighted; } set { if (mHighlighted == value) return; mHighlighted = value; Dirty = true; if (value) Highlight(); else ResetColors();  } }
+        public bool Highlighted { get { return mHighlighted; } set { if (mHighlighted == value) return; mHighlighted = value; Dirty = true; if (value) Highlight(); else ResetColors(); } }
         public bool Enabled { get { return mEnabled; } set { mEnabled = value; mDisabled = !value; } }
         public bool Disabled { get { return mDisabled; } set { mDisabled = value; mEnabled = !value; } }
 
@@ -124,6 +124,38 @@ namespace GLUI
         protected bool IsMouseOver(MouseState mouseState)
         {
             return (new Rectangle(AbsoluteLocation, Size)).Contains(mouseState.X, mouseState.Y);
+        }
+
+        protected bool IsMouseOverDirectly(MouseState mouseState)
+        {
+            if (mouseState.IsOver == false)
+            {
+                return false;
+            }
+            var wIsNotOver = true;
+            var wComponent = this;
+            while (wComponent != null && wIsNotOver)
+            {
+                var wSiblingsToTheRight = wComponent.GetSiblingsToTheRight();
+                if(wSiblingsToTheRight != null)
+                {
+                    for (int i = wSiblingsToTheRight.Count - 1; i >= 0 && wIsNotOver; --i)
+                    {
+                        wIsNotOver = wIsNotOver && !wSiblingsToTheRight[i].IsMouseOver(mouseState);
+                    }
+                }
+                else
+                {
+                    return wIsNotOver;
+                }
+                wComponent = wComponent.Parent;
+            }
+            return wIsNotOver;
+        }
+
+        protected List<Component> GetSiblingsToTheRight()
+        {
+            return Parent?.Children.Skip(Parent.Children.IndexOf(this)).Skip(1).ToList();
         }
 
         protected void BringFront(MouseState mouseState)
@@ -233,7 +265,7 @@ namespace GLUI
         /// Handles the mouse events
         /// </summary>
         /// <param name="mouseState"></param>
-        protected virtual void OnMouse(MouseState mouseState) { if(Highlightable) Highlighted = mouseState.IsOver; }
+        protected virtual void OnMouse(MouseState mouseState) { if (Highlightable) Highlighted = mouseState.IsOverDirectly; }
 
         /// <summary>
         /// Renders the component
@@ -352,6 +384,7 @@ namespace GLUI
         {
             if (Invisible || Disabled) return;
             mouseState.IsOver = IsMouseOver(mouseState);
+            mouseState.IsOverDirectly = IsMouseOverDirectly(mouseState);
             OnMouse(mouseState);
             foreach (var wChild in Children)
             {
