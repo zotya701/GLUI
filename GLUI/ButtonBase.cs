@@ -4,12 +4,15 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenTK.Graphics.OpenGL;
 
 namespace GLUI
 {
     public abstract class ButtonBase : Component
     {
         private bool mDisposed = false;
+
+        private bool mPressed = false;
 
         public ButtonBase()
         {
@@ -24,6 +27,20 @@ namespace GLUI
         protected override void OnMouse(MouseState mouseState)
         {
             base.OnMouse(mouseState);
+            if(mouseState.IsOverDirectly && mouseState.Button == OpenTK.Input.MouseButton.Left && mouseState.IsPressed)
+            {
+                Console.WriteLine("Pressed");
+                mPressed = true;
+                Width = Width * 2;
+                Height = Height * 2;
+            }
+            if (mPressed && mouseState.ButtonDown[OpenTK.Input.MouseButton.Left] == false)
+            {
+                Console.WriteLine("Released");
+                mPressed = false;
+                Width = Width / 2;
+                Height = Height / 2;
+            }
         }
 
         protected override void OnRender()

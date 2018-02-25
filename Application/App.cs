@@ -91,7 +91,7 @@ namespace Application
                 Console.WriteLine($"  {wControlKey.Key} -> {wControlKey.Value}");
             }
 
-            mRoot.Size = Size;
+            mRoot.Size = new Vector2(Width, Height);
             mWindow.Run();
         }
 
@@ -118,13 +118,15 @@ namespace Application
 
         private void OnResize(object sender, EventArgs e)
         {
-            mRoot.Size = Size;
+            mRoot.Size = new Vector2(Width, Height);
             GL.Viewport(mWindow.ClientRectangle);
             OnRenderFrame(null, null);
         }
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)
         {
+            OnMouse?.Invoke(this, mMouseState);
+            OnKeyboard?.Invoke(this, mKeyboardState);
             mRoot.Update();
         }
 
@@ -136,32 +138,6 @@ namespace Application
             GL.Enable(EnableCap.ScissorTest);
             mRoot.Render();
             GL.Disable(EnableCap.ScissorTest);
-
-
-            //var wViewport = new int[4];
-            //GL.GetInteger(GetPName.Viewport, wViewport);
-            //GL.MatrixMode(MatrixMode.Projection);
-            //GL.LoadIdentity();
-            //GL.Viewport(wViewport[0], wViewport[1], wViewport[2], wViewport[3]);
-            //GL.MatrixMode(MatrixMode.Modelview);
-            //GL.LoadIdentity();
-            //GL.Ortho(0, wViewport[2], wViewport[3], 0, 1, -1);
-
-            //GL.Enable(EnableCap.Blend);
-            //GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
-            //GL.Disable(EnableCap.Lighting);
-            //GL.Enable(EnableCap.Texture2D);
-            //GL.BindTexture(TextureTarget.Texture2D, 3);
-            //GL.Begin(BeginMode.Quads);
-            //GL.TexCoord2(0, 0);
-            //GL.Vertex2(0, 0);
-            //GL.TexCoord2(1, 0);
-            //GL.Vertex2(wViewport[2], 0);
-            //GL.TexCoord2(1, 1);
-            //GL.Vertex2(wViewport[2], wViewport[3]);
-            //GL.TexCoord2(0, 1);
-            //GL.Vertex2(0, wViewport[3]);
-            //GL.End();
 
             mWindow.SwapBuffers();
         }

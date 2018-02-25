@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -9,11 +10,16 @@ namespace GLUI
 {
     public static class Raster
     {
-        public static Point Location { get; set; } = new Point(0, 0);
+        public static Vector2 Location { get; set; } = new Vector2(0, 0);
 
-        public static void Move(int right, int down)
+        public static void Move(float right, float down)
         {
-            Location = Location + new Size(right, down);
+            Location = Location + new Vector2(right, down);
+        }
+
+        public static void Move(Vector2 vector)
+        {
+            Location = Location + vector;
         }
     }
 }

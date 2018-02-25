@@ -26,16 +26,6 @@ namespace GLUI
         protected override void OnRender()
         {
             base.OnRender();
-
-            //GL.Color3(BackgroundColor.R,
-            //          BackgroundColor.G,
-            //          BackgroundColor.B);
-            //GL.Begin(BeginMode.Quads);
-            //GL.Vertex2(AbsoluteLocation.X, AbsoluteLocation.Y);
-            //GL.Vertex2(AbsoluteLocation.X + Width, AbsoluteLocation.Y);
-            //GL.Vertex2(AbsoluteLocation.X + Width, AbsoluteLocation.Y + Height);
-            //GL.Vertex2(AbsoluteLocation.X, AbsoluteLocation.Y + Height);
-            //GL.End();
         }
 
         protected override void OnUpdate()

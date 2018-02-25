@@ -22,10 +22,10 @@ namespace GLUI
 
         private static Stack<Scissor> mScissorStack = new Stack<Scissor>();
 
-        private Point mLocation;
-        private Point mAbsoluteLocation;
-        private Size mSize;
-        private int mBorderWidth;
+        private Vector2 mLocation;
+        private Vector2 mAbsoluteLocation;
+        private Vector2 mSize;
+        private float mBorderWidth;
         private bool mVisible;
         private bool mInvisible;
         private bool mHighlightable;
@@ -39,14 +39,14 @@ namespace GLUI
 
         public Component Parent { get; private set; } = null;
         public ObservableCollection<Component> Children { get; } = new ObservableCollection<Component>();
-        public int X { get { return Location.X; } set { Location = new Point(value, Y); } }
-        public int Y { get { return Location.Y; } set { Location = new Point(X, value); } }
-        public Point Location { get { return mLocation; } set { if (mLocation == value) return; mLocation = value; Dirty = true; } }
-        public Point AbsoluteLocation { get { if (Dirty) { mAbsoluteLocation = (Parent?.AbsoluteLocation ?? new Point(0, 0)) + new Size(X, Y); } return mAbsoluteLocation; } }
-        public int Width { get { return Size.Width; } set { Size = new Size(value, Height); } }
-        public int Height { get { return Size.Height; } set { Size = new Size(Width, value); } }
-        public Size Size { get { return mSize; } set { if (mSize == value) return; mSize = value; Dirty = true; } }
-        public int BorderWidth { get { return mBorderWidth; } set { if (mBorderWidth == value) return; mBorderWidth = value; Dirty = true; } }
+        public float X { get { return Location.X; } set { Location = new Vector2(value, Y); } }
+        public float Y { get { return Location.Y; } set { Location = new Vector2(X, value); } }
+        public Vector2 Location { get { return mLocation; } set { if (mLocation == value) return; mLocation = value; Dirty = true; } }
+        public Vector2 AbsoluteLocation { get { if (Dirty) { mAbsoluteLocation = (Parent?.AbsoluteLocation ?? new Vector2(0, 0)) + new Vector2(X, Y); } return mAbsoluteLocation; } }
+        public float Width { get { return Size.X; } set { Size = new Vector2(value, Height); } }
+        public float Height { get { return Size.Y; } set { Size = new Vector2(Width, value); } }
+        public Vector2 Size { get { return mSize; } set { if (mSize == value) return; mSize = value; Dirty = true; } }
+        public float BorderWidth { get { return mBorderWidth; } set { if (mBorderWidth == value) return; mBorderWidth = value; Dirty = true; } }
 
         public bool Dirty { get; set; }
         public bool Visible { get { return mVisible; } set { mVisible = value; mInvisible = !value; } }
@@ -61,8 +61,8 @@ namespace GLUI
 
         public Component()
         {
-            Location = new Point(0, 0);
-            Size = new Size(0, 0);
+            Location = new Vector2(0, 0);
+            Size = new Vector2(0, 0);
 
             Dirty = true;
             Visible = true;
@@ -123,7 +123,7 @@ namespace GLUI
         #region Methods
         protected bool IsMouseOver(MouseState mouseState)
         {
-            return (new Rectangle(AbsoluteLocation, Size)).Contains(mouseState.X, mouseState.Y);
+            return new Box2(AbsoluteLocation, AbsoluteLocation + Size).Contains(new Vector2(mouseState.X, mouseState.Y));
         }
 
         protected bool IsMouseOverDirectly(MouseState mouseState)
@@ -234,25 +234,23 @@ namespace GLUI
             Dirty = true;
         }
 
-        private Size CalculateSize()
+        private Vector2 CalculateSize()
         {
-            var wBottomRight = new Point(0, 0);
+            var wBottomRight = new Vector2(0, 0);
             var wQueue = new Queue<Component>();
             wQueue.Enqueue(this);
             while (wQueue.Any())
             {
                 var wCurrent = wQueue.Dequeue();
-                if (wCurrent == null)
-                    continue;
+                if (wCurrent == null) continue;
                 foreach (var wChild in wCurrent.Children)
                 {
                     wQueue.Enqueue(wChild);
                 }
-
-                wBottomRight = new Point(Math.Max(wBottomRight.X, wCurrent.AbsoluteLocation.X + wCurrent.Width),
-                                         Math.Max(wBottomRight.Y, wCurrent.AbsoluteLocation.Y + wCurrent.Height));
+                wBottomRight.X = Math.Max(wBottomRight.X, wCurrent.AbsoluteLocation.X + wCurrent.Width);
+                wBottomRight.Y = Math.Max(wBottomRight.Y, wCurrent.AbsoluteLocation.Y + wCurrent.Height);
             }
-            return new Size(wBottomRight.X - AbsoluteLocation.X, wBottomRight.Y - AbsoluteLocation.Y);
+            return wBottomRight - AbsoluteLocation;
         }
 
         /// <summary>
@@ -274,7 +272,7 @@ namespace GLUI
         {
             GL.EnableClientState(ArrayCap.VertexArray);
             GL.BindBuffer(BufferTarget.ArrayBuffer, mVerticesId);
-            GL.VertexPointer(2, VertexPointerType.Int, 0, 0);
+            GL.VertexPointer(2, VertexPointerType.Float, 0, 0);
 
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, mIndicesId);
 
@@ -296,7 +294,7 @@ namespace GLUI
         protected virtual void OnUpdate()
         {
             // The background
-            var wVertices = new List<int>
+            var wVertices = new List<float>
             {
                 AbsoluteLocation.X + BorderWidth, AbsoluteLocation.Y + BorderWidth,                     // 0, Upper left
                 AbsoluteLocation.X + Width - BorderWidth, AbsoluteLocation.Y + BorderWidth,             // 1, Upper right
@@ -317,7 +315,7 @@ namespace GLUI
             }
 
             // The border
-            wVertices.AddRange(new List<int>
+            wVertices.AddRange(new List<float>
             {
                 AbsoluteLocation.X + BorderWidth, AbsoluteLocation.Y + BorderWidth,                     // 4, same as 0
                 AbsoluteLocation.X + Width - BorderWidth, AbsoluteLocation.Y + BorderWidth,             // 5, same as 1
@@ -353,7 +351,7 @@ namespace GLUI
             mIndicesCount = wIndices.Count;
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, mVerticesId);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(int) * wVertices.Count, wVertices.ToArray(), BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * wVertices.Count, wVertices.ToArray(), BufferUsageHint.StaticDraw);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, mIndicesId);
             GL.BufferData(BufferTarget.ElementArrayBuffer, sizeof(uint) * wIndices.Count, wIndices.ToArray(), BufferUsageHint.StaticDraw);
             GL.BindBuffer(BufferTarget.ArrayBuffer, mColorsId);

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing.Drawing2D;
+using OpenTK;
 
 namespace GLUI
 {
@@ -18,7 +19,7 @@ namespace GLUI
         private string mText;
         private Alignment mAlignment;
         private string mFontFamily;
-        private int mFontSize;
+        private float mFontSize;
         private Color mFontColor;
         private Font mFont;
 
@@ -62,7 +63,7 @@ namespace GLUI
             }
         }
 
-        public int FontSize
+        public float FontSize
         {
             get
             {
@@ -117,24 +118,25 @@ namespace GLUI
             {
                 mFontChanged = false;
                 mFont?.Dispose();
-                mFont = Font.Create(FontFamily, FontSize, FontColor);
+                mFont = new Font(FontFamily, FontSize, FontColor);
             }
 
             var wSize = mFont.MeasureText(Text);
-            Size = new Size(Math.Max(Width, wSize.Width), Math.Max(Height, wSize.Height));
+            Size = new Vector2(Math.Max(Width, wSize.X),
+                               Math.Max(Height, wSize.Y));
 
-            var wX = 0;
-            var wY = 0;
+            float wX = 0;
+            float wY = 0;
             switch (Alignment.Horizontal)
             {
                 case Horizontal.Left:
                     wX = AbsoluteLocation.X;
                     break;
                 case Horizontal.Center:
-                    wX = (AbsoluteLocation.X + Size.Width / 2) - wSize.Width / 2;
+                    wX = (AbsoluteLocation.X + Size.X / 2) - wSize.X / 2;
                     break;
                 case Horizontal.Right:
-                    wX = AbsoluteLocation.X + Size.Width - wSize.Width;
+                    wX = AbsoluteLocation.X + Size.X - wSize.X;
                     break;
             }
             switch (Alignment.Vertical)
@@ -143,13 +145,13 @@ namespace GLUI
                     wY = AbsoluteLocation.Y;
                     break;
                 case Vertical.Center:
-                    wY = (AbsoluteLocation.Y + Size.Height / 2) - wSize.Height / 2;
+                    wY = (AbsoluteLocation.Y + Size.Y / 2) - wSize.Y / 2;
                     break;
                 case Vertical.Bottom:
-                    wY = AbsoluteLocation.Y + Size.Height - wSize.Height;
+                    wY = AbsoluteLocation.Y + Size.Y - wSize.Y;
                     break;
             }
-            Raster.Location = new Point(wX, wY);
+            Raster.Location = new Vector2(wX, wY);
             mFont.RegenerateTextCache(Text);
 
             base.OnUpdate();
