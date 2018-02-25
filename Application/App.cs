@@ -11,6 +11,7 @@ using OpenTK.Input;
 using GLUI;
 using System.Drawing;
 using Foundation;
+using System.Diagnostics;
 #endregion
 
 namespace Application
@@ -19,6 +20,10 @@ namespace Application
     {
         private GameWindow mWindow;
         private RootComponent mRoot;
+        private Label mFPSLabel;
+        private Stopwatch mFPSTimer = Stopwatch.StartNew();
+        private ulong mFrameCounter = 0;
+        private LinkedList<DateTime> mFrameTimes = new LinkedList<DateTime>();
         private Foundation.KeyboardState mKeyboardState;
         private Foundation.MouseState mMouseState;
 
@@ -75,6 +80,15 @@ namespace Application
             };
             OnKeyboard += mRoot.KeyboardHandler;
             OnMouse += mRoot.MouseHandler;
+
+            mFPSLabel = new Label
+            {
+                FontFamily = "Arial",
+                FontColor = Color.Orange,
+                FontSize = 20,
+                Location = new Vector2(0, 0)
+            };
+            AddComponent(mFPSLabel);
         }
 
         public void Run()
@@ -125,6 +139,7 @@ namespace Application
             mRoot.Size = new Vector2(Width, Height);
             GL.Viewport(mWindow.ClientRectangle);
             OnRenderFrame(null, null);
+            mFrameTimes.Clear();
         }
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)
@@ -133,6 +148,19 @@ namespace Application
             while (Dispatcher.Actions.TryDequeue(out wAction))
             {
                 wAction();
+            }
+
+            mFPSLabel.Visible = ShowFPS;
+            mFPSLabel.BringFront();
+            if(mFrameCounter++ % 50 == 0)
+            {
+                mFrameTimes.AddLast(DateTime.Now);
+                if (mFPSTimer.Elapsed.TotalSeconds >= 0.20f && mFrameTimes.Count >= 2)
+                {
+                    mFPSLabel.Text = $"{Math.Round(mFrameTimes.Count * 50 / (mFrameTimes.Last() - mFrameTimes.First()).TotalSeconds)}";
+                    mFrameTimes.RemoveFirst();
+                    mFPSTimer.Restart();
+                }
             }
 
             OnMouse?.Invoke(this, mMouseState);

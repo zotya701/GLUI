@@ -181,9 +181,10 @@ namespace GLUI
             } while (wComponents.Count > 1 && wFoundTheClosestComponent);
         }
 
-        protected void BringFront()
+        public void BringFront()
         {
-            var wSiblings = Parent?.Children;
+            if (Parent == null) return;
+            var wSiblings = Parent.Children;
             wSiblings.Remove(this);
             wSiblings.Add(this);
             Parent?.BringFront();

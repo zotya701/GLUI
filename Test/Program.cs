@@ -26,6 +26,7 @@ namespace Test
                 Width = 210 * 8,
                 Height = 90 * 8,
                 VSync = false,
+                ShowFPS = true,
                 Commands = new Dictionary<string, Command>
                 {
                     {"Exit", Key.Escape },
