@@ -35,7 +35,19 @@ namespace Foundation
             }
             if (wFullFilled)
             {
-                Activated?.Invoke(this, this);
+                var wInOrder = true;
+                var wKeys = Keys.ToList();
+                var wLast10Keys = keyboardState.Last10Keys.ToList();
+                wKeys.Reverse();
+                wLast10Keys.Reverse();
+                for (int i = 0; i < Math.Min(wKeys.Count, wLast10Keys.Count); ++i)
+                {
+                    wInOrder = wInOrder && wKeys[i] == wLast10Keys[i];
+                }
+                if(wInOrder == wKeys.Count >= Math.Min(wKeys.Count, wLast10Keys.Count))
+                {
+                    Activated?.Invoke(this, this);
+                }
             }
         }
 

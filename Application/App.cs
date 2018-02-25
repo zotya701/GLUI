@@ -160,6 +160,7 @@ namespace Application
             mKeyboardState.Control = e.Control;
             mKeyboardState.Shift = e.Shift;
             mKeyboardState.KeyDown[e.Key] = true;
+            mKeyboardState.LastKey = e.Key;
 
             foreach(var wControlKey in Commands.Values)
             {
