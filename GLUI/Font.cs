@@ -21,13 +21,14 @@ namespace GLUI
         private int mIndicesCount = 0;
 
         private Texture mTexture;
+        private Color mColor;
         private System.Drawing.Font mFont;
         private int mFontHeight;
         private Dictionary<char, FontTextureData> mLookUpTable;
         private Vector2 mOriginalRasterLocation;
         private static string mCharSet;
 
-        public Color Color { get; }
+        public Color Color { get { return mColor; } set { mColor = value; OnColorChanged(); } }
         public string FamilyName { get { return mFont.FontFamily.Name; } }
         public int Size { get { return mFontHeight; } }
         public static string CharSet
@@ -182,6 +183,7 @@ namespace GLUI
             var wData = wCharacterSetImage.LockBits(new Rectangle(0, 0, wCharacterSetImage.Width, wCharacterSetImage.Height), System.Drawing.Imaging.ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.Bgra, PixelType.UnsignedByte, wData.Scan0);
             wCharacterSetImage.UnlockBits(wData);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
             using (var wGraphics = Graphics.FromImage(wCharacterSetImage))
             using (var wPen = new Pen(Color.FromArgb(Color.R, Color.G, Color.B)))
             {
@@ -209,6 +211,38 @@ namespace GLUI
                 wFileName = $"{wFileName}0.bmp";
             }
             wCharacterSetImage.Save(wFileName);
+        }
+
+        private void OnColorChanged()
+        {
+            if (mTexture == null) return;
+
+            // Generate the bitmap containing the texture atlas
+            var wCharacterSetImage = new Bitmap(mTexture.Width, mTexture.Height);
+            using (var wGraphics = Graphics.FromImage(wCharacterSetImage))
+            {
+                wGraphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+                wGraphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                wGraphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                wGraphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                foreach (var wTuple in mLookUpTable)
+                {
+                    wGraphics.DrawString($"{wTuple.Key}", mFont, new SolidBrush(Color.FromArgb(Color.R, Color.G, Color.B)), (int)wTuple.Value.Location.X, (int)wTuple.Value.Location.Y);
+                }
+                wGraphics.Flush();
+            }
+
+            // Update the texture
+            GL.BindTexture(TextureTarget.Texture2D, mTexture.Id);
+            var wData = wCharacterSetImage.LockBits(new Rectangle(0, 0, wCharacterSetImage.Width, wCharacterSetImage.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            //GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, wCharacterSetImage.Width, wCharacterSetImage.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, wData.Scan0);
+            GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, wCharacterSetImage.Width, wCharacterSetImage.Height, PixelFormat.Bgra, PixelType.UnsignedByte, wData.Scan0);
+            wCharacterSetImage.UnlockBits(wData);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
         private void GenerateFontMap()
@@ -288,12 +322,13 @@ namespace GLUI
             };
             GL.BindTexture(TextureTarget.Texture2D, mTexture.Id);
             var wData = wCharacterSetImage.LockBits(new Rectangle(0, 0, wCharacterSetImage.Width, wCharacterSetImage.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, wCharacterSetImage.Width, wCharacterSetImage.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, wData.Scan0);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, wCharacterSetImage.Width, wCharacterSetImage.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, wData.Scan0);
             wCharacterSetImage.UnlockBits(wData);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
         protected virtual void Dispose(bool disposing)

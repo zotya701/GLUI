@@ -15,6 +15,7 @@ namespace GLUI
     {
         private bool mDisposed = false;
         private bool mFontChanged = false;
+        private bool mFontColorChanged = false;
 
         private string mText;
         private Alignment mAlignment;
@@ -89,7 +90,7 @@ namespace GLUI
             {
                 mFontColor = value;
                 Dirty = true;
-                mFontChanged = true;
+                mFontColorChanged = true;
             }
         }
 
@@ -126,8 +127,17 @@ namespace GLUI
             if (mFontChanged)
             {
                 mFontChanged = false;
+                mFontColorChanged = false;
                 mFont?.Dispose();
                 mFont = new Font(FontFamily, FontSize, FontColor);
+            }
+            if (mFontColorChanged)
+            {
+                mFontColorChanged = false;
+                if (mFont != null)
+                {
+                    mFont.Color = FontColor;
+                }
             }
 
             var wSize = mFont.MeasureText(Text);
