@@ -81,6 +81,11 @@ namespace Test
                     {
                         Location = new Vector2(200, 250),
                         //Size = new Vector2(100, 100)
+                    },
+                    new ToggleButton("Test toggle button")
+                    {
+                        Location = new Vector2(200, 300),
+                        Size = new Vector2(200, 30)
                     }
                 }
             };
@@ -98,6 +103,10 @@ namespace Test
 
             wWindow.MouseEntered += (o, e) => { Console.WriteLine("Mouse entered"); };
             wWindow.MouseLeaved += (o, e) => { Console.WriteLine("Mouse leaved"); };
+
+            var wToggleButton = wWindow.Children.First(wChild => wChild is ToggleButton) as ToggleButton;
+            wToggleButton.ToggleButtonOn += (o, e) => { wToggleButton.Text = "ON"; };
+            wToggleButton.ToggleButtonOff += (o, e) => { wToggleButton.Text = "OFF"; };
 
             //Task.Run(() =>
             //{
