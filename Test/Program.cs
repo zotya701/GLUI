@@ -42,7 +42,7 @@ namespace Test
                 wApp.FullScreen = !wApp.FullScreen;
             };
 
-            var wWindow = new Window
+            var wWindow = new Window("Test window title")
             {
                 //BackgroundColor = Color.FromArgb(100, 255, 0, 0),
                 Location = new Vector2(300.0f, 100.0f),
@@ -123,17 +123,17 @@ namespace Test
             //    }
             //});
 
-            for (int i = 0; i < 10; ++i)
-            {
-                for (int j = 0; j < 10; ++j)
-                {
-                    wWindow.Children.Add(new Button("ASD")
-                    {
-                        Location = new Vector2(500 + i * 80, 100 + j * 35),
-                        Size = new Vector2(70, 30)
-                    });
-                }
-            }
+            //for (int i = 0; i < 10; ++i)
+            //{
+            //    for (int j = 0; j < 10; ++j)
+            //    {
+            //        wWindow.Children.Add(new Button("ASDASD")
+            //        {
+            //            Location = new Vector2(500 + i * 80, 100 + j * 35),
+            //            Size = new Vector2(70, 30)
+            //        });
+            //    }
+            //}
 
             var asd = new GLUI.Font("Arial", 256, Color.Black);
             asd.SaveCharacterSet();
