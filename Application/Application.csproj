@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Dispatcher.cs" />
+    <Compile Include="PerformanceInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

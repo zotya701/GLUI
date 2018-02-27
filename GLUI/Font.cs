@@ -152,7 +152,7 @@ namespace GLUI
             {
                 case '\r': Raster.Move(mOriginalRasterLocation.X - Raster.Location.X, 0); break;
                 case '\n': Raster.Move(0, mFontHeight); break;
-                default: Raster.Move(mLookUpTable[c].Size.X - (mFont.Height / 4), 0); break;
+                default: Raster.Move(mLookUpTable[c].Size.X - (mFontHeight / 4), 0); break;
             }
         }
 

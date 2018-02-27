@@ -23,6 +23,7 @@ namespace GLUI
         private int mColorsId = 0;
         private int mIndicesCount = 0;
 
+        private static HashSet<Component> mClickThroughList = new HashSet<Component>();
         private static Stack<Scissor> mScissorStack = new Stack<Scissor>();
         protected List<Action> mImmediateDrawingActions = new List<Action>();
 
@@ -62,6 +63,7 @@ namespace GLUI
         public bool Highlighted { get { return mHighlighted; } set { if (mHighlighted == value) return; mHighlighted = value; Dirty = true; if (value) Highlight(); else ResetColors(); } }
         public bool Enabled { get { return mEnabled; } set { mEnabled = value; mDisabled = !value; } }
         public bool Disabled { get { return mDisabled; } set { mDisabled = value; mEnabled = !value; } }
+        public bool ClickThrough { get { return mClickThroughList.Contains(this); } set { if(value && !ClickThrough) mClickThroughList.Add(this); } }
 
         public Color BackgroundColor { get; set; }
         public Color BorderColor { get; set; }
@@ -140,7 +142,7 @@ namespace GLUI
 
         protected bool IsMouseOver(MouseState mouseState)
         {
-            return new Box2(AbsoluteLocation, AbsoluteLocation + Size).Contains(new Vector2(mouseState.X, mouseState.Y));
+            return ClickThrough ? false : new Box2(AbsoluteLocation, AbsoluteLocation + Size).Contains(new Vector2(mouseState.X, mouseState.Y));
         }
 
         protected bool IsMouseOverDirectly(MouseState mouseState)

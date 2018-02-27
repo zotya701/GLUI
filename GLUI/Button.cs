@@ -78,10 +78,10 @@ namespace GLUI
 
         protected override void OnUpdate()
         {
-            if (Label.Size.X == 0 && Label.Size.Y == 0)
-            {
-                Size = CalculateSize() + new Vector2(10, 5);
-            }
+            //if (Label.Size.X == 0 && Label.Size.Y == 0)
+            //{
+            //    Size = CalculateSize() + new Vector2(10, 5);
+            //}
             //Size = new Vector2(Math.Max(Width, Label.Size.X),
             //                   Math.Max(Height, Label.Size.Y));
             Label.Size = Size;

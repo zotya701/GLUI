@@ -12,6 +12,7 @@ using GLUI;
 using System.Drawing;
 using Foundation;
 using System.Diagnostics;
+using System.Threading;
 #endregion
 
 namespace Application
@@ -20,10 +21,13 @@ namespace Application
     {
         private GameWindow mWindow;
         private RootComponent mRoot;
-        private Label mFPSLabel;
-        private Stopwatch mFPSTimer = Stopwatch.StartNew();
+        private Label mPerformanceLabel;
+        private Stopwatch mPerformanceLabelTimer = Stopwatch.StartNew();
+        private Stopwatch mTimer = Stopwatch.StartNew();
+        private LinkedList<DateTime> mFrameDates = new LinkedList<DateTime>();
+        private double mElapsedTime;
+        private double mWaitTime;
         private ulong mFrameCounter = 0;
-        private LinkedList<DateTime> mFrameTimes = new LinkedList<DateTime>();
         private Foundation.KeyboardState mKeyboardState;
         private Foundation.MouseState mMouseState;
 
@@ -38,9 +42,8 @@ namespace Application
         public int Height { get { return mWindow.Height; } set { mWindow.Height = value; } }
         public Size Size { get { return mWindow.ClientSize; } set { mWindow.ClientSize = value; } }
         public bool FullScreen { get { return mWindow.WindowState == WindowState.Fullscreen; } set { if (value) { mWindow.WindowState = WindowState.Fullscreen; } else { mWindow.WindowState = WindowState.Normal; } } }
-        public bool VSync { get { return mWindow.VSync == VSyncMode.On; } set { if (value) { mWindow.VSync = VSyncMode.On; } else { mWindow.VSync = VSyncMode.Off; } } }
-        public double FPS { get { return mWindow.TargetRenderFrequency; } set { mWindow.TargetRenderFrequency = value; mWindow.TargetUpdateFrequency = value; } }
-        public bool ShowFPS { get; set; }
+        public double FPS { get; set; } = 100;
+        public bool ShowPerformanceInfo { get; set; }
         public string Title { get { return mWindow.Title; } set { mWindow.Title = value; } }
         public System.Drawing.Icon Icon { get { return mWindow.Icon; } set { mWindow.Icon = value; } }
         public bool CursorVisible { get { return mWindow.CursorVisible; } set { mWindow.CursorVisible = value; } }
@@ -53,6 +56,7 @@ namespace Application
             mMouseState = new Foundation.MouseState();
             // Enable antialiasing
             mWindow = new GameWindow(1, 1, new OpenTK.Graphics.GraphicsMode(32, 0, 8, 8));
+            mWindow.VSync = VSyncMode.Off;
             Commands = new Dictionary<string, Command>();
 
             mWindow.Load += OnLoad;
@@ -81,14 +85,14 @@ namespace Application
             OnKeyboard += mRoot.KeyboardHandler;
             OnMouse += mRoot.MouseHandler;
 
-            mFPSLabel = new Label
+            mPerformanceLabel = new Label()
             {
+                ClickThrough = true,
                 FontFamily = "Arial",
-                FontColor = Color.Orange,
-                FontSize = 20,
-                Location = new Vector2(0, 0)
+                FontSize = 12,
+                FontColor = Color.Orange
             };
-            AddComponent(mFPSLabel);
+            AddComponent(mPerformanceLabel);
         }
 
         public void Run()
@@ -139,7 +143,6 @@ namespace Application
             mRoot.Size = new Vector2(Width, Height);
             GL.Viewport(mWindow.ClientRectangle);
             OnRenderFrame(null, null);
-            mFrameTimes.Clear();
         }
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)
@@ -150,18 +153,8 @@ namespace Application
                 wAction();
             }
 
-            mFPSLabel.Visible = ShowFPS;
-            mFPSLabel.BringFront();
-            if(mFrameCounter++ % 50 == 0)
-            {
-                mFrameTimes.AddLast(DateTime.Now);
-                if (mFPSTimer.Elapsed.TotalSeconds >= 0.20f && mFrameTimes.Count >= 2)
-                {
-                    mFPSLabel.Text = $"{Math.Round(mFrameTimes.Count * 50 / (mFrameTimes.Last() - mFrameTimes.First()).TotalSeconds)}";
-                    mFrameTimes.RemoveFirst();
-                    mFPSTimer.Restart();
-                }
-            }
+            mElapsedTime = mTimer.Elapsed.TotalSeconds;
+            if (mElapsedTime < mWaitTime) return;
 
             OnMouse?.Invoke(this, mMouseState);
             OnKeyboard?.Invoke(this, mKeyboardState);
@@ -174,8 +167,42 @@ namespace Application
 
         private void OnRenderFrame(object sender, FrameEventArgs e)
         {
+            if (FPS >= 30 && mElapsedTime < mWaitTime) return;
+
+            mWaitTime = Math.Max((1.0f - (mTimer.Elapsed.TotalSeconds * FPS / 1 - FPS * mWaitTime)) / FPS, 0.0f);  // Calculate the dt between frames
+            mTimer.Restart();
+
             GL.ClearColor(0.1f, 0.2f, 0.3f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            mPerformanceLabel.Visible = ShowPerformanceInfo;
+            mPerformanceLabel.BringFront();
+            mFrameCounter++;
+            if (mPerformanceLabelTimer.Elapsed.TotalSeconds >= 0.5f)
+            {
+                mFrameDates.AddLast(DateTime.Now);
+                var wFrameCounter = mFrameCounter;
+                if (mFrameDates.Count >= 3)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        var wPerformanceInfos = new List<string>
+                        {
+                            //$"FPS: {Math.Round(wFrameCounter / 0.33f)}",
+                            $"FPS: {Math.Round(wFrameCounter / (mFrameDates.Last.Value - mFrameDates.First.Value).TotalSeconds)}",
+                            $"CPU utilization: {PerformanceInfo.CPUUtilization}%",
+                            $"Used RAM: {PerformanceInfo.UsedRam}MB",
+                            $"Available RAM: {PerformanceInfo.AvailableRAM}MB",
+                            $"Total used RAM: {PerformanceInfo.TotalUsedRAM}MB",
+                            $"Total RAM: {PerformanceInfo.TotalRAM}MB"
+                        };
+                        mPerformanceLabel.Text = string.Join("\r\n", wPerformanceInfos);
+                    });
+                    mFrameDates.RemoveFirst();
+                    mFrameCounter = 0;
+                }
+                mPerformanceLabelTimer.Restart();
+            }
 
             mRoot.Render();
 
@@ -190,7 +217,7 @@ namespace Application
             mKeyboardState.KeyDown[e.Key] = true;
             mKeyboardState.LastKey = e.Key;
 
-            foreach(var wControlKey in Commands.Values)
+            foreach (var wControlKey in Commands.Values)
             {
                 wControlKey.Check(mKeyboardState);
             }
