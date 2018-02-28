@@ -213,7 +213,26 @@ namespace GLUI
         public bool Highlighted { get { return mHighlighted; } set { if (mHighlighted == value) return; mHighlighted = value; Dirty = true; if (value) Highlight(); else ResetColors(); } }
         public bool Enabled { get { return mEnabled; } set { mEnabled = value; mDisabled = !value; } }
         public bool Disabled { get { return mDisabled; } set { mDisabled = value; mEnabled = !value; } }
-        public bool ClickThrough { get { return mClickThroughList.Contains(this); } set { if (value && !ClickThrough) mClickThroughList.Add(this); } }
+        public bool ClickThrough
+        {
+            get
+            {
+                return mClickThroughList.Contains(this);
+            }
+            set
+            {
+                if (value && !ClickThrough) mClickThroughList.Add(this);
+
+                if(ClickThrough == false && value == true)
+                {
+                    mClickThroughList.Add(this);
+                }
+                else if(ClickThrough == true && value == false)
+                {
+                    mClickThroughList.Remove(this);
+                }
+            }
+        }
 
         public Color BackgroundColor { get; set; }
         public Color BorderColor { get; set; }
