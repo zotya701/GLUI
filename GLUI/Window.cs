@@ -33,8 +33,8 @@ namespace GLUI
                     Vertical = Vertical.Center
                 },
                 BackgroundColor = Color.FromArgb(0, 0, 0, 0),
-                BorderWidth = 0,
-                FontColor = Color.Black,
+                BorderWidth = 1.5f,
+                FontColor = Color.LightGray,
                 FontFamily = "Arial",
                 FontSize = 14,
                 Text = title
@@ -54,7 +54,7 @@ namespace GLUI
                     },
                     BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                     BorderWidth = 0,
-                    FontColor = Color.Black,
+                    FontColor = Color.LightGray,
                     FontFamily = "Arial",
                     FontSize = 14,
                     Text = "_"
@@ -75,7 +75,7 @@ namespace GLUI
                     },
                     BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                     BorderWidth = 0,
-                    FontColor = Color.Black,
+                    FontColor = Color.LightGray,
                     FontFamily = "Arial",
                     FontSize = 14,
                     Text = "[]"
@@ -96,7 +96,7 @@ namespace GLUI
                     },
                     BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                     BorderWidth = 0,
-                    FontColor = Color.Black,
+                    FontColor = Color.LightGray,
                     FontFamily = "Arial",
                     FontSize = 14,
                     Text = "X"

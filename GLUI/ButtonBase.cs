@@ -73,7 +73,7 @@ namespace GLUI
                 },
                 FontFamily = "Arial",
                 FontSize = 14,
-                FontColor = Color.Black,
+                FontColor = Color.LightGray,
                 Text = string.Empty
             };
         }

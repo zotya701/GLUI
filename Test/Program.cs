@@ -66,7 +66,7 @@ namespace Test
                         Text = "Bared on your tomb\r\nI'm a prayer for your loneliness\r\nAnd would you ever soon\r\nCome above unto me?",
                         FontFamily = "Arial",
                         FontSize = 14,
-                        FontColor = Color.Black,
+                        FontColor = Color.LightGray,
                         Location = new Vector2(200, 60),
                         //Size = new Vector2(250, 100),
                         BorderWidth = 1.5f
@@ -135,8 +135,8 @@ namespace Test
             //    }
             //}
 
-            var asd = new GLUI.Font("Arial", 256, Color.Black);
-            asd.SaveCharacterSet();
+            //var asd = new GLUI.Font("Arial", 256, Color.Black);
+            //asd.SaveCharacterSet();
 
             wApp.AddComponent(wWindow);
             wApp.Run();

@@ -61,7 +61,7 @@ namespace GLUI
                 {
                     int[] wData = new int[4];
                     GL.GetInteger(GetPName.CurrentColor, wData);
-                    GL.Color4(0.7f, 0.7f, 0.7f, 1.0f);
+                    GL.Color4(Color.LightGray.R, Color.LightGray.G, Color.LightGray.B, Color.LightGray.A);
                     GL.Begin(PrimitiveType.Polygon);
                     GL.Vertex2(mCheckButton.Width * 0.09, mCheckButton.Height * 0.50);
                     GL.Vertex2(mCheckButton.Width * 0.05, mCheckButton.Height * 0.55);

@@ -115,7 +115,7 @@ namespace GLUI
             };
             FontFamily = "Arial";
             FontSize = 12;
-            FontColor = Color.Black;
+            FontColor = Color.LightGray;
         }
 
         protected virtual internal void OnPressed(object s, EventArgs e)
@@ -153,12 +153,12 @@ namespace GLUI
         {
             base.OnRender();
             var wCenter = Size * 0.5f;
-            GL.PushMatrix();
-            GL.Translate(-wCenter.X * GLScale, -wCenter.Y * GLScale, 0);
-            GL.Scale(GLScale, GLScale, 1);
-            GL.Translate(wCenter.X / GLScale, wCenter.Y / GLScale, 0);
+            //GL.PushMatrix();
+            //GL.Translate(-wCenter.X * GLScale, -wCenter.Y * GLScale, 0);
+            //GL.Scale(GLScale, GLScale, 1);
+            //GL.Translate(wCenter.X / GLScale, wCenter.Y / GLScale, 0);
             mFont.DrawCachedText();
-            GL.PopMatrix();
+            //GL.PopMatrix();
         }
 
         protected override void OnUpdate()
