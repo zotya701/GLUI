@@ -179,23 +179,21 @@ namespace Application
             mWaitTime = Math.Max((1.0f - (mTimer.Elapsed.TotalSeconds * FPS / 1 - FPS * mWaitTime)) / FPS, 0.0f);  // Calculate the dt between frames
             mTimer.Restart();
 
-            GL.ClearColor(0.1f, 0.2f, 0.3f, 1.0f);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
             mPerformanceLabel.Visible = ShowPerformanceInfo;
-            mPerformanceLabel.BringFront();
-            mFrameCounter++;
-            if (mPerformanceLabelTimer.Elapsed.TotalSeconds >= 0.5f)
+            if (mPerformanceLabel.Visible)
             {
-                mFrameDates.AddLast(DateTime.Now);
-                var wFrameCounter = mFrameCounter;
-                if (mFrameDates.Count >= 3)
+                mPerformanceLabel.BringFront();
+                mFrameCounter++;
+                if (mPerformanceLabelTimer.Elapsed.TotalSeconds >= 0.5f)
                 {
-                    Dispatcher.Invoke(() =>
+                    mFrameDates.AddLast(DateTime.Now);
+                    var wFrameCounter = mFrameCounter;
+                    if (mFrameDates.Count >= 3)
                     {
-                        var wPerformanceInfos = new List<string>
+                        Dispatcher.Invoke(() =>
                         {
-                            //$"FPS: {Math.Round(wFrameCounter / 0.33f)}",
+                            var wPerformanceInfos = new List<string>
+                        {
                             $"FPS: {Math.Round(wFrameCounter / (mFrameDates.Last.Value - mFrameDates.First.Value).TotalSeconds)}",
                             $"CPU utilization: {PerformanceInfo.CPUUtilization}%",
                             $"Used RAM: {PerformanceInfo.UsedRam}MB",
@@ -203,13 +201,17 @@ namespace Application
                             $"Total used RAM: {PerformanceInfo.TotalUsedRAM}MB",
                             $"Total RAM: {PerformanceInfo.TotalRAM}MB"
                         };
-                        mPerformanceLabel.Text = string.Join("\r\n", wPerformanceInfos);
-                    });
-                    mFrameDates.RemoveFirst();
-                    mFrameCounter = 0;
+                            mPerformanceLabel.Text = string.Join("\r\n", wPerformanceInfos);
+                        });
+                        mFrameDates.RemoveFirst();
+                        mFrameCounter = 0;
+                    }
+                    mPerformanceLabelTimer.Restart();
                 }
-                mPerformanceLabelTimer.Restart();
             }
+
+            GL.ClearColor(0.1f, 0.2f, 0.3f, 1.0f);
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
             mRoot.Render();
 
