@@ -125,18 +125,6 @@ namespace GLUI
             if (mTitleGrabbed && mouseState.IsMoved)
             {
                 Location = Location + new Vector2(mouseState.XDelta, mouseState.YDelta);
-
-                var wQueue = new Queue<Component>();
-                wQueue.Enqueue(this);
-                while (wQueue.Any())
-                {
-                    var wCurrent = wQueue.Dequeue();
-                    foreach (var wComp in wCurrent.Children)
-                    {
-                        wQueue.Enqueue(wComp);
-                    }
-                    wCurrent.Dirty = true;
-                }
             }
         }
 

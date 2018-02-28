@@ -63,16 +63,16 @@ namespace GLUI
                     GL.GetInteger(GetPName.CurrentColor, wData);
                     GL.Color4(0.7f, 0.7f, 0.7f, 1.0f);
                     GL.Begin(PrimitiveType.Polygon);
-                    GL.Vertex2(mCheckButton.AbsoluteLocation.X + mCheckButton.Width * 0.09, mCheckButton.AbsoluteLocation.Y + mCheckButton.Height * 0.50);
-                    GL.Vertex2(mCheckButton.AbsoluteLocation.X + mCheckButton.Width * 0.05, mCheckButton.AbsoluteLocation.Y + mCheckButton.Height * 0.55);
-                    GL.Vertex2(mCheckButton.AbsoluteLocation.X + mCheckButton.Width * 0.45, mCheckButton.AbsoluteLocation.Y + mCheckButton.Height * 0.95);
-                    GL.Vertex2(mCheckButton.AbsoluteLocation.X + mCheckButton.Width * 0.52, mCheckButton.AbsoluteLocation.Y + mCheckButton.Height * 0.95);
+                    GL.Vertex2(mCheckButton.Width * 0.09, mCheckButton.Height * 0.50);
+                    GL.Vertex2(mCheckButton.Width * 0.05, mCheckButton.Height * 0.55);
+                    GL.Vertex2(mCheckButton.Width * 0.45, mCheckButton.Height * 0.95);
+                    GL.Vertex2(mCheckButton.Width * 0.52, mCheckButton.Height * 0.95);
                     GL.End();
                     GL.Begin(PrimitiveType.Polygon);
-                    GL.Vertex2(mCheckButton.AbsoluteLocation.X + mCheckButton.Width * 0.45, mCheckButton.AbsoluteLocation.Y + mCheckButton.Height * 0.95);
-                    GL.Vertex2(mCheckButton.AbsoluteLocation.X + mCheckButton.Width * 0.52, mCheckButton.AbsoluteLocation.Y + mCheckButton.Height * 0.95);
-                    GL.Vertex2(mCheckButton.AbsoluteLocation.X + mCheckButton.Width * 0.95, mCheckButton.AbsoluteLocation.Y + mCheckButton.Height * 0.14);
-                    GL.Vertex2(mCheckButton.AbsoluteLocation.X + mCheckButton.Width * 0.91, mCheckButton.AbsoluteLocation.Y + mCheckButton.Height * 0.10);
+                    GL.Vertex2(mCheckButton.Width * 0.45, mCheckButton.Height * 0.95);
+                    GL.Vertex2(mCheckButton.Width * 0.52, mCheckButton.Height * 0.95);
+                    GL.Vertex2(mCheckButton.Width * 0.95, mCheckButton.Height * 0.14);
+                    GL.Vertex2(mCheckButton.Width * 0.91, mCheckButton.Height * 0.10);
                     GL.End();
                     GL.Color4(wData[0], wData[1], wData[2], wData[3]);
                 }

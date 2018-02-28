@@ -152,7 +152,7 @@ namespace GLUI
         protected override void OnRender()
         {
             base.OnRender();
-            var wCenter = AbsoluteLocation + Size * 0.5f;
+            var wCenter = Size * 0.5f;
             GL.PushMatrix();
             GL.Translate(-wCenter.X * GLScale, -wCenter.Y * GLScale, 0);
             GL.Scale(GLScale, GLScale, 1);
@@ -188,28 +188,28 @@ namespace GLUI
             switch (Alignment.Horizontal)
             {
                 case Horizontal.Left:
-                    wX = AbsoluteLocation.X;
+                    wX = 0;
                     break;
                 case Horizontal.Center:
-                    wX = (AbsoluteLocation.X + Size.X / 2) - wSize.X / 2;
+                    wX = Size.X / 2 - wSize.X / 2;
                     break;
                 case Horizontal.Right:
-                    wX = AbsoluteLocation.X + Size.X - wSize.X;
+                    wX = Size.X - wSize.X;
                     break;
             }
             switch (Alignment.Vertical)
             {
                 case Vertical.Top:
-                    wY = AbsoluteLocation.Y;
+                    wY = 0;
                     break;
                 case Vertical.Center:
-                    wY = (AbsoluteLocation.Y + Size.Y / 2) - wSize.Y / 2;
+                    wY = Size.Y / 2 - wSize.Y / 2;
                     break;
                 case Vertical.Bottom:
-                    wY = AbsoluteLocation.Y + Size.Y - wSize.Y;
+                    wY = Size.Y - wSize.Y;
                     break;
             }
-            Raster.Location = new Vector2(wX, wY);
+            Raster.Location = new Vector2((float)Math.Round(wX), (float)Math.Round(wY));
             mFont.RegenerateTextCache(Text);
 
             base.OnUpdate();
