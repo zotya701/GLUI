@@ -87,6 +87,11 @@ namespace Application
 
             mPerformanceLabel = new Label()
             {
+                Alignment = new Alignment
+                {
+                    Horizontal = Horizontal.Left,
+                    Vertical = Vertical.Bottom
+                },
                 ClickThrough = true,
                 FontFamily = "Arial",
                 FontSize = 12,
@@ -141,7 +146,9 @@ namespace Application
         private void OnResize(object sender, EventArgs e)
         {
             mRoot.Size = new Vector2(Width, Height);
+            mPerformanceLabel.Size = mRoot.Size;
             GL.Viewport(mWindow.ClientRectangle);
+            OnUpdateFrame(null, null);
             OnRenderFrame(null, null);
         }
 
