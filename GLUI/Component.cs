@@ -55,11 +55,9 @@ namespace GLUI
         private Vector2 mSize;
         private float mBorderWidth;
         private bool mVisible;
-        private bool mInvisible;
         private bool mHighlightable;
         private bool mHighlighted;
         private bool mEnabled;
-        private bool mDisabled;
 
         private Color mOriginalBackgroundColor;
         private Color mOriginalBorderColor;
@@ -206,13 +204,92 @@ namespace GLUI
         }
 
 
-        public bool Dirty { get; set; }
-        public bool Visible { get { return mVisible; } set { mVisible = value; mInvisible = !value; } }
-        public bool Invisible { get { return mInvisible; } set { mInvisible = value; mVisible = !value; } }
-        public bool Highlightable { get { return mHighlightable; } set { if (mHighlightable == value) return; mHighlightable = value; Dirty = true; } }
-        public bool Highlighted { get { return mHighlighted; } set { if (mHighlighted == value) return; mHighlighted = value; Dirty = true; if (value) Highlight(); else ResetColors(); } }
-        public bool Enabled { get { return mEnabled; } set { mEnabled = value; mDisabled = !value; } }
-        public bool Disabled { get { return mDisabled; } set { mDisabled = value; mEnabled = !value; } }
+        protected internal bool Dirty { get; set; }
+        public bool Visible
+        {
+            get
+            {
+                return mVisible;
+            }
+            set
+            {
+                if (mVisible == value) return;
+
+                mVisible = value;
+            }
+        }
+        public bool Invisible
+        {
+            get
+            {
+                return !Visible;
+            }
+            set
+            {
+                Visible = !value;
+            }
+        }
+        public bool Highlightable
+        {
+            get
+            {
+                return mHighlightable;
+            }
+            set
+            {
+                if (mHighlightable == value) return;
+
+                mHighlightable = value;
+                Dirty = true;
+            }
+        }
+        public bool Highlighted
+        {
+            get
+            {
+                return mHighlighted;
+            }
+            set
+            {
+                if (mHighlighted == value) return;
+
+                mHighlighted = value;
+                Dirty = true;
+                if (value)
+                {
+                    Highlight();
+                }
+                else
+                {
+                    ResetColors();
+                }
+            }
+        }
+        public bool Enabled
+        {
+            get
+            {
+                return mEnabled;
+            }
+            set
+            {
+                if (mEnabled == value) return;
+
+                mEnabled = value;
+                Dirty = true;
+            }
+        }
+        public bool Disabled
+        {
+            get
+            {
+                return !Enabled;
+            }
+            set
+            {
+                Enabled = !value;
+            }
+        }
         public bool ClickThrough
         {
             get
@@ -458,24 +535,24 @@ namespace GLUI
             if (mMouseInside == false && mouseState.IsOverDirectly == true)
             {
                 mMouseInside = true;
-                if (Highlightable) Highlighted = true;
                 OnMouseEntered(mouseState);
             }
             else if (mMouseInside == true && mouseState.IsOverDirectly == false)
             {
                 mMouseInside = false;
-                if (Highlightable) Highlighted = false;
                 OnMouseLeaved(mouseState);
             }
         }
 
         protected virtual void OnMouseEntered(MouseState mouseState)
         {
+            if (Highlightable) Highlighted = true;
             MouseEntered?.Invoke(this, mouseState);
         }
 
         protected virtual void OnMouseLeaved(MouseState mouseState)
         {
+            if (Highlightable) Highlighted = false;
             MouseLeaved?.Invoke(this, mouseState);
         }
 
