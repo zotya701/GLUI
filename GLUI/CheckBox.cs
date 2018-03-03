@@ -46,6 +46,7 @@ namespace GLUI
 
         public CheckBox(string text)
         {
+            Highlightable = true;
             BackgroundColor = Color.FromArgb(0, 0, 0, 0);
             BorderWidth = 0;
 
@@ -53,7 +54,7 @@ namespace GLUI
 
             mCheckButton = new Button(string.Empty)
             {
-                Highlightable = true,
+                Highlightable = Highlightable,
             };
             mCheckButton.AddDrawingAction(() =>
             {
@@ -61,7 +62,7 @@ namespace GLUI
                 {
                     int[] wData = new int[4];
                     GL.GetInteger(GetPName.CurrentColor, wData);
-                    GL.Color4(Color.LightGray.R, Color.LightGray.G, Color.LightGray.B, Color.LightGray.A);
+                    GL.Color4(Label.FontColor.R, Label.FontColor.G, Label.FontColor.B, Label.FontColor.A);
                     GL.Begin(PrimitiveType.Polygon);
                     GL.Vertex2(mCheckButton.Width * 0.09, mCheckButton.Height * 0.50);
                     GL.Vertex2(mCheckButton.Width * 0.05, mCheckButton.Height * 0.55);
@@ -99,6 +100,21 @@ namespace GLUI
             {
                 if (!Pressed) mCheckButton.Highlighted = false;
             };
+        }
+
+        protected override void GreyOut()
+        {
+            //base.GreyOut();
+        }
+
+        protected override void Highlight()
+        {
+            //base.Highlight();
+        }
+
+        protected override void ResetColors()
+        {
+            //base.ResetColors();
         }
 
         protected override void OnKeyboard(KeyboardState keyboardState)
