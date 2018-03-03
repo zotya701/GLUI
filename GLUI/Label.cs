@@ -14,6 +14,18 @@ namespace GLUI
 {
     public class Label : Component
     {
+        public new class Default : Component.Default
+        {
+            public static string Text { get; set; } = "Label";
+            public static Alignment Alignment { get; set; } = new Alignment { Horizontal = Horizontal.Left, Vertical = Vertical.Top };
+            public static string FontFamily { get; set; } = "Arial";
+            public static float FontSize { get; set; } = 12.0f;
+            public static Color FontColor { get; set; } = Color.LightGray;
+            public static Color DisabledFontColor { get; set; } = Color.FromArgb(140, 140, 140);
+            public new static Color BackgroundColor { get; set; } = Color.FromArgb(0, 0, 0, 0);
+            public new static float BorderWidth { get; set; } = 0.0f;
+        }
+
         private bool mDisposed = false;
         private bool mFontChanged = false;
         private bool mFontColorChanged = false;
@@ -23,6 +35,8 @@ namespace GLUI
         private string mFontFamily;
         private float mFontSize;
         private Color mFontColor;
+        private Color mDisabledFontColor;
+        private Color mOriginalFontColor;
         private Font mFont;
 
         public float GLScale { get; set; } = 1.0f;
@@ -42,6 +56,8 @@ namespace GLUI
             }
             set
             {
+                if (string.Equals(mText, value)) return;
+
                 mText = value;
                 Dirty = true;
             }
@@ -55,6 +71,8 @@ namespace GLUI
             }
             set
             {
+                if (mAlignment != null && mAlignment.Horizontal == value.Horizontal && mAlignment.Vertical == value.Vertical) return;
+
                 mAlignment = value;
                 Dirty = true;
             }
@@ -68,6 +86,8 @@ namespace GLUI
             }
             set
             {
+                if (mFontFamily == value) return;
+
                 mFontFamily = value;
                 Dirty = true;
                 mFontChanged = true;
@@ -82,6 +102,8 @@ namespace GLUI
             }
             set
             {
+                if (mFontSize == value) return;
+
                 mFontSize = value;
                 Dirty = true;
                 mFontChanged = true;
@@ -96,26 +118,45 @@ namespace GLUI
             }
             set
             {
+                if (mFontColor == value) return;
+
                 mFontColor = value;
                 Dirty = true;
                 mFontColorChanged = true;
             }
         }
 
-        public Label()
+        public Color DisabledFontColor
         {
-            BackgroundColor = Color.FromArgb(0, 0, 0, 0);
-            BorderWidth = 0;
-
-            Text = string.Empty;
-            Alignment = new Alignment
+            get
             {
-                Vertical = Vertical.Top,
-                Horizontal = Horizontal.Left
-            };
-            FontFamily = "Arial";
-            FontSize = 12;
-            FontColor = Color.LightGray;
+                return mDisabledFontColor;
+            }
+            set
+            {
+                if (mDisabledFontColor == value) return;
+
+                mDisabledFontColor = value;
+                Dirty = true;
+            }
+        }
+
+        public Label() : this(Default.Text)
+        {
+
+        }
+
+        public Label(string text)
+        {
+            BackgroundColor = Default.BackgroundColor;
+            BorderWidth = Default.BorderWidth;
+
+            Text = text;
+            Alignment = Default.Alignment;
+            FontFamily = Default.FontFamily;
+            FontSize = Default.FontSize;
+            FontColor = Default.FontColor;
+            DisabledFontColor = Default.DisabledFontColor;
         }
 
         protected virtual internal void OnPressed(object s, EventArgs e)
@@ -132,6 +173,24 @@ namespace GLUI
         protected virtual internal void OnClick(object s, EventArgs e)
         {
             LabelClicked?.Invoke(s, e);
+        }
+
+        protected override void GreyOut()
+        {
+            //base.GreyOut();
+            mOriginalFontColor = FontColor;
+            FontColor = DisabledFontColor;
+        }
+
+        protected override void Highlight()
+        {
+            //base.Highlight();
+        }
+
+        protected override void ResetColors()
+        {
+            //base.ResetColors();
+            FontColor = mOriginalFontColor;
         }
 
         protected override void OnMouse(MouseState mouseState)
