@@ -35,8 +35,6 @@ namespace GLUI
         public void Dispose()
         {
             Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
         }
     }
 }
