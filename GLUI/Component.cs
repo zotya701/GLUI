@@ -14,8 +14,9 @@ namespace GLUI
 {
     public abstract class Component : IDisposable
     {
-        public static class Default
+        public class Default
         {
+            protected Default() { }
             public static float X { get; set; } = 0.0f;
             public static float Y { get; set; } = 0.0f;
             public static Vector2 Location { get; set; } = new Vector2(0.0f, 0.0f);
@@ -34,6 +35,8 @@ namespace GLUI
             public static Color BorderColor { get; set; } = Color.FromArgb(220, 170, 170, 170);
             public static Color HighlightedBackgroundColor { get; set; } = Color.FromArgb(255, 130, 130, 130);
             public static Color HighlightedBorderColor { get; set; } = Color.FromArgb(255, 200, 200, 200);
+            public static Color DisabledBackgroundColor { get; set; } = Color.FromArgb(255, 100, 100, 100);
+            public static Color DisabledBorderColor { get; set; } = Color.FromArgb(255, 130, 130, 130);
         }
 
         private bool mDisposed = false;
@@ -275,7 +278,7 @@ namespace GLUI
             }
             set
             {
-                if (mHighlighted == value) return;
+                if (mHighlighted == value || !Highlightable) return;
 
                 mHighlighted = value;
                 Dirty = true;
@@ -299,8 +302,21 @@ namespace GLUI
             {
                 if (mEnabled == value) return;
 
+                foreach(var wChild in Children)
+                {
+                    wChild.Enabled = value;
+                }
+
                 mEnabled = value;
                 Dirty = true;
+                if (value)
+                {
+                    ResetColors();
+                }
+                else
+                {
+                    GreyOut();
+                }
             }
         }
         public bool Disabled
@@ -339,6 +355,8 @@ namespace GLUI
         public Color BorderColor { get; set; }
         public Color HighlightedBackgroundColor { get; set; }
         public Color HighlightedBorderColor { get; set; }
+        public Color DisabledBackgroundColor { get; set; }
+        public Color DisabledBorderColor { get; set; }
 
         public Component()
         {
@@ -356,6 +374,8 @@ namespace GLUI
             BorderColor = Default.BorderColor;
             HighlightedBackgroundColor = Default.HighlightedBackgroundColor;
             HighlightedBorderColor = Default.HighlightedBorderColor;
+            DisabledBackgroundColor = Default.DisabledBackgroundColor;
+            DisabledBorderColor = Default.DisabledBorderColor;
 
             ClickThrough = Default.ClickThrough;
 
@@ -497,33 +517,26 @@ namespace GLUI
             wScissor.Apply();
         }
 
-        protected void GreyOut()
+        protected virtual void GreyOut()
         {
             mOriginalBackgroundColor = BackgroundColor;
             mOriginalBorderColor = BorderColor;
-            BackgroundColor = Color.FromArgb((int)(BackgroundColor.R * 0.8),
-                                             (int)(BackgroundColor.G * 0.8),
-                                             (int)(BackgroundColor.B * 0.8));
-            BorderColor = Color.FromArgb((int)(BorderColor.R * 0.8),
-                                         (int)(BorderColor.G * 0.8),
-                                         (int)(BorderColor.B * 0.8));
-            Dirty = true;
+            BackgroundColor = DisabledBackgroundColor;
+            BorderColor = DisabledBorderColor;
         }
 
-        protected void Highlight()
+        protected virtual void Highlight()
         {
             mOriginalBackgroundColor = BackgroundColor;
             mOriginalBorderColor = BorderColor;
             BackgroundColor = HighlightedBackgroundColor;
             BorderColor = HighlightedBorderColor;
-            Dirty = true;
         }
 
-        protected void ResetColors()
+        protected virtual void ResetColors()
         {
             BackgroundColor = mOriginalBackgroundColor;
             BorderColor = mOriginalBorderColor;
-            Dirty = true;
         }
 
         protected Vector2 CalculateSize()
@@ -715,12 +728,10 @@ namespace GLUI
         {
             if (Invisible) return;
             PushScissor();
-            if (Disabled) GreyOut();
             GL.PushMatrix();
             GL.Translate(X, Y, 0);
             OnRender();
             mDrawingActions.ForEach(wAction => wAction());
-            if (Disabled) ResetColors();
             foreach (var wChild in Children)
             {
                 wChild.Render();
