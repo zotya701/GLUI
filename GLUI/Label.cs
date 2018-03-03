@@ -152,12 +152,15 @@ namespace GLUI
         protected override void OnRender()
         {
             base.OnRender();
-            var wCenter = Size * 0.5f;
+            //var wCenter = Size * 0.5f;
             //GL.PushMatrix();
             //GL.Translate(-wCenter.X * GLScale, -wCenter.Y * GLScale, 0);
             //GL.Scale(GLScale, GLScale, 1);
             //GL.Translate(wCenter.X / GLScale, wCenter.Y / GLScale, 0);
-            mFont.DrawCachedText();
+            if(string.IsNullOrEmpty(Text) == false)
+            {
+                mFont.DrawCachedText();
+            }
             //GL.PopMatrix();
         }
 
