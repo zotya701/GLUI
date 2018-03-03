@@ -53,13 +53,13 @@ namespace Test
                     {
                         //BackgroundColor = Color.FromArgb(100, 0, 255, 0),
                         Location = new Vector2(50, 50),
-                        Size = new Vector2(100, 100)
+                        Size = new Vector2(200, 100)
                     },
                     new Window
                     {
                         //BackgroundColor = Color.FromArgb(100, 0, 0, 255),
                         Location = new Vector2(90, 50),
-                        Size = new Vector2(100, 100)
+                        Size = new Vector2(200, 100)
                     },
                     new Label
                     {
@@ -69,7 +69,7 @@ namespace Test
                         FontColor = Color.LightGray,
                         Location = new Vector2(200, 60),
                         //Size = new Vector2(250, 100),
-                        BorderWidth = 1.5f
+                        BorderWidth = 1.0f
                     },
                     new RepeatButton("RepeatButton - 1")
                     {
@@ -95,7 +95,7 @@ namespace Test
             wCheckBox.CheckBoxUnchecked += (o, e) => { Console.WriteLine("CheckBox unchecked"); };
 
             var wRepeatButton = wWindow.Children.First(wChild => wChild is RepeatButton) as RepeatButton;
-            wRepeatButton.ButtonClicked += (o, e) => { wRepeatButton.Text = wRepeatButton.Text.Substring(0, 15) + $"{Convert.ToInt32(wRepeatButton.Text.Substring(15)) + 1}"; Console.WriteLine(wRepeatButton.Text); };
+            wRepeatButton.ButtonClicked += (o, e) => { wCheckBox.Enabled = !wCheckBox.Enabled; wRepeatButton.Text = wRepeatButton.Text.Substring(0, 15) + $"{Convert.ToInt32(wRepeatButton.Text.Substring(15)) + 1}"; Console.WriteLine(wRepeatButton.Text); };
 
             var wLabel = wWindow.Children.First(wChild => wChild is Label) as Label;
             wLabel.LabelClicked += (o, e) => { Console.WriteLine(wLabel.Text); };
@@ -123,17 +123,17 @@ namespace Test
             //    }
             //});
 
-            //for (int i = 0; i < 10; ++i)
-            //{
-            //    for (int j = 0; j < 10; ++j)
-            //    {
-            //        wWindow.Children.Add(new Button("ASDASD")
-            //        {
-            //            Location = new Vector2(500 + i * 80, 100 + j * 35),
-            //            Size = new Vector2(70, 30)
-            //        });
-            //    }
-            //}
+            for (int i = 0; i < 10; ++i)
+            {
+                for (int j = 0; j < 10; ++j)
+                {
+                    wWindow.Children.Add(new Button("ASDASD")
+                    {
+                        Location = new Vector2(500 + i * 80, 100 + j * 35),
+                        Size = new Vector2(70, 30)
+                    });
+                }
+            }
 
             //var asd = new GLUI.Font("Arial", 256, Color.Black);
             //asd.SaveCharacterSet();

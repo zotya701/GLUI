@@ -14,6 +14,28 @@ namespace GLUI
 {
     public abstract class Component : IDisposable
     {
+        public static class Default
+        {
+            public static float X { get; set; } = 0.0f;
+            public static float Y { get; set; } = 0.0f;
+            public static Vector2 Location { get; set; } = new Vector2(0.0f, 0.0f);
+            public static float Width { get; set; } = 0.0f;
+            public static float Height { get; set; } = 0.0f;
+            public static Vector2 Size { get; set; } = new Vector2(0.0f, 0.0f);
+            public static float BorderWidth { get; set; } = 1.0f;
+            public static bool Visible { get; set; } = true;
+            public static bool Invisible { get; set; } = false;
+            public static bool Highlightable { get; set; } = false;
+            public static bool Highlighted { get; set; } = false;
+            public static bool Enabled { get; set; } = true;
+            public static bool Disabled { get; set; } = false;
+            public static bool ClickThrough { get; set; } = false;
+            public static Color BackgroundColor { get; set; } = Color.FromArgb(220, 80, 80, 80);
+            public static Color BorderColor { get; set; } = Color.FromArgb(220, 170, 170, 170);
+            public static Color HighlightedBackgroundColor { get; set; } = Color.FromArgb(255, 130, 130, 130);
+            public static Color HighlightedBorderColor { get; set; } = Color.FromArgb(255, 200, 200, 200);
+        }
+
         private bool mDisposed = false;
 
         private bool mMouseInside = false;
@@ -205,6 +227,8 @@ namespace GLUI
 
 
         protected internal bool Dirty { get; set; }
+
+
         public bool Visible
         {
             get
@@ -313,21 +337,27 @@ namespace GLUI
 
         public Color BackgroundColor { get; set; }
         public Color BorderColor { get; set; }
+        public Color HighlightedBackgroundColor { get; set; }
+        public Color HighlightedBorderColor { get; set; }
 
         public Component()
         {
-            Location = new Vector2(0, 0);
-            Size = new Vector2(0, 0);
+            Location = Default.Location;
+            Size = Default.Size;
+            BorderWidth = Default.BorderWidth;
 
             Dirty = true;
-            Visible = true;
-            Highlightable = false;
-            Highlighted = false;
-            Enabled = true;
+            Visible = Default.Visible;
+            Highlightable = Default.Highlightable;
+            Highlighted = Default.Highlighted;
+            Enabled = Default.Enabled;
 
-            BackgroundColor = Color.FromArgb(100, 100, 100, 100);
-            BorderColor = Color.FromArgb(150, 150, 150);
-            BorderWidth = 1.5f;
+            BackgroundColor = Default.BackgroundColor;
+            BorderColor = Default.BorderColor;
+            HighlightedBackgroundColor = Default.HighlightedBackgroundColor;
+            HighlightedBorderColor = Default.HighlightedBorderColor;
+
+            ClickThrough = Default.ClickThrough;
 
             Children.CollectionChanged += Children_CollectionChanged;
         }
@@ -484,12 +514,8 @@ namespace GLUI
         {
             mOriginalBackgroundColor = BackgroundColor;
             mOriginalBorderColor = BorderColor;
-            BackgroundColor = Color.FromArgb(255, (int)(BackgroundColor.R * 1.2),
-                                             (int)(BackgroundColor.G * 1.2),
-                                             (int)(BackgroundColor.B * 1.2));
-            BorderColor = Color.FromArgb((int)(BorderColor.R * 1.2),
-                                         (int)(BorderColor.G * 1.2),
-                                         (int)(BorderColor.B * 1.2));
+            BackgroundColor = HighlightedBackgroundColor;
+            BorderColor = HighlightedBorderColor;
             Dirty = true;
         }
 

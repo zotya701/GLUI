@@ -33,7 +33,7 @@ namespace GLUI
                     Vertical = Vertical.Center
                 },
                 BackgroundColor = Color.FromArgb(0, 0, 0, 0),
-                BorderWidth = 1.5f,
+                BorderWidth = 1.0f,
                 FontColor = Color.LightGray,
                 FontFamily = "Arial",
                 FontSize = 14,
@@ -44,7 +44,6 @@ namespace GLUI
             mMinimizeButton = new Button("")
             {
                 BackgroundColor = Color.FromArgb(0, 0, 0, 0),
-                BorderWidth = 1,
                 Label = new Label()
                 {
                     Alignment = new Alignment
@@ -65,7 +64,6 @@ namespace GLUI
             mMaximizeButton = new Button("")
             {
                 BackgroundColor = Color.FromArgb(0, 0, 0, 0),
-                BorderWidth = 1,
                 Label = new Label()
                 {
                     Alignment = new Alignment
@@ -86,7 +84,6 @@ namespace GLUI
             mCloseButton = new Button("")
             {
                 BackgroundColor = Color.FromArgb(0, 0, 0, 0),
-                BorderWidth = 1,
                 Label = new Label()
                 {
                     Alignment = new Alignment
