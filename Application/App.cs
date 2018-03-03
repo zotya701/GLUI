@@ -138,8 +138,25 @@ namespace Application
         }
 
         #region EventHandlers
+        private Texture mWallpaperTexture;
         private void OnLoad(object sender, EventArgs e)
         {
+            var wWallpaper = new Bitmap(@"E:\Dev\GLUI\Application\XP.bmp");
+            mWallpaperTexture = new Texture
+            {
+                Width = wWallpaper.Width,
+                Height = wWallpaper.Height
+            };
+            GL.BindTexture(TextureTarget.Texture2D, mWallpaperTexture.Id);
+            var wData = wWallpaper.LockBits(new Rectangle(0, 0, mWallpaperTexture.Width, mWallpaperTexture.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, mWallpaperTexture.Width, mWallpaperTexture.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte, wData.Scan0);
+            wWallpaper.UnlockBits(wData);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
+            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
+            GL.BindTexture(TextureTarget.Texture2D, 0);
+
             mRoot.Update();
         }
 
@@ -212,6 +229,15 @@ namespace Application
 
             GL.ClearColor(0.1f, 0.2f, 0.3f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+
+            GL.BindTexture(TextureTarget.Texture2D, mWallpaperTexture.Id);
+            GL.Begin(PrimitiveType.Quads);
+            GL.TexCoord2(0, 0); GL.Vertex2(0, 0);
+            GL.TexCoord2(1, 0); GL.Vertex2(Width, 0);
+            GL.TexCoord2(1, 1); GL.Vertex2(Width, Height);
+            GL.TexCoord2(0, 1); GL.Vertex2(0, Height);
+            GL.End();
+            GL.BindTexture(TextureTarget.Texture2D, 0);
 
             mRoot.Render();
 
