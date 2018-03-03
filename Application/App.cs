@@ -171,11 +171,7 @@ namespace Application
 
         private void OnUpdateFrame(object sender, FrameEventArgs e)
         {
-            Action wAction;
-            while (Dispatcher.Actions.TryDequeue(out wAction))
-            {
-                wAction();
-            }
+            Dispatcher.ExecuteNextAction();
 
             mElapsedTime = mTimer.Elapsed.TotalSeconds;
             if (mElapsedTime < mWaitTime) return;
@@ -210,14 +206,14 @@ namespace Application
                         Dispatcher.Invoke(() =>
                         {
                             var wPerformanceInfos = new List<string>
-                        {
-                            $"FPS: {Math.Round(wFrameCounter / (mFrameDates.Last.Value - mFrameDates.First.Value).TotalSeconds)}",
-                            $"CPU utilization: {PerformanceInfo.CPUUtilization}%",
-                            $"Used RAM: {PerformanceInfo.UsedRam}MB",
-                            $"Available RAM: {PerformanceInfo.AvailableRAM}MB",
-                            $"Total used RAM: {PerformanceInfo.TotalUsedRAM}MB",
-                            $"Total RAM: {PerformanceInfo.TotalRAM}MB"
-                        };
+                            {
+                                $"FPS: {Math.Round(wFrameCounter / (mFrameDates.Last.Value - mFrameDates.First.Value).TotalSeconds)}",
+                                $"CPU utilization: {PerformanceInfo.CPUUtilization}%",
+                                $"Used RAM: {PerformanceInfo.UsedRam}MB",
+                                $"Available RAM: {PerformanceInfo.AvailableRAM}MB",
+                                $"Total used RAM: {PerformanceInfo.TotalUsedRAM}MB",
+                                $"Total RAM: {PerformanceInfo.TotalRAM}MB"
+                            };
                             mPerformanceLabel.Text = string.Join("\r\n", wPerformanceInfos);
                         });
                         mFrameDates.RemoveFirst();
