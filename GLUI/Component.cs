@@ -215,9 +215,7 @@ namespace GLUI
         }
 
         private bool mDisposed = false;
-
-        private bool mMouseInside = false;
-
+        private bool mMouseIsOver = false;
         private bool mLocationChanged = true;
 
         private bool LocationChanged
@@ -714,23 +712,19 @@ namespace GLUI
             BorderColor = mOriginalBorderColor;
         }
 
-        protected Vector2 CalculateSize()
+        protected Vector2 CalculateSize(int depth = 0)
         {
             var wBottomRight = new Vector2(0, 0);
-            var wQueue = new Queue<Component>();
-            wQueue.Enqueue(this);
-            while (wQueue.Any())
+            foreach(var wChild in Children)
             {
-                var wCurrent = wQueue.Dequeue();
-                if (wCurrent == null) continue;
-                foreach (var wChild in wCurrent.Children)
-                {
-                    wQueue.Enqueue(wChild);
-                }
-                if (wCurrent != this) wCurrent.OnUpdate();
-                wBottomRight.X = Math.Max(wBottomRight.X, wCurrent.AbsoluteLocation.X + wCurrent.Width);
-                wBottomRight.Y = Math.Max(wBottomRight.Y, wCurrent.AbsoluteLocation.Y + wCurrent.Height);
+                var wSize = wChild.CalculateSize(depth + 1);
+                wBottomRight.X = Math.Max(wBottomRight.X, wChild.AbsoluteLocation.X + wSize.X);
+                wBottomRight.Y = Math.Max(wBottomRight.Y, wChild.AbsoluteLocation.Y + wSize.Y);
             }
+            if(depth > 0) OnUpdate();
+            wBottomRight.X = Math.Max(wBottomRight.X, AbsoluteLocation.X + Width);
+            wBottomRight.Y = Math.Max(wBottomRight.Y, AbsoluteLocation.Y + Height);
+
             return wBottomRight - AbsoluteLocation;
         }
 
@@ -746,27 +740,27 @@ namespace GLUI
         /// <param name="mouseState"></param>
         protected virtual void OnMouse(MouseState mouseState)
         {
-            if (mMouseInside == false && mouseState.IsOverDirectly == true)
+            if (mMouseIsOver == false && mouseState.IsOverDirectly == true)
             {
-                mMouseInside = true;
+                mMouseIsOver = true;
                 OnMouseEntered(mouseState);
             }
-            else if (mMouseInside == true && mouseState.IsOverDirectly == false)
+            else if (mMouseIsOver == true && mouseState.IsOverDirectly == false)
             {
-                mMouseInside = false;
+                mMouseIsOver = false;
                 OnMouseLeaved(mouseState);
             }
         }
 
         protected virtual void OnMouseEntered(MouseState mouseState)
         {
-            if (Highlightable) Highlighted = true;
+            Highlighted = true;
             MouseEntered?.Invoke(this, mouseState);
         }
 
         protected virtual void OnMouseLeaved(MouseState mouseState)
         {
-            if (Highlightable) Highlighted = false;
+            Highlighted = false;
             MouseLeaved?.Invoke(this, mouseState);
         }
 
