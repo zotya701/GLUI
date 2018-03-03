@@ -14,29 +14,204 @@ namespace GLUI
 {
     public abstract class Component : IDisposable
     {
+
+        /// <summary>
+        /// Specifies the default values for every component.
+        /// </summary>
         public class Default
         {
-            protected Default() { }
-            public static float X { get; set; } = 0.0f;
-            public static float Y { get; set; } = 0.0f;
+            private static bool mHighlightable = false;
+
+            protected Default()
+            {
+
+            }
+
+            /// <summary>
+            /// Specifies the default X coordinate of newly created component's location.
+            /// </summary>
+            public static float X
+            {
+                get
+                {
+                    return Location.X;
+                }
+                set
+                {
+                    if (X == value) return;
+
+                    Location = new Vector2(value, Y);
+                }
+            }
+
+            /// <summary>
+            /// Specifies the default Y coordinate of newly created component's location.
+            /// </summary>
+            public static float Y
+            {
+                get
+                {
+                    return Location.Y;
+                }
+                set
+                {
+                    if (Y == value) return;
+
+                    Location = new Vector2(X, value);
+                }
+            }
+
+            /// <summary>
+            /// Specifies the default location of newly created component's.
+            /// </summary>
             public static Vector2 Location { get; set; } = new Vector2(0.0f, 0.0f);
-            public static float Width { get; set; } = 0.0f;
-            public static float Height { get; set; } = 0.0f;
+
+            /// <summary>
+            /// Specifies the default width of newly created component's size.
+            /// </summary>
+            public static float Width
+            {
+                get
+                {
+                    return Size.X;
+                }
+                set
+                {
+                    if (Width == value) return;
+
+                    Size = new Vector2(value, Height);
+                }
+            }
+
+            /// <summary>
+            /// Specifies the default height of newly created component's size.
+            /// </summary>
+            public static float Height
+            {
+                get
+                {
+                    return Size.Y;
+                }
+                set
+                {
+                    if (Height == value) return;
+
+                    Size = new Vector2(Width, value);
+                }
+            }
+
+            /// <summary>
+            /// Specifies the default size of newly created component's.
+            /// </summary>
             public static Vector2 Size { get; set; } = new Vector2(0.0f, 0.0f);
+
+            /// <summary>
+            /// Specifies the default width of newly created component's border.
+            /// </summary>
             public static float BorderWidth { get; set; } = 1.0f;
+
+            /// <summary>
+            /// Specifies that the newly created components are visible or not.
+            /// </summary>
             public static bool Visible { get; set; } = true;
-            public static bool Invisible { get; set; } = false;
-            public static bool Highlightable { get; set; } = false;
+
+            /// <summary>
+            /// Specifies that the newly created components are invisible or not.
+            /// </summary>
+            public static bool Invisible
+            {
+                get
+                {
+                    return !Visible;
+                }
+                set
+                {
+                    if (Invisible == value) return;
+
+                    Visible = !value;
+                }
+            }
+
+            /// <summary>
+            /// Specifies that the newly created components are highlightable or not.
+            /// </summary>
+            public static bool Highlightable
+            {
+                get
+                {
+                    return mHighlightable;
+                }
+                set
+                {
+                    if (mHighlightable == value) return;
+
+                    mHighlightable = value;
+                    Highlighted = Highlighted && Highlightable;
+                }
+            }
+
+            /// <summary>
+            /// Specifies that the newly created components are highlighted or not.
+            /// </summary>
             public static bool Highlighted { get; set; } = false;
+
+            /// <summary>
+            /// Specifies that the newly created components are enabled or not.
+            /// </summary>
             public static bool Enabled { get; set; } = true;
-            public static bool Disabled { get; set; } = false;
+
+            /// <summary>
+            /// Specifies that the newly created components are disabled or not.
+            /// </summary>
+            public static bool Disabled
+            {
+                get
+                {
+                    return !Enabled;
+                }
+                set
+                {
+                    if (Disabled == value) return;
+
+                    Enabled = !value;
+                }
+            }
+
+            /// <summary>
+            /// Specifies that the user is able to click through the newly created components or not.
+            /// </summary>
             public static bool ClickThrough { get; set; } = false;
+
+            /// <summary>
+            /// Specifies the default background color of newly created component's.
+            /// </summary>
             public static Color BackgroundColor { get; set; } = Color.FromArgb(220, 80, 80, 80);
+
+            /// <summary>
+            /// Specifies the default border color of newly created component's.
+            /// </summary>
             public static Color BorderColor { get; set; } = Color.FromArgb(220, 170, 170, 170);
+
+            /// <summary>
+            /// Specifies the default background color of newly created component's when it is highlighted.
+            /// </summary>
             public static Color HighlightedBackgroundColor { get; set; } = Color.FromArgb(255, 130, 130, 130);
+
+            /// <summary>
+            /// Specifies the default border color of newly created component's when it is highlighted.
+            /// </summary>
             public static Color HighlightedBorderColor { get; set; } = Color.FromArgb(255, 200, 200, 200);
+
+            /// <summary>
+            /// Specifies the default background color of newly created component's when it is disabled.
+            /// </summary>
             public static Color DisabledBackgroundColor { get; set; } = Color.FromArgb(255, 100, 100, 100);
+
+            /// <summary>
+            /// Specifies the default border color of newly created component's when it is disabled.
+            /// </summary>
             public static Color DisabledBorderColor { get; set; } = Color.FromArgb(255, 130, 130, 130);
+
         }
 
         private bool mDisposed = false;
@@ -302,7 +477,7 @@ namespace GLUI
             {
                 if (mEnabled == value) return;
 
-                foreach(var wChild in Children)
+                foreach (var wChild in Children)
                 {
                     wChild.Enabled = value;
                 }
@@ -340,11 +515,11 @@ namespace GLUI
             {
                 if (value && !ClickThrough) mClickThroughList.Add(this);
 
-                if(ClickThrough == false && value == true)
+                if (ClickThrough == false && value == true)
                 {
                     mClickThroughList.Add(this);
                 }
-                else if(ClickThrough == true && value == false)
+                else if (ClickThrough == true && value == false)
                 {
                     mClickThroughList.Remove(this);
                 }
@@ -777,7 +952,7 @@ namespace GLUI
         public void Dispose()
         {
             Dispose(true);
-            foreach(var wChild in Children)
+            foreach (var wChild in Children)
             {
                 wChild.Dispose();
             }
