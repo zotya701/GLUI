@@ -715,13 +715,13 @@ namespace GLUI
         protected Vector2 CalculateSize(int depth = 0)
         {
             var wBottomRight = new Vector2(0, 0);
-            foreach(var wChild in Children)
+            foreach (var wChild in Children)
             {
                 var wSize = wChild.CalculateSize(depth + 1);
                 wBottomRight.X = Math.Max(wBottomRight.X, wChild.AbsoluteLocation.X + wSize.X);
                 wBottomRight.Y = Math.Max(wBottomRight.Y, wChild.AbsoluteLocation.Y + wSize.Y);
             }
-            if(depth > 0) OnUpdate();
+            if (depth > 0) OnUpdate();
             wBottomRight.X = Math.Max(wBottomRight.X, AbsoluteLocation.X + Width);
             wBottomRight.Y = Math.Max(wBottomRight.Y, AbsoluteLocation.Y + Height);
 
@@ -729,13 +729,13 @@ namespace GLUI
         }
 
         /// <summary>
-        /// Handles the keyboard events
+        /// Handles the keyboard events.
         /// </summary>
         /// <param name="keyboardState"></param>
         protected virtual void OnKeyboard(KeyboardState keyboardState) { }
 
         /// <summary>
-        /// Handles the mouse events
+        /// Handles the mouse events.
         /// </summary>
         /// <param name="mouseState"></param>
         protected virtual void OnMouse(MouseState mouseState)
@@ -765,7 +765,7 @@ namespace GLUI
         }
 
         /// <summary>
-        /// Renders the component
+        /// Renders the component.
         /// </summary>
         protected virtual void OnRender()
         {
@@ -788,7 +788,7 @@ namespace GLUI
         }
 
         /// <summary>
-        /// Updates the component
+        /// Updates the component.
         /// </summary>
         protected virtual void OnUpdate()
         {
@@ -861,7 +861,7 @@ namespace GLUI
         }
 
         /// <summary>
-        /// Calls OnKeyboard and calls KeyboardHandler on child components if the component is visible and enabled
+        /// Calls OnKeyboard and calls KeyboardHandler on child components if the component is visible and enabled.
         /// </summary>
         /// <param name="keyboardState">The state of the keyboard</param>
         internal void KeyboardHandler(KeyboardState keyboardState)
@@ -875,7 +875,7 @@ namespace GLUI
         }
 
         /// <summary>
-        /// Calls OnMouse and calls MouseHandler on the child components if the component is visible and enabled
+        /// Calls OnMouse and calls MouseHandler on the child components if the component is visible and enabled.
         /// </summary>
         /// <param name="mouseState">The state of the mouse</param>
         internal void MouseHandler(MouseState mouseState)
@@ -891,7 +891,7 @@ namespace GLUI
         }
 
         /// <summary>
-        /// Calls OnRender and calls Render on the child components if the component is visible
+        /// Calls OnRender and calls Render on the child components if the component is visible.
         /// </summary>
         internal void Render()
         {
@@ -910,7 +910,7 @@ namespace GLUI
         }
 
         /// <summary>
-        /// Calls OnUpdate if the Dirty flag is true and calls Update on the child components if the component is visible
+        /// Calls OnUpdate if the Dirty flag is true and calls Update on the child components if the component is visible.
         /// </summary>
         internal void Update()
         {
@@ -924,7 +924,7 @@ namespace GLUI
         }
 
         /// <summary>
-        /// Releases the OpenGL resources
+        /// Releases the OpenGL resources.
         /// </summary>
         /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
@@ -941,7 +941,7 @@ namespace GLUI
         }
 
         /// <summary>
-        /// Releases the OpenGL resources
+        /// Releases the OpenGL resources.
         /// </summary>
         public void Dispose()
         {
