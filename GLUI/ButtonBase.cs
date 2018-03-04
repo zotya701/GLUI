@@ -66,11 +66,8 @@ namespace GLUI
         {
             Label = new Label()
             {
-                Alignment = new Alignment
-                {
-                    Vertical = Vertical.Center,
-                    Horizontal = Horizontal.Center
-                },
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
                 FontFamily = "Arial",
                 FontSize = 14,
                 FontColor = Color.LightGray,

@@ -6,23 +6,17 @@ using System.Threading.Tasks;
 
 namespace GLUI
 {
-    public enum Horizontal
+    public enum HorizontalAlignment
     {
         Left,
         Center,
         Right
     }
 
-    public enum Vertical
+    public enum VerticalAlignment
     {
         Top,
         Center,
         Bottom
-    }
-
-    public class Alignment
-    {
-        public Vertical Vertical { get; set; }
-        public Horizontal Horizontal { get; set; }
     }
 }

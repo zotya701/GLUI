@@ -13,6 +13,12 @@ namespace GLUI
 {
     public class Font : IDisposable
     {
+        private class FontTextureData
+        {
+            public Vector2 Location { get; set; }
+            public Vector2 Size { get; set; }
+        }
+
         private bool mDisposed = false;
 
         private int mVerticesId = 0;

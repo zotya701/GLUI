@@ -87,11 +87,8 @@ namespace Application
 
             mPerformanceLabel = new Label()
             {
-                Alignment = new Alignment
-                {
-                    Horizontal = Horizontal.Left,
-                    Vertical = Vertical.Bottom
-                },
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Bottom,
                 ClickThrough = true,
                 FontFamily = "Arial",
                 FontSize = 12,

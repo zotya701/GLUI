@@ -17,7 +17,8 @@ namespace GLUI
         public new class Default : Component.Default
         {
             public static string Text { get; set; } = "Label";
-            public static Alignment Alignment { get; set; } = new Alignment { Horizontal = Horizontal.Left, Vertical = Vertical.Top };
+            public static HorizontalAlignment HorizontalAlignment { get; set; } = HorizontalAlignment.Left;
+            public static VerticalAlignment VerticalAlignment { get; set; } = VerticalAlignment.Top;
             public static string FontFamily { get; set; } = "Arial";
             public static float FontSize { get; set; } = 12.0f;
             public static Color FontColor { get; set; } = Color.LightGray;
@@ -31,7 +32,8 @@ namespace GLUI
         private bool mFontColorChanged = false;
 
         private string mText;
-        private Alignment mAlignment;
+        private HorizontalAlignment mHorizontalAlignment;
+        private VerticalAlignment mVerticalAlignment;
         private string mFontFamily;
         private float mFontSize;
         private Color mFontColor;
@@ -63,17 +65,32 @@ namespace GLUI
             }
         }
 
-        public Alignment Alignment
+        public HorizontalAlignment HorizontalAlignment
         {
             get
             {
-                return mAlignment;
+                return mHorizontalAlignment;
             }
             set
             {
-                if (mAlignment != null && mAlignment.Horizontal == value.Horizontal && mAlignment.Vertical == value.Vertical) return;
+                if (mHorizontalAlignment == value) return;
 
-                mAlignment = value;
+                mHorizontalAlignment = value;
+                Dirty = true;
+            }
+        }
+
+        public VerticalAlignment VerticalAlignment
+        {
+            get
+            {
+                return mVerticalAlignment;
+            }
+            set
+            {
+                if (mVerticalAlignment == value) return;
+
+                mVerticalAlignment = value;
                 Dirty = true;
             }
         }
@@ -152,7 +169,8 @@ namespace GLUI
             BorderWidth = Default.BorderWidth;
 
             Text = text;
-            Alignment = Default.Alignment;
+            HorizontalAlignment = Default.HorizontalAlignment;
+            VerticalAlignment = Default.VerticalAlignment;
             FontFamily = Default.FontFamily;
             FontSize = Default.FontSize;
             FontColor = Default.FontColor;
@@ -216,7 +234,7 @@ namespace GLUI
             //GL.Translate(-wCenter.X * GLScale, -wCenter.Y * GLScale, 0);
             //GL.Scale(GLScale, GLScale, 1);
             //GL.Translate(wCenter.X / GLScale, wCenter.Y / GLScale, 0);
-            if(string.IsNullOrEmpty(Text) == false)
+            if (string.IsNullOrEmpty(Text) == false)
             {
                 mFont.DrawCachedText();
             }
@@ -247,29 +265,17 @@ namespace GLUI
 
             float wX = 0;
             float wY = 0;
-            switch (Alignment.Horizontal)
+            switch (HorizontalAlignment)
             {
-                case Horizontal.Left:
-                    wX = 0;
-                    break;
-                case Horizontal.Center:
-                    wX = Size.X / 2 - wSize.X / 2;
-                    break;
-                case Horizontal.Right:
-                    wX = Size.X - wSize.X;
-                    break;
+                case HorizontalAlignment.Left: wX = 0; break;
+                case HorizontalAlignment.Center: wX = Size.X / 2 - wSize.X / 2; break;
+                case HorizontalAlignment.Right: wX = Size.X - wSize.X; break;
             }
-            switch (Alignment.Vertical)
+            switch (VerticalAlignment)
             {
-                case Vertical.Top:
-                    wY = 0;
-                    break;
-                case Vertical.Center:
-                    wY = Size.Y / 2 - wSize.Y / 2;
-                    break;
-                case Vertical.Bottom:
-                    wY = Size.Y - wSize.Y;
-                    break;
+                case VerticalAlignment.Top: wY = 0; break;
+                case VerticalAlignment.Center: wY = Size.Y / 2 - wSize.Y / 2; break;
+                case VerticalAlignment.Bottom: wY = Size.Y - wSize.Y; break;
             }
             Raster.Location = new Vector2((float)Math.Round(wX), (float)Math.Round(wY));
             mFont.RegenerateTextCache(Text);

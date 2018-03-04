@@ -27,11 +27,8 @@ namespace GLUI
         {
             mTitle = new Label()
             {
-                Alignment = new Alignment
-                {
-                    Horizontal = Horizontal.Left,
-                    Vertical = Vertical.Center
-                },
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Center,
                 BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                 BorderWidth = 1.0f,
                 FontColor = Color.LightGray,
@@ -46,11 +43,8 @@ namespace GLUI
                 BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                 Label = new Label()
                 {
-                    Alignment = new Alignment
-                    {
-                        Horizontal = Horizontal.Center,
-                        Vertical = Vertical.Center
-                    },
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
                     BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                     BorderWidth = 0,
                     FontColor = Color.LightGray,
@@ -66,11 +60,8 @@ namespace GLUI
                 BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                 Label = new Label()
                 {
-                    Alignment = new Alignment
-                    {
-                        Horizontal = Horizontal.Center,
-                        Vertical = Vertical.Center
-                    },
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
                     BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                     BorderWidth = 0,
                     FontColor = Color.LightGray,
@@ -86,11 +77,8 @@ namespace GLUI
                 BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                 Label = new Label()
                 {
-                    Alignment = new Alignment
-                    {
-                        Horizontal = Horizontal.Center,
-                        Vertical = Vertical.Center
-                    },
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
                     BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                     BorderWidth = 0,
                     FontColor = Color.LightGray,
