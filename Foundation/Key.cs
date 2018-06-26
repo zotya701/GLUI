@@ -164,9 +164,9 @@ namespace Foundation
             RealKey = key;
         }
 
-        public static Command operator +(Key left, Key right)
+        public override string ToString()
         {
-            return new Command(left, right);
+            return RealKey.ToString();
         }
 
         public static bool operator ==(OpenTK.Input.Key left, Key right)

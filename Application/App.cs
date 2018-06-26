@@ -47,7 +47,7 @@ namespace Application
         public string Title { get { return mWindow.Title; } set { mWindow.Title = value; } }
         public System.Drawing.Icon Icon { get { return mWindow.Icon; } set { mWindow.Icon = value; } }
         public bool CursorVisible { get { return mWindow.CursorVisible; } set { mWindow.CursorVisible = value; } }
-        public Dictionary<string, Command> Commands { get; set; }
+        public Commands Commands { get; } = new Commands();
         #endregion
 
         public App()
@@ -57,7 +57,6 @@ namespace Application
             // Enable antialiasing
             mWindow = new GameWindow(1, 1, new OpenTK.Graphics.GraphicsMode(32, 0, 8, 8));
             mWindow.VSync = VSyncMode.Off;
-            Commands = new Dictionary<string, Command>();
 
             mWindow.Load += OnLoad;
 
@@ -87,7 +86,7 @@ namespace Application
 
             mPerformanceLabel = new Label()
             {
-                HorizontalAlignment = HorizontalAlignment.Left,
+                HorizontalAlignment = HorizontalAlignment.Right,
                 VerticalAlignment = VerticalAlignment.Bottom,
                 ClickThrough = true,
                 FontFamily = "Arial",
@@ -110,11 +109,11 @@ namespace Application
             //    Console.WriteLine($"  {wExtension}");
             //}
             Console.WriteLine("Commands:");
-            foreach (var wControlKey in Commands)
+            foreach(var wCommand in Commands)
             {
-                Console.WriteLine($"  {wControlKey.Key} -> {wControlKey.Value}");
+                Console.WriteLine($"  {wCommand}");
             }
-
+            
             mRoot.Size = new Vector2(Width, Height);
             mWindow.Run();
         }
@@ -245,10 +244,11 @@ namespace Application
             mKeyboardState.KeyDown[e.Key] = true;
             mKeyboardState.LastKey = e.Key;
 
-            foreach (var wControlKey in Commands.Values)
+            foreach( var wCommand in Commands)
             {
-                wControlKey.Check(mKeyboardState);
+                wCommand.Check(mKeyboardState);
             }
+
 
             OnKeyboard?.Invoke(this, mKeyboardState);
         }

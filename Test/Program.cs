@@ -26,21 +26,16 @@ namespace Test
                 Width = 210 * 8,
                 Height = 90 * 8,
                 ShowPerformanceInfo = true,
-                Commands = new Dictionary<string, Command>
-                {
-                    {"Exit", Key.Escape },
-                    {"Fullscreen", Key.AltLeft + Key.Enter },
-                }
             };
-
-            wApp.Commands["Exit"].Activated += (s, e) =>
+            wApp.Commands.Add(new Command("Exit", Key.Escape).Executes(() =>
             {
                 wApp.Exit();
-            };
-            wApp.Commands["Fullscreen"].Activated += (s, e) =>
+            }));
+            wApp.Commands.Add(new Command("FullScreen", Key.AltLeft, Key.Enter).Executes(() =>
             {
                 wApp.FullScreen = !wApp.FullScreen;
-            };
+            }));
+
 
             var wWindow = new Window("Test window title")
             {

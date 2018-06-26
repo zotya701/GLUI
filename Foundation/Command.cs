@@ -8,22 +8,27 @@ namespace Foundation
 {
     public class Command
     {
+        public string Name;
         public List<Key> Keys { get; } = new List<Key>();
 
         public event EventHandler<Command> Activated;
 
-        public Command(params Key[] keys)
+        public Command(string name, params Key[] keys)
         {
+            Name = name;
             foreach (var wKey in keys)
             {
                 Keys.Add(wKey);
             }
         }
 
-        public Command(Command left, params Key[] keys)
+        public Command Executes(Action action)
         {
-            Keys = left.Keys;
-            Keys.AddRange(keys);
+            Activated += (o, e) =>
+            {
+                action?.Invoke();
+            };
+            return this;
         }
 
         public void Check(KeyboardState keyboardState)
@@ -53,42 +58,7 @@ namespace Foundation
 
         public override string ToString()
         {
-            return string.Join(" + ", Keys.Select(key => key.RealKey));
+            return $"{Name} -> {string.Join(" + ", Keys)}";
         }
-
-        public static implicit operator Command(Key key)
-        {
-            return new Command(key);
-        }
-
-        public static Command operator +(Command left, Key right)
-        {
-            return new Command(left, right);
-        }
-
-        //public static bool operator ==(KeyboardState left, ControlKey right)
-        //{
-        //    var wFullFilled = true;
-        //    foreach (var wKey in right.Keys)
-        //    {
-        //        wFullFilled = wFullFilled && left.KeyDown[wKey.RealKey];
-        //    }
-        //    return wFullFilled;
-        //}
-
-        //public static bool operator ==(ControlKey left, KeyboardState right)
-        //{
-        //    return right == left;
-        //}
-
-        //public static bool operator !=(KeyboardState left, ControlKey right)
-        //{
-        //    return !(left == right);
-        //}
-
-        //public static bool operator !=(ControlKey left, KeyboardState right)
-        //{
-        //    return right != left;
-        //}
     }
 }
