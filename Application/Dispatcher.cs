@@ -10,22 +10,28 @@ namespace Application
 {
     public static class Dispatcher
     {
-        private static ConcurrentQueue<Tuple<Action, ManualResetEventSlim>> Actions { get; } = new ConcurrentQueue<Tuple<Action, ManualResetEventSlim>>();
+        private static ConcurrentQueue<(Action Callback, ManualResetEventSlim CallbackFinished)> Actions { get; } = new ConcurrentQueue<(Action, ManualResetEventSlim)>();
 
-        public static ManualResetEventSlim Invoke(Action action)
+        public static void BeginInvoke(Action action)
+        {
+            Actions.Enqueue((action, null));
+        }
+
+        public static void Invoke(Action action)
         {
             var wHandle = new ManualResetEventSlim(false);
-            Actions.Enqueue(Tuple.Create(action, wHandle));
-            return wHandle;
+            Actions.Enqueue((action, wHandle));
+            wHandle.Wait();
         }
 
         internal static void ExecuteNextAction()
         {
-            Tuple<Action, ManualResetEventSlim> wTuple;
-            if (Actions.Any() && Actions.TryDequeue(out wTuple))
+            if (Actions.IsEmpty) return;
+
+            if(Actions.TryDequeue(out var wAction))
             {
-                wTuple.Item1?.Invoke();
-                wTuple.Item2.Set();
+                wAction.Callback?.Invoke();
+                wAction.CallbackFinished?.Set();
             }
         }
     }

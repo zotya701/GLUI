@@ -199,7 +199,7 @@ namespace Application
                     var wFrameCounter = mFrameCounter;
                     if (mFrameDates.Count >= 3)
                     {
-                        Dispatcher.Invoke(() =>
+                        Dispatcher.BeginInvoke(() =>
                         {
                             var wPerformanceInfos = new List<string>
                             {
