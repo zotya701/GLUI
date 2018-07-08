@@ -8,7 +8,7 @@ using System.Threading;
 using GLUI;
 using System.Drawing;
 using OpenTK;
-using Foundation;
+using GLUI.Foundation;
 
 namespace Test
 {

@@ -10,7 +10,7 @@ using OpenTK.Graphics;
 using OpenTK.Input;
 using GLUI;
 using System.Drawing;
-using Foundation;
+using GLUI.Foundation;
 using System.Diagnostics;
 using System.Threading;
 #endregion
@@ -28,8 +28,8 @@ namespace Application
         private double mElapsedTime;
         private double mWaitTime;
         private ulong mFrameCounter = 0;
-        private Foundation.KeyboardState mKeyboardState;
-        private Foundation.MouseState mMouseState;
+        private GLUI.Foundation.KeyboardState mKeyboardState;
+        private GLUI.Foundation.MouseState mMouseState;
 
         public event KeyboardHandler OnKeyboard;
         public event MouseHandler OnMouse;
@@ -52,8 +52,8 @@ namespace Application
 
         public App()
         {
-            mKeyboardState = new Foundation.KeyboardState();
-            mMouseState = new Foundation.MouseState();
+            mKeyboardState = new GLUI.Foundation.KeyboardState();
+            mMouseState = new GLUI.Foundation.MouseState();
             // Enable antialiasing
             mWindow = new GameWindow(1, 1, new OpenTK.Graphics.GraphicsMode(32, 0, 8, 8));
             mWindow.VSync = VSyncMode.Off;

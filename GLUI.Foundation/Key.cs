@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Foundation
+namespace GLUI.Foundation
 {
     public class Key
     {
@@ -187,6 +187,17 @@ namespace Foundation
         public static bool operator !=(Key left, OpenTK.Input.Key right)
         {
             return left.RealKey != right;
+        }
+
+        public override bool Equals(object obj)
+        {
+            var wKey = obj as Key;
+            return this == wKey;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.RealKey.GetHashCode();
         }
     }
 }

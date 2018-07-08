@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Foundation;
+using GLUI.Foundation;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 

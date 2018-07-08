@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing.Drawing2D;
 using OpenTK;
-using Foundation;
+using GLUI.Foundation;
 
 namespace GLUI
 {

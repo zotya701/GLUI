@@ -1,4 +1,4 @@
-﻿using Foundation;
+﻿using GLUI.Foundation;
 using OpenTK;
 using System;
 using System.Collections.Generic;

@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Foundation
+namespace GLUI.Foundation
 {
     public class Command
     {
         public string Name;
         public List<Key> Keys { get; } = new List<Key>();
 
-        public event EventHandler<Command> Activated;
+        public event EventHandler<EventArgs> Activated;
 
         public Command(string name, params Key[] keys)
         {
@@ -51,7 +51,7 @@ namespace Foundation
                 }
                 if(wInOrder == wKeys.Count >= Math.Min(wKeys.Count, wLast10Keys.Count))
                 {
-                    Activated?.Invoke(this, this);
+                    Activated?.Invoke(this, EventArgs.Empty);
                 }
             }
         }

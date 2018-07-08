@@ -8,7 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using OpenTK;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Foundation;
+using GLUI.Foundation;
 
 namespace GLUI
 {

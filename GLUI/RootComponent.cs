@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
-using Foundation;
+using GLUI.Foundation;
 
 namespace GLUI
 {

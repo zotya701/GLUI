@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Foundation
+namespace GLUI.Foundation
 {
     public delegate void KeyboardHandler(object sender, KeyboardState keyboardState);
     public class KeyboardState : EventArgs
