@@ -8,8 +8,12 @@ namespace GLUI.Foundation.MathExtension
 {
     public class Vector
     {
+        private static ulong mCounter = 0;
+        private ulong mId = mCounter++;
         private int mDimension;
         private double[] mValues;
+
+        public double Length { get { return Math.Sqrt(mValues.Sum(value => value * value)); } }
 
         public static Vector Unit(int axis, int dimension)
         {
@@ -41,14 +45,9 @@ namespace GLUI.Foundation.MathExtension
             }
         }
 
-        public double Length()
-        {
-            return Math.Sqrt(mValues.Sum(value => value * value));
-        }
-
         public Vector Normalize()
         {
-            return this / Length();
+            return this / Length;
         }
 
         private Vector DoForAll(double value, Func<double, double, double> operation)
@@ -87,7 +86,7 @@ namespace GLUI.Foundation.MathExtension
 
         public static Vector operator +(double value, Vector vector)
         {
-            return vector * value;
+            return vector + value;
         }
 
         public static Vector operator -(Vector vector, Vector value)
@@ -102,7 +101,7 @@ namespace GLUI.Foundation.MathExtension
 
         public static Vector operator -(double value, Vector vector)
         {
-            return vector * value;
+            return vector.DoForAll(value, (l, r) => r - l);
         }
 
         public static Vector operator *(Vector vector, double value)
@@ -117,17 +116,44 @@ namespace GLUI.Foundation.MathExtension
 
         public static Vector operator /(Vector vector, double value)
         {
-            return vector.DoForAll(value, (x, y) => x / y);
+            return vector.DoForAll(value, (l, r) => l / r);
         }
 
         public static Vector operator /(double value, Vector vector)
         {
-            return vector / value;
+            return vector.DoForAll(value, (l, r) => r / l);
         }
 
         public static double operator *(Vector left, Vector right)
         {
             return left.DoForAll(right, (l, r) => l * r).mValues.Sum();
+        }
+
+        public static Vector operator -(Vector vector)
+        {
+            return vector * (-1);
+        }
+
+        public static bool operator ==(Vector left, Vector right)
+        {
+            if (left.mDimension != right.mDimension) return false;
+            return left.mValues.SequenceEqual(right.mValues);
+        }
+
+        public static bool operator !=(Vector left, Vector right)
+        {
+            return !(left == right);
+        }
+
+        public override bool Equals(object obj)
+        {
+            var wVector = obj as Vector;
+            return this == wVector;
+        }
+
+        public override int GetHashCode()
+        {
+            return mId.GetHashCode();
         }
     }
 }
