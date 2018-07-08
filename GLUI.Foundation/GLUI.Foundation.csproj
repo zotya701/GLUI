@@ -7,8 +7,8 @@
     <ProjectGuid>{DD262875-66AF-448A-B3F8-3D5AA272C3D9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Foundation</RootNamespace>
-    <AssemblyName>Foundation</AssemblyName>
+    <RootNamespace>GLUI.Foundation</RootNamespace>
+    <AssemblyName>GLUI.Foundation</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
