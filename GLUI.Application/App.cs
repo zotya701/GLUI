@@ -47,7 +47,7 @@ namespace GLUI.Application
         public string Title { get { return mWindow.Title; } set { mWindow.Title = value; } }
         public System.Drawing.Icon Icon { get { return mWindow.Icon; } set { mWindow.Icon = value; } }
         public bool CursorVisible { get { return mWindow.CursorVisible; } set { mWindow.CursorVisible = value; } }
-        public Commands Commands { get; } = new Commands();
+        public List<Command> Commands { get; } = new List<Command>();
         #endregion
 
         public App()
@@ -242,13 +242,8 @@ namespace GLUI.Application
             mKeyboardState.Control = e.Control;
             mKeyboardState.Shift = e.Shift;
             mKeyboardState.KeyDown[e.Key] = true;
-            mKeyboardState.LastKey = e.Key;
 
-            foreach( var wCommand in Commands)
-            {
-                wCommand.Check(mKeyboardState);
-            }
-
+            Commands.ForEach(wCommand => wCommand.Check(mKeyboardState));
 
             OnKeyboard?.Invoke(this, mKeyboardState);
         }

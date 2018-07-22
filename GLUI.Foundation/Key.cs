@@ -24,6 +24,10 @@ namespace GLUI.Foundation
 
         public static bool operator !=(Key left, OpenTK.Input.Key right) => left.RealKey != right;
 
+        public static bool operator ==(Key left, Key right) => left.RealKey == right.RealKey;
+
+        public static bool operator !=(Key left, Key right) => left.RealKey != right.RealKey;
+
         public override bool Equals(object obj) => RealKey == (obj as Key).RealKey;
 
         public override int GetHashCode() => RealKey.GetHashCode();

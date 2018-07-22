@@ -56,7 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
-    <Compile Include="Commands.cs" />
     <Compile Include="Key.cs" />
     <Compile Include="Key.generated.cs">
       <AutoGen>True</AutoGen>
