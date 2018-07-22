@@ -8,8 +8,9 @@ namespace GLUI.Foundation.MathExtension
 {
     public class Vector2 : Vector
     {
-        public static Vector2 UnitX { get; } = Unit(0, 2) as Vector2;
-        public static Vector2 UnitY { get; } = Unit(1, 2) as Vector2;
+        public static Vector2 UnitX { get; } = new Vector2(Unit(0, 2));
+        public static Vector2 UnitY { get; } = new Vector2(Unit(1, 2));
+        public new static Vector2 Zero { get; } = new Vector2(Zero(2));
 
         public double X
         {
@@ -28,10 +29,36 @@ namespace GLUI.Foundation.MathExtension
             this.Y = Y;
         }
 
-        public Vector2 Rotate(double angle)
-        {
-            return new Vector2(X = X * Math.Cos(angle) - Y * Math.Sin(angle),
-                               Y = X * Math.Sin(angle) + Y * Math.Cos(angle));
-        }
+        public Vector2(Vector vector) : base(vector) { }
+
+        public static implicit operator Vector2((double X, double Y) tuple) => new Vector2(tuple.X, tuple.Y);
+
+        public void Deconstruct(out double X, out double Y) { X = this.X; Y = this.Y; }
+
+        public new Vector2 Normalize() => new Vector2(base.Normalize());
+
+        public static Vector2 operator +(Vector2 vector, Vector2 value) => new Vector2((vector as Vector) + (value as Vector));
+
+        public static Vector2 operator +(Vector2 vector, double value) => new Vector2((vector as Vector) + value);
+
+        public static Vector2 operator +(double value, Vector2 vector) => new Vector2(value + (vector as Vector));
+
+        public static Vector2 operator -(Vector2 vector, Vector2 value) => new Vector2((vector as Vector) - (value as Vector));
+
+        public static Vector2 operator -(Vector2 vector, double value) => new Vector2((vector as Vector) - value);
+
+        public static Vector2 operator -(double value, Vector2 vector) => new Vector2(value - (vector as Vector));
+
+        public static Vector2 operator *(Vector2 vector, double value) => new Vector2((vector as Vector) * value);
+
+        public static Vector2 operator *(double value, Vector2 vector) => new Vector2(value * (vector as Vector));
+
+        public static Vector2 operator /(Vector2 vector, double value) => new Vector2((vector as Vector) / value);
+
+        public static Vector2 operator /(double value, Vector2 vector) => new Vector2(value / (vector as Vector));
+
+        public static Vector2 operator -(Vector2 vector) => new Vector2(-(vector as Vector));
+
+        public Vector2 Rotate(double angle) => new Vector2(X * Math.Cos(angle) - Y * Math.Sin(angle), X * Math.Sin(angle) + Y * Math.Cos(angle));
     }
 }

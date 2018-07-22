@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GLUI.Foundation.MathExtension;
+using System.Collections.Generic;
 
 namespace GLUI.Foundation.Test.MathExtension
 {
@@ -49,40 +50,52 @@ namespace GLUI.Foundation.Test.MathExtension
         [TestMethod]
         public void TestConstructor()
         {
+            foreach (var wVector in new List<Vector3> { new Vector3(1, 2, 3), (1, 2, 3) })
+            {
+                Assert.AreEqual(1, wVector.X);
+                Assert.AreEqual(2, wVector.Y);
+                Assert.AreEqual(3, wVector.Z);
+
+                Assert.AreEqual(1, wVector[0]);
+                Assert.AreEqual(2, wVector[1]);
+                Assert.AreEqual(3, wVector[2]);
+
+                Assert.IsFalse(wVector == Vector3.Zero);
+                Assert.IsTrue(wVector != Vector3.Zero);
+                Assert.AreNotEqual(Vector3.Zero, wVector);
+                Assert.AreNotSame(Vector3.Zero, wVector);
+
+                Assert.ThrowsException<IndexOutOfRangeException>(() => { var wValue = wVector[-1]; });
+                Assert.ThrowsException<IndexOutOfRangeException>(() => { var wValue = wVector[3]; });
+
+                wVector.X = 0;
+                wVector.Y = 0;
+                wVector.Z = 0;
+
+                Assert.AreEqual(0, wVector.X);
+                Assert.AreEqual(0, wVector.Y);
+                Assert.AreEqual(0, wVector.Z);
+
+                Assert.AreEqual(0, wVector[0]);
+                Assert.AreEqual(0, wVector[1]);
+                Assert.AreEqual(0, wVector[2]);
+
+                Assert.IsTrue(wVector == Vector3.Zero);
+                Assert.IsFalse(wVector != Vector3.Zero);
+                Assert.AreEqual(Vector3.Zero, wVector);
+                Assert.AreNotSame(Vector3.Zero, wVector);
+            }
+        }
+
+        [TestMethod]
+        public void TestDeconstructor()
+        {
             var wVector = new Vector3(1, 2, 3);
+            var (X, Y, Z) = wVector;
 
-            Assert.AreEqual(1, wVector.X);
-            Assert.AreEqual(2, wVector.Y);
-            Assert.AreEqual(3, wVector.Z);
-
-            Assert.AreEqual(1, wVector[0]);
-            Assert.AreEqual(2, wVector[1]);
-            Assert.AreEqual(3, wVector[2]);
-
-            Assert.IsFalse(wVector == Vector3.Zero);
-            Assert.IsTrue(wVector != Vector3.Zero);
-            Assert.AreNotEqual(Vector3.Zero, wVector);
-            Assert.AreNotSame(Vector3.Zero, wVector);
-
-            Assert.ThrowsException<IndexOutOfRangeException>(() => { var wValue = wVector[-1]; });
-            Assert.ThrowsException<IndexOutOfRangeException>(() => { var wValue = wVector[3]; });
-
-            wVector.X = 0;
-            wVector.Y = 0;
-            wVector.Z = 0;
-
-            Assert.AreEqual(0, wVector.X);
-            Assert.AreEqual(0, wVector.Y);
-            Assert.AreEqual(0, wVector.Z);
-
-            Assert.AreEqual(0, wVector[0]);
-            Assert.AreEqual(0, wVector[1]);
-            Assert.AreEqual(0, wVector[2]);
-
-            Assert.IsTrue(wVector == Vector3.Zero);
-            Assert.IsFalse(wVector != Vector3.Zero);
-            Assert.AreEqual(Vector3.Zero, wVector);
-            Assert.AreNotSame(Vector3.Zero, wVector);
+            Assert.AreEqual(wVector.X, X);
+            Assert.AreEqual(wVector.Y, Y);
+            Assert.AreEqual(wVector.Z, Z);
         }
 
         [TestMethod]
@@ -121,6 +134,18 @@ namespace GLUI.Foundation.Test.MathExtension
             Assert.AreNotEqual(Vector3.UnitY, Vector3.Zero);
 
             Assert.AreNotEqual(Vector3.UnitZ, Vector3.Zero);
+
+            Assert.ThrowsException<IndexOutOfRangeException>(() => { var wValue = Vector3.UnitX[-1]; });
+            Assert.ThrowsException<IndexOutOfRangeException>(() => { var wValue = Vector3.UnitX[3]; });
+
+            Assert.ThrowsException<IndexOutOfRangeException>(() => { var wValue = Vector3.UnitY[-1]; });
+            Assert.ThrowsException<IndexOutOfRangeException>(() => { var wValue = Vector3.UnitY[3]; });
+
+            Assert.ThrowsException<IndexOutOfRangeException>(() => { var wValue = Vector3.UnitZ[-1]; });
+            Assert.ThrowsException<IndexOutOfRangeException>(() => { var wValue = Vector3.UnitZ[3]; });
+
+            Assert.ThrowsException<IndexOutOfRangeException>(() => { var wValue = Vector3.Zero[-1]; });
+            Assert.ThrowsException<IndexOutOfRangeException>(() => { var wValue = Vector3.Zero[3]; });
         }
 
         [TestMethod]

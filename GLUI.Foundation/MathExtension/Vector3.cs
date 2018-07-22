@@ -11,7 +11,7 @@ namespace GLUI.Foundation.MathExtension
         public static Vector3 UnitX { get; } = new Vector3(Unit(0, 3));
         public static Vector3 UnitY { get; } = new Vector3(Unit(1, 3));
         public static Vector3 UnitZ { get; } = new Vector3(Unit(2, 3));
-        public static Vector3 Zero { get; } = new Vector3(0, 0, 0);
+        public new static Vector3 Zero { get; } = new Vector3(Zero(3));
 
         public double X
         {
@@ -39,86 +39,39 @@ namespace GLUI.Foundation.MathExtension
 
         public Vector3(Vector vector) : base(vector) { }
 
-        public new Vector3 Normalize()
-        {
-            return new Vector3(base.Normalize());
-        }
+        public static implicit operator Vector3((double X, double Y, double Z) tuple) => new Vector3(tuple.X, tuple.Y, tuple.Z);
 
-        public static Vector3 operator +(Vector3 vector, Vector3 value)
-        {
-            return new Vector3((vector as Vector) + (value as Vector));
-        }
+        public void Deconstruct(out double X, out double Y, out double Z) { X = this.X; Y = this.Y; Z = this.Z; }
 
-        public static Vector3 operator +(Vector3 vector, double value)
-        {
-            return new Vector3((vector as Vector) + value);
-        }
+        public new Vector3 Normalize() => new Vector3(base.Normalize());
 
-        public static Vector3 operator +(double value, Vector3 vector)
-        {
-            return new Vector3(value + (vector as Vector));
-        }
+        public static Vector3 operator +(Vector3 vector, Vector3 value) => new Vector3((vector as Vector) + (value as Vector));
 
-        public static Vector3 operator -(Vector3 vector, Vector3 value)
-        {
-            return new Vector3((vector as Vector) - (value as Vector));
-        }
+        public static Vector3 operator +(Vector3 vector, double value) => new Vector3((vector as Vector) + value);
 
-        public static Vector3 operator -(Vector3 vector, double value)
-        {
-            return new Vector3((vector as Vector) - value);
-        }
+        public static Vector3 operator +(double value, Vector3 vector) => new Vector3(value + (vector as Vector));
 
-        public static Vector3 operator -(double value, Vector3 vector)
-        {
-            return new Vector3(value - (vector as Vector));
-        }
+        public static Vector3 operator -(Vector3 vector, Vector3 value) => new Vector3((vector as Vector) - (value as Vector));
 
-        public static Vector3 operator *(Vector3 vector, double value)
-        {
-            return new Vector3((vector as Vector) * value);
-        }
+        public static Vector3 operator -(Vector3 vector, double value) => new Vector3((vector as Vector) - value);
 
-        public static Vector3 operator *(double value, Vector3 vector)
-        {
-            return new Vector3(value * (vector as Vector));
-        }
+        public static Vector3 operator -(double value, Vector3 vector) => new Vector3(value - (vector as Vector));
 
-        public static Vector3 operator /(Vector3 vector, double value)
-        {
-            return new Vector3((vector as Vector) / value);
-        }
+        public static Vector3 operator *(Vector3 vector, double value) => new Vector3((vector as Vector) * value);
 
-        public static Vector3 operator /(double value, Vector3 vector)
-        {
-            return new Vector3(value / (vector as Vector));
-        }
+        public static Vector3 operator *(double value, Vector3 vector) => new Vector3(value * (vector as Vector));
 
-        public static Vector3 operator -(Vector3 vector)
-        {
-            return new Vector3(-(vector as Vector));
-        }
+        public static Vector3 operator /(Vector3 vector, double value) => new Vector3((vector as Vector) / value);
 
-        public Vector3 RotateX(double angle)
-        {
-            return new Vector3(X,
-                               Y * Math.Cos(angle) - Z * Math.Sin(angle),
-                               Y * Math.Sin(angle) + Z * Math.Cos(angle));
-        }
+        public static Vector3 operator /(double value, Vector3 vector) => new Vector3(value / (vector as Vector));
 
-        public Vector3 RotateY(double angle)
-        {
-            return new Vector3(X * Math.Cos(angle) + Z * Math.Sin(angle),
-                               Y,
-                               -X * Math.Sin(angle) + Z * Math.Cos(angle));
-        }
+        public static Vector3 operator -(Vector3 vector) => new Vector3(-(vector as Vector));
 
-        public Vector3 RotateZ(double angle)
-        {
-            return new Vector3(X * Math.Cos(angle) - Y * Math.Sin(angle),
-                               X * Math.Sin(angle) + Y * Math.Cos(angle),
-                               Z = Z);
-        }
+        public Vector3 RotateX(double angle) => new Vector3(X, Y * Math.Cos(angle) - Z * Math.Sin(angle), Y * Math.Sin(angle) + Z * Math.Cos(angle));
+
+        public Vector3 RotateY(double angle) => new Vector3(X * Math.Cos(angle) + Z * Math.Sin(angle), Y, -X * Math.Sin(angle) + Z * Math.Cos(angle));
+
+        public Vector3 RotateZ(double angle) => new Vector3(X * Math.Cos(angle) - Y * Math.Sin(angle), X * Math.Sin(angle) + Y * Math.Cos(angle), Z = Z);
 
         public Vector3 Rotate(Vector3 axis, double angle)
         {
