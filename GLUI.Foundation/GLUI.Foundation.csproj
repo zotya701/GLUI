@@ -63,7 +63,6 @@
       <DependentUpon>Key.tt</DependentUpon>
     </Compile>
     <Compile Include="KeyboardState.cs" />
-    <Compile Include="MathExtension\Point2.cs" />
     <Compile Include="MathExtension\Vector.cs" />
     <Compile Include="MathExtension\Vector2.cs" />
     <Compile Include="MathExtension\Vector3.cs" />
