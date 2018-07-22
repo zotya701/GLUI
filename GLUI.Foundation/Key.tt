@@ -1,0 +1,14 @@
+﻿<#@ template hostspecific="false" language="C#" #>
+<#@ output extension=".generated.cs" #>
+<#@ assembly name="$(SolutionDir)packages\OpenTK.3.0.1\lib\net20\OpenTK.dll" #>
+// Generated code, do not modify!
+namespace GLUI.Foundation
+{
+    public partial class Key
+    {
+<#foreach (var wKey in Enum.GetNames(typeof(OpenTK.Input.Key)))
+{#>
+		public static Key <#=wKey.ToString()#> => OpenTK.Input.Key.<#= wKey.ToString() #>;
+<#}#>
+	}
+}

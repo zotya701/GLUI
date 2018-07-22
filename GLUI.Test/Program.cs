@@ -16,8 +16,6 @@ namespace GLUI.Test
     {
         static void Main(string[] args)
         {
-            //Enum.GetNames(typeof(Key)).ToList().ForEach(key => Console.WriteLine($"public static Key {key.ToString()} {{ get {{ return new Key(Key.{key.ToString()}); }} }}"));
-
             var wApp = new App()
             {
                 Title = "Test program",

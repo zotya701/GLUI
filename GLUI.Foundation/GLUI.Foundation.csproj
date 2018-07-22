@@ -58,6 +58,11 @@
     <Compile Include="Command.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="Key.cs" />
+    <Compile Include="Key.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Key.tt</DependentUpon>
+    </Compile>
     <Compile Include="KeyboardState.cs" />
     <Compile Include="MathExtension\Point2.cs" />
     <Compile Include="MathExtension\Vector.cs" />
@@ -69,6 +74,15 @@
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Key.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Key.generated.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
