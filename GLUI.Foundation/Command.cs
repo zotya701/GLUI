@@ -15,6 +15,7 @@ namespace GLUI.Foundation
 
         public Command(string name, params Key[] keys)
         {
+            if (keys.Length < 1) throw new InvalidOperationException("Every command must have at least 1 key!");
             Name = name;
             foreach (var wKey in keys) { Keys.Add(wKey); }
         }

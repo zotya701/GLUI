@@ -16,14 +16,6 @@ namespace GLUI.Foundation
 
         public static implicit operator Key(OpenTK.Input.Key key) => new Key(key);
 
-        public static bool operator ==(OpenTK.Input.Key left, Key right) => left == right.RealKey;
-
-        public static bool operator !=(OpenTK.Input.Key left, Key right) => left != right.RealKey;
-
-        public static bool operator ==(Key left, OpenTK.Input.Key right) => left.RealKey == right;
-
-        public static bool operator !=(Key left, OpenTK.Input.Key right) => left.RealKey != right;
-
         public static bool operator ==(Key left, Key right) => left.RealKey == right.RealKey;
 
         public static bool operator !=(Key left, Key right) => left.RealKey != right.RealKey;

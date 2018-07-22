@@ -73,6 +73,7 @@
     <Compile Include="MathExtension\TestVector.cs" />
     <Compile Include="MathExtension\TestVector3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
