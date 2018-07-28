@@ -12,10 +12,7 @@ namespace GLUI.Application
     {
         private static ConcurrentQueue<(Action Callback, ManualResetEventSlim CallbackFinished)> Actions { get; } = new ConcurrentQueue<(Action, ManualResetEventSlim)>();
 
-        public static void BeginInvoke(Action action)
-        {
-            Actions.Enqueue((action, null));
-        }
+        public static void BeginInvoke(Action action) => Actions.Enqueue((action, null));
 
         public static void Invoke(Action action)
         {

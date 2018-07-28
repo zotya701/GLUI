@@ -11,13 +11,13 @@ namespace GLUI.Application
     public static class PerformanceInfo
     {
         private static PerformanceCounter mCpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-        private static PerformanceCounter mRamCounter = mRamCounter = new PerformanceCounter("Memory", "Available Bytes");
+        private static PerformanceCounter mRamCounter = new PerformanceCounter("Memory", "Available Bytes");
 
-        public static float TotalRAM { get { return Helper.GetTotalMemory(); } }
-        public static float AvailableRAM { get { return mRamCounter.NextValue() / 1024.0f / 1024.0f; } }
-        public static float TotalUsedRAM { get { return TotalRAM - AvailableRAM; } }
-        public static float UsedRam { get { return Environment.WorkingSet / 1024.0f / 1024.0f; } }
-        public static float CPUUtilization { get { return mCpuCounter.NextValue(); } }
+        public static float TotalRAM => Helper.GetTotalMemory();
+        public static float AvailableRAM => mRamCounter.NextValue() / 1024.0f / 1024.0f;
+        public static float TotalUsedRAM => TotalRAM - AvailableRAM;
+        public static float UsedRam => Environment.WorkingSet / 1024.0f / 1024.0f;
+        public static float CPUUtilization => mCpuCounter.NextValue();
 
         private static class Helper
         {
@@ -44,18 +44,7 @@ namespace GLUI.Application
             [return: MarshalAs(UnmanagedType.Bool)]
             public static extern bool GetPerformanceInfo([Out] out PerformanceInformation PerformanceInformation, [In] int Size);
 
-            public static float GetTotalMemory()
-            {
-                var wInfo = new PerformanceInformation();
-                if (GetPerformanceInfo(out wInfo, Marshal.SizeOf(wInfo)))
-                {
-                    return wInfo.PhysicalTotal.ToInt64() * wInfo.PageSize.ToInt64() / 1024.0f / 1024.0f;
-                }
-                else
-                {
-                    return -1;
-                }
-            }
+            public static float GetTotalMemory() => GetPerformanceInfo(out var wInfo, Marshal.SizeOf<PerformanceInformation>()) ? wInfo.PhysicalTotal.ToInt64() * wInfo.PageSize.ToInt64() / 1024.0f / 1024.0f : 1;
         }
     }
 }

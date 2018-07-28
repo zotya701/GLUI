@@ -65,7 +65,7 @@ namespace GLUI.Foundation.MathExtension
             }
         }
 
-        public Vector Normalize() => this / Length;
+        public Vector Normalize() => DoForAll(Length, (l, r) => l / r);
 
         private Vector DoForAll(double value, Func<double, double, double> operation)
         {
