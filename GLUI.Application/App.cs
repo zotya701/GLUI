@@ -21,8 +21,8 @@ namespace GLUI.Application
     {
         private GameWindow mWindow;
         private RootComponent mRoot;
-        private Label mPerformanceLabel;
-        private Stopwatch mPerformanceLabelTimer = Stopwatch.StartNew();
+        //private Label mPerformanceLabel;
+        //private Stopwatch mPerformanceLabelTimer = Stopwatch.StartNew();
         private Stopwatch mTimer = Stopwatch.StartNew();
         private LinkedList<DateTime> mFrameDates = new LinkedList<DateTime>();
         private double mElapsedTime;
@@ -84,16 +84,16 @@ namespace GLUI.Application
             OnKeyboard += mRoot.KeyboardHandler;
             OnMouse += mRoot.MouseHandler;
 
-            mPerformanceLabel = new Label()
-            {
-                HorizontalAlignment = HorizontalAlignment.Right,
-                VerticalAlignment = VerticalAlignment.Bottom,
-                ClickThrough = true,
-                FontFamily = "Arial",
-                FontSize = 12,
-                FontColor = Color.Orange
-            };
-            AddComponent(mPerformanceLabel);
+            //mPerformanceLabel = new Label()
+            //{
+            //    HorizontalAlignment = HorizontalAlignment.Right,
+            //    VerticalAlignment = VerticalAlignment.Bottom,
+            //    ClickThrough = true,
+            //    //FontFamily = "Arial",
+            //    //FontSize = 12,
+            //    //FontColor = Color.Orange
+            //};
+            //AddComponent(mPerformanceLabel);
         }
 
         public void Run()
@@ -159,7 +159,7 @@ namespace GLUI.Application
         private void OnResize(object sender, EventArgs e)
         {
             mRoot.Size = new Vector2(Width, Height);
-            mPerformanceLabel.Size = mRoot.Size;
+            //mPerformanceLabel.Size = mRoot.Size;
             GL.Viewport(mWindow.ClientRectangle);
             OnUpdateFrame(null, null);
             OnRenderFrame(null, null);
@@ -188,36 +188,36 @@ namespace GLUI.Application
             mWaitTime = Math.Max((1.0f - (mTimer.Elapsed.TotalSeconds * FPS / 1 - FPS * mWaitTime)) / FPS, 0.0f);  // Calculate the dt between frames
             mTimer.Restart();
 
-            mPerformanceLabel.Visible = ShowPerformanceInfo;
-            if (mPerformanceLabel.Visible)
-            {
-                mPerformanceLabel.BringFront();
-                mFrameCounter++;
-                if (mPerformanceLabelTimer.Elapsed.TotalSeconds >= 0.5f)
-                {
-                    mFrameDates.AddLast(DateTime.Now);
-                    var wFrameCounter = mFrameCounter;
-                    if (mFrameDates.Count >= 3)
-                    {
-                        Dispatcher.BeginInvoke(() =>
-                        {
-                            var wPerformanceInfos = new List<string>
-                            {
-                                $"FPS: {Math.Round(wFrameCounter / (mFrameDates.Last.Value - mFrameDates.First.Value).TotalSeconds)}",
-                                $"CPU utilization: {PerformanceInfo.CPUUtilization}%",
-                                $"Used RAM: {PerformanceInfo.UsedRam}MB",
-                                $"Available RAM: {PerformanceInfo.AvailableRAM}MB",
-                                $"Total used RAM: {PerformanceInfo.TotalUsedRAM}MB",
-                                $"Total RAM: {PerformanceInfo.TotalRAM}MB"
-                            };
-                            mPerformanceLabel.Text = string.Join("\r\n", wPerformanceInfos);
-                        });
-                        mFrameDates.RemoveFirst();
-                        mFrameCounter = 0;
-                    }
-                    mPerformanceLabelTimer.Restart();
-                }
-            }
+            //mPerformanceLabel.Visible = ShowPerformanceInfo;
+            //if (mPerformanceLabel.Visible)
+            //{
+            //    mPerformanceLabel.BringFront();
+            //    mFrameCounter++;
+            //    if (mPerformanceLabelTimer.Elapsed.TotalSeconds >= 0.5f)
+            //    {
+            //        mFrameDates.AddLast(DateTime.Now);
+            //        var wFrameCounter = mFrameCounter;
+            //        if (mFrameDates.Count >= 3)
+            //        {
+            //            Dispatcher.BeginInvoke(() =>
+            //            {
+            //                var wPerformanceInfos = new List<string>
+            //                {
+            //                    $"FPS: {Math.Round(wFrameCounter / (mFrameDates.Last.Value - mFrameDates.First.Value).TotalSeconds)}",
+            //                    $"CPU utilization: {PerformanceInfo.CPUUtilization}%",
+            //                    $"Used RAM: {PerformanceInfo.UsedRam}MB",
+            //                    $"Available RAM: {PerformanceInfo.AvailableRAM}MB",
+            //                    $"Total used RAM: {PerformanceInfo.TotalUsedRAM}MB",
+            //                    $"Total RAM: {PerformanceInfo.TotalRAM}MB"
+            //                };
+            //                mPerformanceLabel.Text = string.Join("\r\n", wPerformanceInfos);
+            //            });
+            //            mFrameDates.RemoveFirst();
+            //            mFrameCounter = 0;
+            //        }
+            //        mPerformanceLabelTimer.Restart();
+            //    }
+            //}
 
             GL.ClearColor(0.1f, 0.2f, 0.3f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);

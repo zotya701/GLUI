@@ -62,7 +62,7 @@ namespace GLUI.GLUI
                 {
                     int[] wData = new int[4];
                     GL.GetInteger(GetPName.CurrentColor, wData);
-                    GL.Color4(Label.FontColor.R, Label.FontColor.G, Label.FontColor.B, Label.FontColor.A);
+                    //GL.Color4(Label.FontColor.R, Label.FontColor.G, Label.FontColor.B, Label.FontColor.A);
                     GL.Begin(PrimitiveType.Polygon);
                     GL.Vertex2(mCheckButton.Width * 0.09, mCheckButton.Height * 0.50);
                     GL.Vertex2(mCheckButton.Width * 0.05, mCheckButton.Height * 0.55);

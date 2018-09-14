@@ -57,9 +57,6 @@ namespace GLUI.Test
                     new Label
                     {
                         Text = "Bared on your tomb\r\nI'm a prayer for your loneliness\r\nAnd would you ever soon\r\nCome above unto me?",
-                        FontFamily = "Arial",
-                        FontSize = 14,
-                        FontColor = Color.LightGray,
                         Location = new Vector2(200, 60),
                         //Size = new Vector2(250, 100),
                         BorderWidth = 1.0f
@@ -91,7 +88,7 @@ namespace GLUI.Test
             wRepeatButton.ButtonClicked += (o, e) => { wCheckBox.Enabled = !wCheckBox.Enabled; wRepeatButton.Text = wRepeatButton.Text.Substring(0, 15) + $"{Convert.ToInt32(wRepeatButton.Text.Substring(15)) + 1}"; Console.WriteLine(wRepeatButton.Text); };
 
             var wLabel = wWindow.Children.First(wChild => wChild is Label) as Label;
-            wLabel.LabelClicked += (o, e) => { Console.WriteLine(wLabel.Text); };
+            wLabel.Clicked += (o, e) => { Console.WriteLine(wLabel.Text); };
 
             wWindow.MouseEntered += (o, e) => { Console.WriteLine("Mouse entered"); };
             wWindow.MouseLeaved += (o, e) => { Console.WriteLine("Mouse leaved"); };

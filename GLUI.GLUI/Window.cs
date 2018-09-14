@@ -31,9 +31,6 @@ namespace GLUI.GLUI
                 VerticalAlignment = VerticalAlignment.Center,
                 BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                 BorderWidth = 1.0f,
-                FontColor = Color.LightGray,
-                FontFamily = "Arial",
-                FontSize = 14,
                 Text = title
             };
             Children.Add(mTitle);
@@ -47,10 +44,8 @@ namespace GLUI.GLUI
                     VerticalAlignment = VerticalAlignment.Center,
                     BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                     BorderWidth = 0,
-                    FontColor = Color.LightGray,
-                    FontFamily = "Arial",
-                    FontSize = 14,
-                    Text = "_"
+                    //Text = "_"
+                    Text = "\u2014"
                 }
             };
             Children.Add(mMinimizeButton);
@@ -64,10 +59,8 @@ namespace GLUI.GLUI
                     VerticalAlignment = VerticalAlignment.Center,
                     BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                     BorderWidth = 0,
-                    FontColor = Color.LightGray,
-                    FontFamily = "Arial",
-                    FontSize = 14,
-                    Text = "[]"
+                    //Text = "[]"
+                    Text = "\u25A1"
                 }
             };
             Children.Add(mMaximizeButton);
@@ -81,10 +74,8 @@ namespace GLUI.GLUI
                     VerticalAlignment = VerticalAlignment.Center,
                     BackgroundColor = Color.FromArgb(0, 0, 0, 0),
                     BorderWidth = 0,
-                    FontColor = Color.LightGray,
-                    FontFamily = "Arial",
-                    FontSize = 14,
-                    Text = "X"
+                    //Text = "X"
+                    Text = "\u00D7"
                 }
             };
             Children.Add(mCloseButton);

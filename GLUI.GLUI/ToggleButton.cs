@@ -38,7 +38,7 @@ namespace GLUI.GLUI
                     {
                         Size = mSizeAnimator.Target;
                         Location = mLocationAnimator.Target;
-                        Label.GLScale = mLabelAnimator.Target[0];
+                        //Label.GLScale = mLabelAnimator.Target[0];
                     }
                     mSizeAnimator.Start(Size, Size - new Vector2(4, 4));
                     mLocationAnimator.Start(Location, Location + new Vector2(2, 2));
@@ -94,7 +94,7 @@ namespace GLUI.GLUI
             {
                 Size = mSizeAnimator.Current;
                 Location = mLocationAnimator.Current;
-                Label.GLScale = mLabelAnimator.Current[0];
+                //Label.GLScale = mLabelAnimator.Current[0];
             }
             base.OnRender();
         }

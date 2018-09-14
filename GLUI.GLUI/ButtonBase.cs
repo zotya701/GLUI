@@ -68,9 +68,6 @@ namespace GLUI.GLUI
             {
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                FontFamily = "Arial",
-                FontSize = 14,
-                FontColor = Color.LightGray,
                 Text = string.Empty
             };
         }
